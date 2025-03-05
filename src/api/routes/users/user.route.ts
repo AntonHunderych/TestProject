@@ -2,6 +2,7 @@ import {createRespUserSchema, createUserSchema} from "./schemas/createUserSchema
 import {getUsersRespSchema} from "./schemas/getUsersSchema";
 import {UUIDGetter} from "../schemas/UUIDGetter";
 import {FastifyPluginAsyncZod} from "fastify-type-provider-zod";
+import createUserHandler from "../../../controllers/users/createUser";
 
 const routes : FastifyPluginAsyncZod = async (f) =>{
 
@@ -50,9 +51,7 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
                 },
             }
         },
-        async (req) => {
-            return createRespUserSchema.parse(await _userRepo.createUser(req.body))
-        }
+        async (req) => {return await createUserHandler(_userRepo,req.body)}
     )
 
     f.delete(

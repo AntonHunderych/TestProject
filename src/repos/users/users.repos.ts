@@ -2,7 +2,7 @@ import { DataSource } from "typeorm";
 import {User} from "../../db/entities/UserEntity";
 
 
-interface IUsersRepos {
+export interface IUsersRepos {
     getAllUsers: () => Promise<User[]>;
     getUserById: (id: string) => Promise<User | null>;
     createUser: (userData: Partial<User>) => Promise<User>;
@@ -28,9 +28,7 @@ export function getUserRepos(db: DataSource): IUsersRepos {
         },
 
         updateUser: async (id: string, userData: Partial<User>) => {
-            const user = await _usersRepo.findOne({ where: { id } });
-            if (!user) return null;
-
+            const user = await _usersRepo.findOneOrFail({ where: { id } });
             Object.assign(user, userData);
             return await _usersRepo.save(user);
         },
