@@ -1,5 +1,6 @@
 import {IUsersRepos} from "../../repos/users/users.repos";
 import {UserSchema} from "../../db/schemas/UserSchema";
+import {IUserRoleRepo} from "../../repos/user-role/getUserRoleRepo";
 
 interface ICreateUser{
     username: string,
@@ -12,14 +13,18 @@ interface IUserControllerResp{
     username: string,
 }
 
-export default async function createUserHandler(rep : IUsersRepos, date:ICreateUser ): Promise<IUserControllerResp>{
+export default async function createUserHandler(rep : IUsersRepos, userRoleRepo: IUserRoleRepo, date:ICreateUser ): Promise<IUserControllerResp>{
     try {
-        return UserSchema.parse(await rep.createUser(date))
+        const user = UserSchema.parse(await rep.createUser(date))
+        await userRoleRepo.giveRoleToUser(user.id, "USER")
+        return UserSchema.parse(
+            await rep.getUserById(user.id)
+        )
     } catch (e){
         console.log(e)
         return {
             id:"",
             username:""
-        } //tmp
+        }
     }
 }

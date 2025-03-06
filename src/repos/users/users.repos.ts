@@ -10,7 +10,7 @@ export interface IUsersRepos {
     deleteUser: (id: string) => Promise<boolean>;
 }
 
-export function getUserRepos(db: DataSource): IUsersRepos {
+export function getUserRepo(db: DataSource): IUsersRepos {
     const _usersRepo = db.getRepository(User);
 
     return {
@@ -19,7 +19,7 @@ export function getUserRepos(db: DataSource): IUsersRepos {
         },
 
         getUserById: async (id: string): Promise<User> => {
-            return await _usersRepo.findOneOrFail({ where: { id } });
+            return await _usersRepo.findOneOrFail({ where: { id }, relations: ["roles"]});
         },
 
         createUser: async (userData: Partial<User>) => {

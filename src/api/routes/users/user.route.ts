@@ -12,7 +12,8 @@ import {updateUserSchema} from "./schemas/updateUserSchema";
 
 const routes : FastifyPluginAsyncZod = async (f) =>{
 
-    const _userRepo = f.repos.userRepo
+    const userRepo = f.repos.userRepo
+    const userRoleRepo = f.repos.userRoleRepo
 
     f.get(
         "/",
@@ -24,7 +25,7 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
             }
         },
         async () => {
-            const users = await getAllUsersHandler(_userRepo)
+            const users = await getAllUsersHandler(userRepo)
             return {
                 data: users,
                 count: users.length,
@@ -42,7 +43,7 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
                 },
             }
         },
-        async (req) => await getUserByIdHandler(_userRepo,req.params.id)
+        async (req) => await getUserByIdHandler(userRepo,req.params.id)
     )
 
     f.post(
@@ -55,7 +56,7 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
                 },
             }
         },
-        async (req) => await createUserHandler(_userRepo,req.body)
+        async (req) => await createUserHandler(userRepo,userRoleRepo,req.body)
     )
 
     f.delete(
@@ -68,7 +69,7 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
                 },
             }
         },
-        async (req) => await deleteUserHandler(_userRepo,req.params.id)
+        async (req) => await deleteUserHandler(userRepo,req.params.id)
     )
 
     f.post(
@@ -82,7 +83,7 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
                 },
             },
         },
-        async (req) => updateUserHandler(_userRepo,req.params.id,req.body)
+        async (req) => updateUserHandler(userRepo,req.params.id,req.body)
     )
 
 }

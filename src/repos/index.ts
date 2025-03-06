@@ -1,10 +1,14 @@
 import {DataSource} from "typeorm";
-import {getUserRepos} from "./users/users.repos";
+import {getUserRepo} from "./users/users.repos";
+import {getUserRoleRepo} from "./user-role/getUserRoleRepo";
+import getRolesRepo from "./roles/roles.repos";
 
 
 export default function getRepos(db: DataSource){
     return{
-        userRepo: getUserRepos(db)
+        userRepo: getUserRepo(db),
+        roleRepo: getRolesRepo(db),
+        userRoleRepo: getUserRoleRepo(db),
     }
 }
 

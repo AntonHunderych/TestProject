@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import {User} from "./entities/UserEntity";
+import {Role} from "./entities/RoleEntity";
 
 export const pgDataSource = new DataSource({
     type: 'postgres',
@@ -11,7 +12,7 @@ export const pgDataSource = new DataSource({
     database: 'mydb',
     synchronize: true, // ⚠️ У продакшені вимкніть (false) і використовуйте міграції!
     logging: true,
-    entities: [User],
+    entities: [User,Role],
 });
 
 export const initDB = async () : Promise<DataSource> => {

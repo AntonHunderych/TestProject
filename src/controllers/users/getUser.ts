@@ -5,7 +5,7 @@ import {IUsersRepos} from "../../repos/users/users.repos";
 export default async function getUserByIdHandler(rep: IUsersRepos, id: string): Promise<User> {
     try{
         const user = await rep.getUserById(id)
-
+        console.log(user)
         if (!user){
             console.error("User not found")
             return {
