@@ -3,6 +3,12 @@ import {getUsersRespSchema} from "./schemas/getUsersSchema";
 import {UUIDGetter} from "../schemas/UUIDGetter";
 import {FastifyPluginAsyncZod} from "fastify-type-provider-zod";
 import createUserHandler from "../../../controllers/users/createUser";
+import getUserByIdHandler from "../../../controllers/users/getUser";
+import deleteUserHandler from "../../../controllers/users/deleteUser";
+import updateUserHandler from "../../../controllers/users/updateUser";
+import getAllUsersHandler from "../../../controllers/users/getUsers";
+import {deleteRespUserSchema} from "./schemas/deleteRespUserSchema";
+import {updateUserSchema} from "./schemas/updateUserSchema";
 
 const routes : FastifyPluginAsyncZod = async (f) =>{
 
@@ -18,10 +24,10 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
             }
         },
         async () => {
-            const _users = await _userRepo.getAllUsers()
+            const users = await getAllUsersHandler(_userRepo)
             return {
-                data: _users.map(user => createRespUserSchema.parse(user)),
-                count: _users.length
+                data: users,
+                count: users.length,
             }
         }
     )
@@ -36,9 +42,7 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
                 },
             }
         },
-        async (req) => {
-            return createRespUserSchema.parse(await _userRepo.getUserById(req.params.id))
-        }
+        async (req) => await getUserByIdHandler(_userRepo,req.params.id)
     )
 
     f.post(
@@ -51,7 +55,7 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
                 },
             }
         },
-        async (req) => {return await createUserHandler(_userRepo,req.body)}
+        async (req) => await createUserHandler(_userRepo,req.body)
     )
 
     f.delete(
@@ -60,15 +64,11 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
             schema: {
                 params: UUIDGetter,
                 response: {
-                    200: {
-                        type: "boolean"
-                    },
+                    200: deleteRespUserSchema
                 },
             }
         },
-        async (req) => {
-            return await _userRepo.deleteUser(req.params.id)
-        }
+        async (req) => await deleteUserHandler(_userRepo,req.params.id)
     )
 
     f.post(
@@ -76,15 +76,13 @@ const routes : FastifyPluginAsyncZod = async (f) =>{
         {
             schema: {
                 params: UUIDGetter,
-                body: createUserSchema,
+                body: updateUserSchema,
                 response: {
                     200: createRespUserSchema,
                 },
             },
         },
-        async (req) => {
-            return createRespUserSchema.parse(await _userRepo.updateUser(req.params.id, req.body))
-        }
+        async (req) => updateUserHandler(_userRepo,req.params.id,req.body)
     )
 
 }

@@ -18,7 +18,7 @@ export function getUserRepos(db: DataSource): IUsersRepos {
             return await _usersRepo.find();
         },
 
-        getUserById: async (id: string) => {
+        getUserById: async (id: string): Promise<User> => {
             return await _usersRepo.findOneOrFail({ where: { id } });
         },
 
