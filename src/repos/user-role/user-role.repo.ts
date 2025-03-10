@@ -7,7 +7,7 @@ export interface IUserRoleRepo {
   removeRoleFromUser(userID: string, roleValue: string): Promise<boolean>;
 }
 
-export function getUserRoleRepo(db: DataSource) {
+export function userRoleRepo(db: DataSource) {
   const userRepo = db.getRepository(User);
   const roleRepo = db.getRepository(Role);
 

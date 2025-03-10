@@ -6,7 +6,6 @@ import { registerHandler } from '../../../controllers/auth/registerHandler';
 import z from 'zod';
 import { registerLoginRespSchema } from './schemas/registerLoginRespSchema';
 import { skipAuthHook } from '../../hooks/skipAuthHook';
-import { roleHook } from '../../hooks/roleHook';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -15,7 +14,6 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const crypto = f.crypto;
 
   f.addHook('preValidation', skipAuthHook);
-  f.addHook('preHandler', roleHook(['ADMIN', 'USER']));
 
   f.post(
     '/register',

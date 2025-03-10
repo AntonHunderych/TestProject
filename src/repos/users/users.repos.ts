@@ -19,7 +19,10 @@ export function getUserRepo(db: DataSource): IUsersRepos {
     },
 
     getUserById: async (id: string): Promise<User> => {
-      return await _usersRepo.findOneOrFail({ where: { id }, relations: ['roles'] });
+      return await _usersRepo.findOneOrFail({ where: { id }, relations: {
+          roles: true,
+          todos: true
+        }, });
     },
 
     async getUserByEmail(email: string): Promise<User | null> {

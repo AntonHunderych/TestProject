@@ -13,13 +13,13 @@ export default function getRolesRepo(db: DataSource): IRolesRepo {
 
   return {
     getRoleByValue: async (value: string): Promise<Role> => {
-      return roleRepo.findOneOrFail({ where: { value } });
+      return await roleRepo.findOneOrFail({ where: { value } });
     },
     addRole: async (role: { value: string; description?: string }): Promise<Role> => {
-      return roleRepo.save(role);
+      return await roleRepo.save(role);
     },
     getAllRoles: async (): Promise<Role[]> => {
-      return roleRepo.find({
+      return await roleRepo.find({
         relations: ['users'],
       });
     },

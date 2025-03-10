@@ -2,6 +2,8 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { User } from './entities/UserEntity';
 import { Role } from './entities/RoleEntity';
+import { Todo } from './entities/TodoEntity';
+import { Comment } from './entities/CommentEntity';
 
 export const pgDataSource = new DataSource({
   type: 'postgres',
@@ -10,10 +12,10 @@ export const pgDataSource = new DataSource({
   username: 'postgres',
   password: 'password',
   database: 'mydb',
-  synchronize: true, // ⚠️ У продакшені вимкніть (false) і використовуйте міграції!
+  synchronize: true,
   //dropSchema: true,
   logging: true,
-  entities: [User, Role],
+  entities: [User, Role,Todo, Comment],
 });
 
 export const initDB = async (): Promise<DataSource> => {

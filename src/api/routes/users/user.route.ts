@@ -10,6 +10,7 @@ import getAllUsersHandler from '../../../controllers/users/getUsers';
 import { deleteRespUserSchema } from './schemas/deleteRespUserSchema';
 import { updateUserSchema } from './schemas/updateUserSchema';
 import { roleHook } from '../../hooks/roleHook';
+import { RoleEnum } from '../../../Types/Enum/RoleEnum';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -24,7 +25,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: getUsersRespSchema,
         },
       },
-      preHandler: roleHook(['ADMIN', 'USER']),
+      preHandler: roleHook([RoleEnum.USER, RoleEnum.ADMIN]),
     },
     async () => {
       const users = await getAllUsersHandler(userRepo);

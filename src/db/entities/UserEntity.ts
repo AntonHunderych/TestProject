@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { Role } from './RoleEntity';
+import { Todo } from './TodoEntity';
+import { Comment } from './CommentEntity';
 
 @Entity()
 export class User {
@@ -21,4 +23,11 @@ export class User {
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable()
   roles: Role[];
+
+  @OneToMany(() => Todo, (todo)=>todo.creator)
+  todos: Todo[]
+
+  @OneToMany(() => Comment, (comments)=>comments.author)
+  comments: Comment[];
+
 }

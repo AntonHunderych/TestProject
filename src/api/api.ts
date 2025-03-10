@@ -11,11 +11,14 @@ import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import { skipAuthHook } from './hooks/skipAuthHook';
 import { authHook } from './hooks/authHook';
+import { getUserDataFromJWT } from './plugins/getUserDataFromJWT';
+import { IUserControllerResp } from '../controllers/users/createUser';
 
 declare module 'fastify' {
   export interface FastifyInstance {
     repos: IRepos;
     crypto: ICrypto;
+    getUserDataFromJWT: (req: FastifyRequest) => IUserControllerResp;
   }
 
   export interface FastifyRequest {
@@ -56,6 +59,7 @@ async function run() {
 
   f.decorate('repos', getRepos(await initDB()));
   f.decorate('crypto', getCryptoService());
+  f.decorate('getUserDataFromJWT', getUserDataFromJWT);
 
   f.setValidatorCompiler(validatorCompiler);
   f.setSerializerCompiler(serializerCompiler);
@@ -67,7 +71,8 @@ async function run() {
       prefix: '/api'
     },
     autoHooks: true,
-    cascadeHooks: true
+    cascadeHooks: true,
+    dirNameRoutePrefix: true,
   });
 
   f.get('/', { preHandler: skipAuthHook, schema:{} }, (_req, res) => {

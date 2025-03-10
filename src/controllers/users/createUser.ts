@@ -1,6 +1,6 @@
 import { IUsersRepos } from '../../repos/users/users.repos';
 import { UserSchema } from '../../db/schemas/UserSchema';
-import { IUserRoleRepo } from '../../repos/user-role/getUserRoleRepo';
+import { IUserRoleRepo } from '../../repos/user-role/user-role.repo';
 import z from 'zod';
 
 interface ICreateUser {
@@ -16,7 +16,7 @@ const UserControllerRespSchema = z.object({
   email: z.string(),
 });
 
-type IUserControllerResp = z.infer<typeof UserControllerRespSchema>;
+export type IUserControllerResp = z.infer<typeof UserControllerRespSchema>;
 
 export default async function createUserHandler(
   rep: IUsersRepos,
