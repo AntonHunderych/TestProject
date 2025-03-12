@@ -2,19 +2,19 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import { createTodoSchema } from './schema/createTodoSchema';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
-  const f = fastify.withTypeProvider<ZodTypeProvider>()
-  const wsTodoRepo = f.repos.workSpaceTodoRepo
+  const f = fastify.withTypeProvider<ZodTypeProvider>();
+  const wsTodoRepo = f.repos.workSpaceTodoRepo;
 
   f.post(
-    "/",
+    '/',
     {
-      schema:{
-        body: createTodoSchema
-      }
+      schema: {
+        body: createTodoSchema,
+      },
     },
-    async (req) =>{
-      return await wsTodoRepo.create({...req.body, creatorId: req.userData.id})
-    }
-  )
-}
+    async (req) => {
+      return await wsTodoRepo.create({ ...req.body, creatorId: req.userData.id });
+    },
+  );
+};
 export default routes;

@@ -3,10 +3,10 @@ import { WorkSpaceUser } from './WorkSpaceUser';
 import { WorkSpaceTodo } from './WorkSpaceTodo';
 
 @Entity()
-@Unique(['name','creatorId'])
+@Unique(['name', 'creatorId'])
 export class WorkSpace {
-  @PrimaryGeneratedColumn("uuid")
-  id:string
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
@@ -18,7 +18,7 @@ export class WorkSpace {
   creatorId: string;
 
   @OneToMany(() => WorkSpaceTodo, (workSpaceEntity) => workSpaceEntity.workSpace)
-  wsTodos: WorkSpaceTodo[]
+  wsTodos: WorkSpaceTodo[];
 
   @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.workSpace)
   wsUsers: WorkSpaceUser[];

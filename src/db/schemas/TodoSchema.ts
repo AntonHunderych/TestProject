@@ -7,6 +7,6 @@ export const TodoSchema = z.object({
   importance: z.number().optional(),
   eliminatedDate: z.date().optional(),
   creatorId: z.string(),
-})
+});
 
-export type ITodo = z.infer<typeof TodoSchema>
+export type ITodo = z.infer<typeof TodoSchema>;

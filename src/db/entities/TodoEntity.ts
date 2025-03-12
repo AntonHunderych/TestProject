@@ -10,25 +10,25 @@ export class Todo {
   @Column()
   title: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   description?: string;
 
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   eliminatedDate?: Date;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   importance?: number;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   status?: string;
 
-  @Column({name: "creator_Id"})
+  @Column({ name: 'creator_Id' })
   creatorId: string;
 
   @ManyToOne(() => User, (user) => user.todos)
   @JoinColumn({ name: 'creator_Id' })
   creator: User;
 
-  @OneToMany(()=> Comment,(comment)=>comment.todo)
+  @OneToMany(() => Comment, (comment) => comment.todo)
   comments: Comment[];
 }

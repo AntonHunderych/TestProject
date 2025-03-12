@@ -6,7 +6,6 @@ import { WorkSpaceTodo } from './WorkSpaceTodo';
 @Entity()
 @Unique(['userId', 'workSpaceId'])
 export class WorkSpaceUser {
-
   @PrimaryColumn()
   userId: string;
 
@@ -24,6 +23,6 @@ export class WorkSpaceUser {
   @Column()
   workSpaceUserId: number;
 
-  @OneToMany(()=> WorkSpaceTodo, (todo) => todo.creator )
-  todos: WorkSpaceTodo[]
+  @OneToMany(() => WorkSpaceTodo, (todo) => todo.creator)
+  todos: WorkSpaceTodo[];
 }

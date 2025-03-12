@@ -7,6 +7,6 @@ export const CommentSchema = z.object({
   todoId: z.string().min(1),
   createdAt: z.date(),
   updatedAt: z.date(),
-})
+});
 
 export type IComment = z.infer<typeof CommentSchema>;

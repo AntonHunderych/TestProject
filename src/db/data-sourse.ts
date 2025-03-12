@@ -18,7 +18,7 @@ export const pgDataSource = new DataSource({
   synchronize: true,
   //dropSchema: true,
   logging: true,
-  entities: [User, Role,Todo, Comment, WorkSpace, WorkSpaceTodo,WorkSpaceUser],
+  entities: [User, Role, Todo, Comment, WorkSpace, WorkSpaceTodo, WorkSpaceUser],
 });
 
 export const initDB = async (): Promise<DataSource> => {

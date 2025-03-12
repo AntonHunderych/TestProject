@@ -12,97 +12,97 @@ import { createCommentSchema } from './schemas/createCommentSchema';
 import { RoleEnum } from '../../../../Types/Enum/RoleEnum';
 
 export const routes: FastifyPluginAsyncZod = async (fastify) => {
-  const f = fastify.withTypeProvider<ZodTypeProvider>()
+  const f = fastify.withTypeProvider<ZodTypeProvider>();
   const commentsRepo = fastify.repos.commentRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
 
   f.get(
-    "/admin/",
+    '/admin/',
     {
       schema: {
-        response:{
-          200: z.array(getCommentSchema)
-        }
+        response: {
+          200: z.array(getCommentSchema),
+        },
       },
-      preHandler: roleHook([RoleEnum.ADMIN])
+      preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async () => {
-      return await commentsRepo.getAllComments()
-    }
-  )
+      return await commentsRepo.getAllComments();
+    },
+  );
 
   f.get(
-    "/admin/:id",
+    '/admin/:id',
     {
       schema: {
         params: UUIDGetter,
         response: {
-          200: getCommentSchema
+          200: getCommentSchema,
         },
-        preHandler: roleHook([RoleEnum.ADMIN])
-      }
+        preHandler: roleHook([RoleEnum.ADMIN]),
+      },
     },
     async (req) => {
-      return await commentsRepo.getCommentById(req.params.id)
-    }
-  )
+      return await commentsRepo.getCommentById(req.params.id);
+    },
+  );
 
   f.get(
-    "/:todoID",
+    '/:todoID',
     {
-      schema:{
+      schema: {
         params: UUIDGetter,
         response: {
-          200: z.array(getCommentSchema)
-        }
-      }
+          200: z.array(getCommentSchema),
+        },
+      },
     },
-    async (req) => await getTodoCommentsHandler(commentsRepo,req.params.id)
-  )
+    async (req) => await getTodoCommentsHandler(commentsRepo, req.params.id),
+  );
 
   f.post(
-    "/",
+    '/',
     {
       schema: {
         body: createCommentSchema,
         response: {
-          200: getCommentSchema
-        }
+          200: getCommentSchema,
+        },
       },
     },
     async (req) => {
-      const userData = f.getUserDataFromJWT(req)
-      return  await createCommentHandler(commentsRepo,{...req.body,authorId: userData.id})
-    }
-  )
+      const userData = f.getUserDataFromJWT(req);
+      return await createCommentHandler(commentsRepo, { ...req.body, authorId: userData.id });
+    },
+  );
 
   f.delete(
-    "/:id",
+    '/:id',
     {
-      schema:{
+      schema: {
         params: UUIDGetter,
         response: {
-          200: z.boolean()
-        }
-      }
+          200: z.boolean(),
+        },
+      },
     },
-    async (req) => await deleteCommentHandler(commentsRepo,req.params.id)
-  )
+    async (req) => await deleteCommentHandler(commentsRepo, req.params.id),
+  );
 
   f.put(
-    "/:id",
+    '/:id',
     {
       schema: {
         params: UUIDGetter,
         body: updateCommentSchema,
         response: {
-          200: getCommentSchema
-        }
-      }
+          200: getCommentSchema,
+        },
+      },
     },
-    async (req) => await updateCommentHandler(commentsRepo,req.params.id,req.body)
-  )
-}
+    async (req) => await updateCommentHandler(commentsRepo, req.params.id, req.body),
+  );
+};
 
 export default routes;

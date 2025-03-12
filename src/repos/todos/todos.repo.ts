@@ -5,36 +5,36 @@ import { util } from 'zod';
 import Omit = util.Omit;
 
 export interface ITodosRepo {
-  create(todo:  Omit<ITodo, "id">): Promise<ITodo>;
+  create(todo: Omit<ITodo, 'id'>): Promise<ITodo>;
 
   findById(id: string): Promise<ITodo>;
 
   findAll(): Promise<ITodo[]>;
 
-  update(id: string, todo: Partial<Omit<ITodo, "id">>): Promise<ITodo>;
+  update(id: string, todo: Partial<Omit<ITodo, 'id'>>): Promise<ITodo>;
 
   delete(id: string): Promise<boolean>;
 
-  findByCreatorId(creatorId:string): Promise<ITodo[]>;
+  findByCreatorId(creatorId: string): Promise<ITodo[]>;
 }
 
-export function getTodosRepo(db: DataSource): ITodosRepo{
-  const todoRepo = db.getRepository(Todo)
-  return{
-    create: async (todo: Omit<ITodo, "id">): Promise<ITodo> => {
+export function getTodosRepo(db: DataSource): ITodosRepo {
+  const todoRepo = db.getRepository(Todo);
+  return {
+    create: async (todo: Omit<ITodo, 'id'>): Promise<ITodo> => {
       return await todoRepo.save(todo);
     },
 
     findById: async (id: string): Promise<ITodo> => {
-      return await todoRepo.findOneOrFail({where:{id}});
+      return await todoRepo.findOneOrFail({ where: { id } });
     },
 
     async findByCreatorId(creatorId: string): Promise<ITodo[]> {
-      return await todoRepo.find({where: {creatorId:creatorId }})
+      return await todoRepo.find({ where: { creatorId } });
     },
 
     findAll: async (): Promise<ITodo[]> => {
-      return await todoRepo.find({relations:{creator:true}});
+      return await todoRepo.find({ relations: { creator: true } });
     },
 
     update: async (id: string, todo: Partial<Omit<ITodo, 'id'>>): Promise<ITodo> => {
@@ -50,7 +50,7 @@ export function getTodosRepo(db: DataSource): ITodosRepo{
     },
 
     delete: async (id: string): Promise<boolean> => {
-      return  !!await todoRepo.delete(id);
-    }
-  }
-} 
+      return !!(await todoRepo.delete(id));
+    },
+  };
+}

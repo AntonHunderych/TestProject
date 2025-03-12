@@ -2,41 +2,37 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import z from 'zod';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
-  const f = fastify.withTypeProvider<ZodTypeProvider>()
+  const f = fastify.withTypeProvider<ZodTypeProvider>();
 
-  const workSpaceUserRepo = f.repos.workSpaceUserRepo
+  const workSpaceUserRepo = f.repos.workSpaceUserRepo;
 
   f.get(
-    "/workSpaces/",
+    '/workSpaces/',
     {
-      schema: {
-
-      }
+      schema: {},
     },
     async (req) => await workSpaceUserRepo.getUserAllWorkSpaces(req.userData.id),
-  )
+  );
 
   f.get(
-    "/workSpaces/created/",
+    '/workSpaces/created/',
     {
-      schema: {
-
-      }
+      schema: {},
     },
-    async (req) => await workSpaceUserRepo.getAllCreatedWorkSpaces(req.userData.id)
-  )
+    async (req) => await workSpaceUserRepo.getAllCreatedWorkSpaces(req.userData.id),
+  );
 
   f.post(
-    "/addUser/",
+    '/addUser/',
     {
       schema: {
         body: z.object({
           userId: z.string(),
           workSpaceId: z.string(),
-        })
-      }
+        }),
+      },
     },
     async (req) => await workSpaceUserRepo.addUserToWorkSpace(req.body.workSpaceId, req.body.userId),
-  )
-}
+  );
+};
 export default routes;

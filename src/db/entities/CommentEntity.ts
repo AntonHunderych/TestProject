@@ -1,21 +1,28 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from './UserEntity';
 import { Todo } from './TodoEntity';
 
 @Entity()
 export class Comment {
-
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   text: string;
 
-  @Column({name: 'authorId'})
+  @Column({ name: 'authorId' })
   authorId: string;
 
-  @Column({name: 'todoId'})
-  todoId: string
+  @Column({ name: 'todoId' })
+  todoId: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
@@ -24,10 +31,10 @@ export class Comment {
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.comments)
-  @JoinTable({name: 'authorId'})
+  @JoinTable({ name: 'authorId' })
   author: User;
 
-  @ManyToOne(()=> Todo, (todo) => todo.comments)
-  @JoinTable({name:"todoId"})
-  todo: Todo
+  @ManyToOne(() => Todo, (todo) => todo.comments)
+  @JoinTable({ name: 'todoId' })
+  todo: Todo;
 }

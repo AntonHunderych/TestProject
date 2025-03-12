@@ -31,19 +31,17 @@ declare module 'fastify' {
   }
 }
 
-
-
-function setupSwagger(f:FastifyInstance ) {
+function setupSwagger(f: FastifyInstance) {
   f.register(fastifySwagger, {
     openapi: {
       info: {
         title: 'SampleApi',
         description: 'Sample backend service',
-        version: '1.0.0'
+        version: '1.0.0',
       },
-      servers: [{ url: 'http://127.0.0.1:3000', description: 'Local server' }]
+      servers: [{ url: 'http://127.0.0.1:3000', description: 'Local server' }],
     },
-   transform: jsonSchemaTransform
+    transform: jsonSchemaTransform,
   });
 
   f.register(fastifySwaggerUi, {
@@ -55,7 +53,7 @@ async function run() {
   const f = fastify({ logger: true });
 
   f.register(fastifyJwt, {
-    secret: 'your-secret-key'
+    secret: 'your-secret-key',
   });
 
   setupSwagger(f);
@@ -63,7 +61,7 @@ async function run() {
   f.addHook('preHandler', authHook);
   f.addHook('preHandler', async (request: FastifyRequest) => {
     request.userData = f.getUserDataFromJWT(request);
-  })
+  });
 
   f.decorate('repos', getRepos(await initDB()));
   f.decorate('crypto', getCryptoService());
@@ -76,16 +74,16 @@ async function run() {
     dir: join(__dirname, 'routes'),
     ignoreFilter: 'schemas',
     options: {
-      prefix: '/api'
+      prefix: '/api',
     },
     autoHooks: true,
     cascadeHooks: true,
     dirNameRoutePrefix: true,
   });
 
-  f.get('/', { preHandler: skipAuthHook, schema:{} }, (_req, res) => {
+  f.get('/', { preHandler: skipAuthHook, schema: {} }, (_req, res) => {
     res.status(200).send({
-      status: 'success'
+      status: 'success',
     });
   });
 
@@ -93,16 +91,14 @@ async function run() {
   f.listen(
     {
       port: 3000,
-      host: '127.0.0.1'
+      host: '127.0.0.1',
     },
     () => {
       console.log('Server started on port 3000');
-    }
+    },
   );
 
-  return f
+  return f;
 }
-
-
 
 export default run();

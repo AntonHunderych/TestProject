@@ -25,12 +25,12 @@ export class User {
   @JoinTable()
   roles: Role[];
 
-  @OneToMany(() => Todo, (todo)=>todo.creator)
-  todos: Todo[]
+  @OneToMany(() => Todo, (todo) => todo.creator)
+  todos: Todo[];
 
-  @OneToMany(() => Comment, (comments)=>comments.author)
+  @OneToMany(() => Comment, (comments) => comments.author)
   comments: Comment[];
 
-  @OneToMany(()=> WorkSpaceUser, (wsUser) => wsUser.user)
+  @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.user)
   wsUsers: WorkSpaceUser[];
 }
