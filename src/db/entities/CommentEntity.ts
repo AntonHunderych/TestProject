@@ -11,10 +11,10 @@ export class Comment {
   @Column()
   text: string;
 
-  @Column({name: 'author_id'})
+  @Column({name: 'authorId'})
   authorId: string;
 
-  @Column({name: 'todo_id'})
+  @Column({name: 'todoId'})
   todoId: string
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
@@ -24,10 +24,10 @@ export class Comment {
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.comments)
-  @JoinTable({name: 'author_id'})
+  @JoinTable({name: 'authorId'})
   author: User;
 
   @ManyToOne(()=> Todo, (todo) => todo.comments)
-  @JoinTable({name:"todo_id"})
+  @JoinTable({name:"todoId"})
   todo: Todo
 }

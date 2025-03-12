@@ -19,6 +19,9 @@ export class Todo {
   @Column({nullable: true})
   importance?: number;
 
+  @Column({nullable: true})
+  status?: string;
+
   @Column({name: "creator_Id"})
   creatorId: string;
 

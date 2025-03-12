@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMan
 import { Role } from './RoleEntity';
 import { Todo } from './TodoEntity';
 import { Comment } from './CommentEntity';
+import { WorkSpaceUser } from './WorkSpaceUser';
 
 @Entity()
 export class User {
@@ -30,4 +31,6 @@ export class User {
   @OneToMany(() => Comment, (comments)=>comments.author)
   comments: Comment[];
 
+  @OneToMany(()=> WorkSpaceUser, (wsUser) => wsUser.user)
+  wsUsers: WorkSpaceUser[];
 }

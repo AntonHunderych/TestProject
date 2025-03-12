@@ -4,6 +4,9 @@ import { userRoleRepo } from './user-role/user-role.repo';
 import getRolesRepo from './roles/roles.repos';
 import { getTodosRepo } from './todos/todos.repo';
 import { getCommentsRepo } from './comments/comments.repos';
+import { getWorkSpaceRepos } from './workspace/workspace.repos';
+import { getWorkSpaceTodoRepo } from './workspace/todos/workSpaceTodos.repos.';
+import { getWorkSpaceUserRepo } from './workspace/user/workSpaceUser.repos';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -12,6 +15,9 @@ export default function getRepos(db: DataSource) {
     userRoleRepo: userRoleRepo(db),
     todoRepo: getTodosRepo(db),
     commentRepo: getCommentsRepo(db),
+    workSpaceRepo: getWorkSpaceRepos(db),
+    workSpaceTodoRepo: getWorkSpaceTodoRepo(db),
+    workSpaceUserRepo: getWorkSpaceUserRepo(db),
   };
 }
 

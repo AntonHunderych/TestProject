@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance } from 'fastify';
+import fastify, { FastifyInstance, FastifyRequest } from 'fastify';
 import fastifyAutoload from '@fastify/autoload';
 import { join } from 'node:path';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
@@ -23,6 +23,11 @@ declare module 'fastify' {
 
   export interface FastifyRequest {
     skipAuth?: boolean;
+    userData: {
+      id: string;
+      username: string;
+      email: string;
+    };
   }
 }
 
@@ -50,12 +55,15 @@ async function run() {
   const f = fastify({ logger: true });
 
   f.register(fastifyJwt, {
-    secret: 'your-secret-key' // Ваш секретний ключ для підпису токенів
+    secret: 'your-secret-key'
   });
 
   setupSwagger(f);
 
   f.addHook('preHandler', authHook);
+  f.addHook('preHandler', async (request: FastifyRequest) => {
+    request.userData = f.getUserDataFromJWT(request);
+  })
 
   f.decorate('repos', getRepos(await initDB()));
   f.decorate('crypto', getCryptoService());
