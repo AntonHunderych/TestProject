@@ -1,12 +1,15 @@
 import { DataSource } from 'typeorm';
-import { getUserRepo } from './users/users.repos';
+import { getUserRepo } from './users/users.repo';
 import { userRoleRepo } from './user-role/user-role.repo';
-import getRolesRepo from './roles/roles.repos';
+import getRolesRepo from './roles/roles.repo';
 import { getTodosRepo } from './todos/todos.repo';
-import { getCommentsRepo } from './comments/comments.repos';
-import { getWorkSpaceRepos } from './workspace/workspace.repos';
-import { getWorkSpaceTodoRepo } from './workspace/todos/workSpaceTodos.repos.';
-import { getWorkSpaceUserRepo } from './workspace/user/workSpaceUser.repos';
+import { getCommentsRepo } from './comments/comments.repo';
+import { getWorkSpaceRepos } from './workspace/workspace.repo';
+import { getWorkSpaceTodoRepo } from './workspace/todos/workSpaceTodos.repo';
+import { getWorkSpaceUserRepo } from './workspace/user/workSpaceUser.repo';
+import { getWorkSpaceRoles } from './workspace/roles/workSpaceRoles.repo';
+import { getWorkSpacePermissionsRepo } from './workspace/permissions/workSpacePermissions.repo';
+import { getWorkSpaceUserRoleRepo } from './workspace/userRole/workSpaceUserRole.repo';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -18,6 +21,9 @@ export default function getRepos(db: DataSource) {
     workSpaceRepo: getWorkSpaceRepos(db),
     workSpaceTodoRepo: getWorkSpaceTodoRepo(db),
     workSpaceUserRepo: getWorkSpaceUserRepo(db),
+    workSpaceRolesRepo: getWorkSpaceRoles(db),
+    workSpacePermissionsRepo: getWorkSpacePermissionsRepo(db),
+    workSpaceUserRoleRepo: getWorkSpaceUserRoleRepo(db)
   };
 }
 

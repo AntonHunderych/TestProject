@@ -1,28 +1,29 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, Unique } from 'typeorm';
+import { Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, Unique } from 'typeorm';
 import { User } from './UserEntity';
 import { WorkSpace } from './WorkSpaceEntity';
 import { WorkSpaceTodo } from './WorkSpaceTodo';
+import { WorkSpaceRoles } from './WorkSpaceRoles';
 
 @Entity()
 @Unique(['userId', 'workSpaceId'])
 export class WorkSpaceUser {
-  @PrimaryColumn()
+  @PrimaryColumn("uuid")
   userId: string;
 
-  @PrimaryColumn()
+  @PrimaryColumn("uuid")
   workSpaceId: string;
 
   @ManyToOne(() => User, (user) => user.wsUsers, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @ManyToOne(() => WorkSpace, (workspace) => workspace.wsUsers, { onDelete: 'CASCADE' })
+  @ManyToOne(() => WorkSpace, (workspace) => workspace.workSpaceUsers, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpace;
 
-  @Column()
-  workSpaceUserId: number;
-
   @OneToMany(() => WorkSpaceTodo, (todo) => todo.creator)
   todos: WorkSpaceTodo[];
+
+  @ManyToMany(() => WorkSpaceRoles, (workSpace) => workSpace.workSpaceUsers)
+  roles: WorkSpaceRoles[];
 }

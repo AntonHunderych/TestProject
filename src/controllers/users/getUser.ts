@@ -1,5 +1,5 @@
 import { User, UserSchema } from '../../db/schemas/UserSchema';
-import { IUsersRepos } from '../../repos/users/users.repos';
+import { IUsersRepos } from '../../repos/users/users.repo';
 
 export default async function getUserByIdHandler(rep: IUsersRepos, id: string): Promise<User> {
   try {

@@ -1,4 +1,4 @@
-import { IUsersRepos } from '../../repos/users/users.repos';
+import { IUsersRepos } from '../../repos/users/users.repo';
 import { UserSchema } from '../../db/schemas/UserSchema';
 import { IUserRoleRepo } from '../../repos/user-role/user-role.repo';
 import z from 'zod';

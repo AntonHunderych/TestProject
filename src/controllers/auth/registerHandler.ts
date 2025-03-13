@@ -1,4 +1,4 @@
-import { IUsersRepos } from '../../repos/users/users.repos';
+import { IUsersRepos } from '../../repos/users/users.repo';
 import ICrypto from '../../services/crypto/ICrypto';
 
 export interface IRegisterResp {

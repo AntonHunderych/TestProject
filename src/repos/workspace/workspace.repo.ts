@@ -35,6 +35,7 @@ export function getWorkSpaceRepos(db: DataSource): IWorkSpaceRepos {
         where: {
           id,
         },
+        relations: { workSpaceTodos: true, workSpaceUsers: true, workSpaceRoles:true },
       });
     },
     async updateWorkSpace(id: string, workSpace: IWorkSpaceUpdate): Promise<IWorkspace> {

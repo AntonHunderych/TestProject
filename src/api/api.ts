@@ -10,7 +10,6 @@ import fastifyJwt from 'fastify-jwt';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import { skipAuthHook } from './hooks/skipAuthHook';
-import { authHook } from './hooks/authHook';
 import { getUserDataFromJWT } from './plugins/getUserDataFromJWT';
 import { IUserControllerResp } from '../controllers/users/createUser';
 
@@ -27,7 +26,11 @@ declare module 'fastify' {
       id: string;
       username: string;
       email: string;
+      isAdmin: boolean;
     };
+    workSpace: {
+      id: string;
+    }
   }
 }
 
@@ -58,9 +61,13 @@ async function run() {
 
   setupSwagger(f);
 
-  f.addHook('preHandler', authHook);
-  f.addHook('preHandler', async (request: FastifyRequest) => {
-    request.userData = f.getUserDataFromJWT(request);
+  //f.addHook('preHandler', authHook);
+  f.addHook('preHandler', async function (request: FastifyRequest) {
+    request.userData =  {...f.getUserDataFromJWT(request),isAdmin:false};
+
+    const user = await this.repos.userRepo.getUserById(request.userData.id);
+
+    request.userData.isAdmin = user.roles.some((r) => r.value === "ADMIN")
   });
 
   f.decorate('repos', getRepos(await initDB()));

@@ -17,15 +17,17 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const userRepo = f.repos.userRepo;
   const userRoleRepo = f.repos.userRoleRepo;
 
+  f.addHook("preHandler",roleHook([RoleEnum.USER]))
+
   f.get(
-    '/',
+    '/admin/',
     {
       schema: {
         response: {
           200: getUsersRespSchema,
         },
       },
-      preHandler: roleHook([RoleEnum.USER, RoleEnum.ADMIN]),
+      preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async () => {
       const users = await getAllUsersHandler(userRepo);
@@ -50,7 +52,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   );
 
   f.post(
-    '/',
+    '/admin/',
     {
       schema: {
         body: createUserSchema,
@@ -58,6 +60,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: createRespUserSchema,
         },
       },
+      preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async (req) => {
       await createUserHandler(userRepo, userRoleRepo, {
@@ -68,7 +71,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   );
 
   f.delete(
-    '/:id',
+    '/admin/:id',
     {
       schema: {
         params: UUIDGetter,
@@ -76,12 +79,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: deleteRespUserSchema,
         },
       },
+      preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async (req) => await deleteUserHandler(userRepo, req.params.id),
   );
 
   f.post(
-    '/:id',
+    '/admin/:id',
     {
       schema: {
         params: UUIDGetter,
@@ -90,6 +94,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: createRespUserSchema,
         },
       },
+      preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async (req) => updateUserHandler(userRepo, req.params.id, req.body),
   );

@@ -114,6 +114,9 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
     {
       schema: {
         params: UUIDGetter,
+        response: {
+          200: z.boolean(),
+        }
       },
     },
     async (req) => {

@@ -6,6 +6,7 @@ export interface IWorkSpaceUserRepo {
   addUserToWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUser>;
   getUserAllWorkSpaces(id: string): Promise<IWorkspace[]>;
   getAllCreatedWorkSpaces(id: string): Promise<IWorkspace[]>;
+  existUserInWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUser|undefined>;
 }
 
 export function getWorkSpaceUserRepo(db: DataSource): IWorkSpaceUserRepo {
@@ -21,18 +22,9 @@ export function getWorkSpaceUserRepo(db: DataSource): IWorkSpaceUserRepo {
         return existingUser;
       }
 
-      const lastUser = await workSpaceUserRepo
-        .createQueryBuilder('wsUser')
-        .where('wsUser.workSpaceId = :workSpaceId', { workSpaceId })
-        .orderBy('wsUser.workSpaceUserId', 'DESC')
-        .getOne();
-
-      const newWorkSpaceUserId = lastUser ? lastUser.workSpaceUserId + 1 : 1;
-
       const newWorkSpaceUser = workSpaceUserRepo.create({
         userId,
         workSpaceId,
-        workSpaceUserId: newWorkSpaceUserId,
       });
 
       return workSpaceUserRepo.save(newWorkSpaceUser);
@@ -45,5 +37,9 @@ export function getWorkSpaceUserRepo(db: DataSource): IWorkSpaceUserRepo {
       const user = await workSpaceUserRepo.find({ where: { userId: id }, relations: { workSpace: true } });
       return user.map((wsUser) => wsUser.workSpace).filter((workSpace) => workSpace?.creatorId === id);
     },
+    async existUserInWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUser|undefined>{
+      const usersInWorkSpace = await workSpaceUserRepo.find({where:{workSpaceId},relations: { workSpace: true }});
+      return  usersInWorkSpace.find((user)=>user.userId === userId)
+    }
   };
 }

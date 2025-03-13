@@ -28,7 +28,6 @@ export default function getRolesRepo(db: DataSource): IRolesRepo {
       if (!role) {
         return false;
       }
-
       await roleRepo.remove(role);
       return true;
     },

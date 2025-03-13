@@ -1,4 +1,4 @@
-import { IUsersRepos } from '../../repos/users/users.repos';
+import { IUsersRepos } from '../../repos/users/users.repo';
 
 export default async function deleteUserHandler(rep: IUsersRepos, id: string): Promise<boolean> {
   try {

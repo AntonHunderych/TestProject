@@ -1,4 +1,4 @@
-import { IUsersRepos } from '../../repos/users/users.repos';
+import { IUsersRepos } from '../../repos/users/users.repo';
 import { User, UserSchema } from '../../db/schemas/UserSchema';
 
 export default async function updateUserHandler(rep: IUsersRepos, id: string, data: Partial<User>): Promise<User> {

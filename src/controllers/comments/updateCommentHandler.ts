@@ -1,4 +1,4 @@
-import { ICommentsRepo, IUpdateComment } from '../../repos/comments/comments.repos';
+import { ICommentsRepo, IUpdateComment } from '../../repos/comments/comments.repo';
 import { IComment } from '../../db/schemas/CommentSchema';
 
 export async function updateCommentHandler(

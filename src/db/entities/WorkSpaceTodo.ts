@@ -1,13 +1,13 @@
 import { Todo } from './TodoEntity';
-import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { WorkSpace } from './WorkSpaceEntity';
 
 @Entity()
 export class WorkSpaceTodo extends Todo {
-  @Column()
+  @Column({name:"workSpaceId"})
   workSpaceId: string;
 
-  @OneToMany(() => WorkSpace, (ws) => ws.wsTodos)
+  @ManyToOne(() => WorkSpace, (ws) => ws.workSpaceTodos)
   @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpace;
 }
