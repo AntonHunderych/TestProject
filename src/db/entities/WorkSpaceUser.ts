@@ -3,6 +3,7 @@ import { User } from './UserEntity';
 import { WorkSpace } from './WorkSpaceEntity';
 import { WorkSpaceTodo } from './WorkSpaceTodo';
 import { WorkSpaceRoles } from './WorkSpaceRoles';
+import { WorkSpaceComment } from './WorkSpaceComment';
 
 @Entity()
 @Unique(['userId', 'workSpaceId'])
@@ -23,6 +24,9 @@ export class WorkSpaceUser {
 
   @OneToMany(() => WorkSpaceTodo, (todo) => todo.creator)
   todos: WorkSpaceTodo[];
+
+  @OneToMany(()=> WorkSpaceComment, (comment) => comment.creator)
+  comments: WorkSpaceComment[];
 
   @ManyToMany(() => WorkSpaceRoles, (workSpace) => workSpace.workSpaceUsers)
   roles: WorkSpaceRoles[];

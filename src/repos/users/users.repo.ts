@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { User } from '../../db/entities/UserEntity';
+import { DBError } from '../../Types/Errors/DBError';
 
 export interface IUsersRepos {
   getAllUsers: () => Promise<User[]>;
@@ -15,42 +16,65 @@ export function getUserRepo(db: DataSource): IUsersRepos {
 
   return {
     getAllUsers: async () => {
-      return await _usersRepo.find();
+      try {
+        return await _usersRepo.find();
+      } catch (error) {
+        throw new DBError('Error fetching all users', error);
+      }
     },
 
     getUserById: async (id: string): Promise<User> => {
-      return await _usersRepo.findOneOrFail({
-        where: { id },
-        relations: {
-          roles: true,
-          todos: true,
-        },
-      });
+      try {
+        return await _usersRepo.findOneOrFail({
+          where: { id },
+          relations: {
+            roles: true,
+            todos: true,
+          },
+        });
+      } catch (error) {
+        throw new DBError('Error fetching user by id', error);
+      }
     },
 
     async getUserByEmail(email: string): Promise<User | null> {
-      return await _usersRepo.findOne({ where: { email }, relations: ['roles'] });
+      try {
+        return await _usersRepo.findOne({ where: { email }, relations: ['roles'] });
+      } catch (error) {
+        throw new DBError('Error fetching user by email', error);
+      }
     },
 
     createUser: async (userData: Partial<User>) => {
-      const newUser = _usersRepo.create(userData);
-      return await _usersRepo.save(newUser);
+      try {
+        const newUser = _usersRepo.create(userData);
+        return await _usersRepo.save(newUser);
+      } catch (error) {
+        throw new DBError('Error creating user', error);
+      }
     },
 
     updateUser: async (id: string, userData: Partial<User>) => {
-      const user = await _usersRepo.findOneOrFail({ where: { id } });
-      Object.assign(user, userData);
-      return await _usersRepo.save(user);
+      try {
+        const user = await _usersRepo.findOneOrFail({ where: { id } });
+        Object.assign(user, userData);
+        return await _usersRepo.save(user);
+      } catch (error) {
+        throw new DBError('Error updating user', error);
+      }
     },
 
     deleteUser: async (id: string) => {
-      const user = await _usersRepo.findOne({ where: { id } });
-      if (!user) {
-        return false;
+      try {
+        const user = await _usersRepo.findOne({ where: { id } });
+        if (!user) {
+          return false;
+        }
+        await _usersRepo.remove(user);
+        return true;
+      } catch (error) {
+        throw new DBError('Error deleting user', error);
       }
-
-      await _usersRepo.remove(user);
-      return true;
     },
   };
 }

@@ -10,8 +10,7 @@ import {
 import { User } from './UserEntity';
 import { Todo } from './TodoEntity';
 
-@Entity()
-export class Comment {
+export class BasicComment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -29,6 +28,10 @@ export class Comment {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+}
+
+@Entity()
+export class Comment extends BasicComment {
 
   @ManyToOne(() => User, (user) => user.comments)
   @JoinTable({ name: 'authorId' })

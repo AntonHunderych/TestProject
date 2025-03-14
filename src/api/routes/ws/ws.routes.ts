@@ -9,6 +9,7 @@ import { startWorkSpaceSchema } from './schema/startWorkSpaceSchema';
 import z from 'zod';
 import { stopWorkSpaceSchema } from './schema/stopWorkSpaceSchema';
 import { getWorkSpaceSchema } from './schema/getWorkSpaceSchema';
+import { addWorkSpaceRoleToUser } from '../../../controllers/ws/roles/giveWorkSpaceRoleToUser';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -65,7 +66,9 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/stop/',
     {
       schema: {
-        response: stopWorkSpaceSchema
+        response: {
+          200: stopWorkSpaceSchema,
+        }
       }
     },
     async (req) => {
@@ -91,7 +94,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       const workSpace = await workSpaceRepo.createWorkSpace({ ...req.body, creatorId: req.userData.id });
       await workSpaceUser.addUserToWorkSpace(workSpace.id, req.userData.id);
       await addStandardRoleToWorkSpace(workSpaceRoleRepo, workSpace.id);
-      await workSpaceUserRoleRepo.giveRoleToUser(req.userData.id, workSpace.id, 'Creator');
+      await addWorkSpaceRoleToUser(workSpaceUserRoleRepo,req.userData.id,workSpace.id,"Creator")
       return workSpace;
     }
   );

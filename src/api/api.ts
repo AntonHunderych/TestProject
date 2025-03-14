@@ -12,6 +12,7 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import { skipAuthHook } from './hooks/skipAuthHook';
 import { getUserDataFromJWT } from './plugins/getUserDataFromJWT';
 import { IUserControllerResp } from '../controllers/users/createUser';
+import { authHook } from './hooks/authHook';
 
 declare module 'fastify' {
   export interface FastifyInstance {
@@ -61,7 +62,7 @@ async function run() {
 
   setupSwagger(f);
 
-  //f.addHook('preHandler', authHook);
+  f.addHook('preHandler', authHook);
   f.addHook('preHandler', async function (request: FastifyRequest) {
     request.userData =  {...f.getUserDataFromJWT(request),isAdmin:false};
 

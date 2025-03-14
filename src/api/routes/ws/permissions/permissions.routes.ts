@@ -4,6 +4,8 @@ import { RoleEnum } from '../../../../Types/Enum/RoleEnum';
 import { roleHook } from '../../../hooks/roleHook';
 import z from 'zod';
 import { UUIDGetter } from '../../schemas/UUIDGetter';
+import { getPermissionSchema } from './schema/getPermissionSchema';
+import { createPermissionSchema } from './schema/createPermissionSchema';
 
 const route: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>()
@@ -14,7 +16,11 @@ const route: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   f.get(
     "/",
     {
-      schema: {}
+      schema: {
+        response: {
+          200: z.array(getPermissionSchema)
+        }
+      }
     },
     async () => {
       return  await workSpacePermissionsRepo.getAll()
@@ -25,9 +31,10 @@ const route: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
     "/",
     {
       schema: {
-        body: z.object({
-          value: z.string(),
-        })
+        body: createPermissionSchema,
+        response: {
+          200: getPermissionSchema,
+        }
       },
     },
     async (req) => {
@@ -39,7 +46,10 @@ const route: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
     "/:id",
     {
       schema: {
-        params: UUIDGetter
+        params: UUIDGetter,
+        response: {
+          200: z.boolean(),
+        }
       }
     },
     async (req) => {

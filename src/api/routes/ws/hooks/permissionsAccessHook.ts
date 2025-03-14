@@ -8,7 +8,7 @@ export function permissionsAccessHook(requiredPermissions: Permissions): preHand
       return
 
     const repo = this.repos.workSpaceUserRoleRepo
-    const userRoleInWorkSpace= await repo.getAllUserRole(req.userData.id,req.workSpace.id)
+    const userRoleInWorkSpace= await repo.getAllUserRoles(req.userData.id,req.workSpace.id)
 
     const userPermissions: string[] = userRoleInWorkSpace.flatMap(role => role.permissions.map((permission) => permission.value));
 

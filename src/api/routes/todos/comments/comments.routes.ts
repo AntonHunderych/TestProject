@@ -72,8 +72,8 @@ export const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      const userData = f.getUserDataFromJWT(req);
-      return await createCommentHandler(commentsRepo, { ...req.body, authorId: userData.id });
+      console.log(req.userData);
+      return await createCommentHandler(commentsRepo, { ...req.body, authorId: req.userData.id });
     },
   );
 

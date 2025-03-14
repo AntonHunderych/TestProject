@@ -9,6 +9,7 @@ import { WorkSpaceTodo } from './entities/WorkSpaceTodo';
 import { WorkSpaceUser } from './entities/WorkSpaceUser';
 import { WorkSpaceRoles } from './entities/WorkSpaceRoles';
 import { WorkSpacePermissions } from './entities/WorkSpacePermissions';
+import { WorkSpaceComment } from './entities/WorkSpaceComment';
 
 export const pgDataSource = new DataSource({
   type: 'postgres',
@@ -20,7 +21,7 @@ export const pgDataSource = new DataSource({
   synchronize: true,
   //dropSchema: true,
   logging: true,
-  entities: [User, Role, Todo, Comment, WorkSpace, WorkSpaceTodo, WorkSpaceUser,WorkSpaceRoles, WorkSpacePermissions],
+  entities: [User, Role, Todo, Comment, WorkSpace, WorkSpaceTodo, WorkSpaceUser,WorkSpaceRoles, WorkSpacePermissions, WorkSpaceComment],
 });
 
 export const initDB = async (): Promise<DataSource> => {

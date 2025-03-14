@@ -2,8 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMan
 import { User } from './UserEntity';
 import { Comment } from './CommentEntity';
 
-@Entity()
-export class Todo {
+export class BasicTodo {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -22,13 +21,18 @@ export class Todo {
   @Column({ nullable: true })
   status?: string;
 
-  @Column({ name: 'creator_Id' })
+  @Column({ name: 'creatorId' })
   creatorId: string;
+}
+
+@Entity()
+export class Todo extends BasicTodo{
 
   @ManyToOne(() => User, (user) => user.todos)
-  @JoinColumn({ name: 'creator_Id' })
+  @JoinColumn({ name: 'creatorId' })
   creator: User;
 
   @OneToMany(() => Comment, (comment) => comment.todo)
   comments: Comment[];
+
 }

@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { User } from '../../db/entities/UserEntity';
 import { Role } from '../../db/entities/RoleEntity';
+import { DBError } from '../../Types/Errors/DBError';
 
 export interface IUserRoleRepo {
   giveRoleToUser(userId: string, roleValue: string): Promise<boolean>;
@@ -17,18 +18,26 @@ export function userRoleRepo(db: DataSource) {
 
   return {
     async giveRoleToUser(userId: string, roleValue: string): Promise<boolean> {
-      const user = await userRepo.findOneOrFail({ where: { id: userId }, relations: ['roles'] });
-      user.roles = [...(user.roles ? user.roles : []), await roleRepo.findOneOrFail({ where: { value: roleValue } })];
+      try {
+        const user = await userRepo.findOneOrFail({ where: { id: userId }, relations: ['roles'] });
+        user.roles = [...(user.roles ? user.roles : []), await roleRepo.findOneOrFail({ where: { value: roleValue } })];
 
-      const newUser = await userRepo.save(user);
-      return checkRoleInUser(newUser, roleValue);
+        const newUser = await userRepo.save(user);
+        return checkRoleInUser(newUser, roleValue);
+      } catch (error) {
+        throw new DBError('Error giving role to user', error);
+      }
     },
     async removeRoleFromUser(userID: string, roleValue: string): Promise<boolean> {
-      const user = await userRepo.findOneOrFail({ where: { id: userID }, relations: ['roles'] });
-      user.roles = user.roles.filter((roleId) => roleId.value !== roleValue);
+      try {
+        const user = await userRepo.findOneOrFail({ where: { id: userID }, relations: ['roles'] });
+        user.roles = user.roles.filter((roleId) => roleId.value !== roleValue);
 
-      const newUser = await userRepo.save(user);
-      return !checkRoleInUser(newUser, roleValue);
+        const newUser = await userRepo.save(user);
+        return !checkRoleInUser(newUser, roleValue);
+      } catch (error) {
+        throw new DBError('Error removing role from user', error);
+      }
     },
   };
 }
