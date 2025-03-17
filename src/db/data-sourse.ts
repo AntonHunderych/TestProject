@@ -10,14 +10,17 @@ import { WorkSpaceUser } from './entities/WorkSpaceUser';
 import { WorkSpaceRoles } from './entities/WorkSpaceRoles';
 import { WorkSpacePermissions } from './entities/WorkSpacePermissions';
 import { WorkSpaceComment } from './entities/WorkSpaceComment';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const pgDataSource = new DataSource({
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'password',
-  database: 'mydb',
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT || '5432'),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   synchronize: true,
   //dropSchema: true,
   logging: true,

@@ -13,6 +13,9 @@ import { skipAuthHook } from './hooks/skipAuthHook';
 import { getUserDataFromJWT } from './plugins/getUserDataFromJWT';
 import { IUserControllerResp } from '../controllers/users/createUser';
 import { authHook } from './hooks/authHook';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 declare module 'fastify' {
   export interface FastifyInstance {
