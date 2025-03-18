@@ -14,6 +14,8 @@ export function permissionsAccessHook(requiredPermissions: Permissions): preHand
       role.permissions.map((permission) => permission.value),
     );
 
+    console.log(userPermissions);
+
     if (!userPermissions.includes(requiredPermissions)) {
       return res.status(400).send({ message: 'You dont have requiredPermissions!' });
     }
