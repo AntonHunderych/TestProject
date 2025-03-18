@@ -4,4 +4,4 @@ export default interface ICrypto {
     salt: string;
   }>;
   compare(password: string, hash: string, salt: string): Promise<boolean>;
-};
+}

@@ -19,33 +19,33 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   f.addHook('preHandler', accessToWorkSpaceHook);
 
   f.get(
-    "/",
+    '/',
     {
-      schema:{
+      schema: {
         response: {
-          200: z.array(TodoSchemaResp)
-        }
+          200: z.array(TodoSchemaResp),
+        },
       },
     },
     async (req) => {
-      return await wsTodoRepo.findAllTodoInWorkSpace(req.workSpace.id)
-    }
-  )
+      return await wsTodoRepo.findAllTodoInWorkSpace(req.workSpace.id);
+    },
+  );
 
   f.get(
-    "/:id",
+    '/:id',
     {
-      schema:{
+      schema: {
         params: UUIDGetter,
         response: {
-          200: TodoSchemaResp
-        }
+          200: TodoSchemaResp,
+        },
       },
     },
     async (req) => {
-      return await wsTodoRepo.findById(req.params.id)
-    }
-  )
+      return await wsTodoRepo.findById(req.params.id);
+    },
+  );
 
   f.post(
     '/',
@@ -53,13 +53,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         body: createTodoSchema,
         response: {
-          200: TodoSchemaResp
-        }
+          200: TodoSchemaResp,
+        },
       },
       preHandler: permissionsAccessHook(Permissions.createTodo),
     },
     async (req) => {
-      return await wsTodoRepo.create( req.body, req.workSpace.id, req.userData.id);
+      return await wsTodoRepo.create(req.body, req.workSpace.id, req.userData.id);
     },
   );
 
@@ -69,28 +69,28 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         params: UUIDGetter,
         response: {
-          200: z.boolean()
-        }
+          200: z.boolean(),
+        },
       },
-      preHandler: permissionsAccessHook(Permissions.deleteTodo)
+      preHandler: permissionsAccessHook(Permissions.deleteTodo),
     },
     async (req) => {
-      return await wsTodoRepo.delete(req.params.id)
-    }
-  )
+      return await wsTodoRepo.delete(req.params.id);
+    },
+  );
 
   f.put(
-    "/:id",
+    '/:id',
     {
       schema: {
         params: UUIDGetter,
-        body:  createTodoSchema.partial()
+        body: createTodoSchema.partial(),
       },
-      preHandler: permissionsAccessHook(Permissions.changeTodo)
+      preHandler: permissionsAccessHook(Permissions.changeTodo),
     },
     async (req) => {
-      return await wsTodoRepo.update(req.params.id, req.body)
-    }
-  )
+      return await wsTodoRepo.update(req.params.id, req.body);
+    },
+  );
 };
 export default routes;

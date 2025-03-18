@@ -65,5 +65,3 @@ export const getCommentsRepo = (db: DataSource): ICommentsRepo => {
     },
   };
 };
-
-

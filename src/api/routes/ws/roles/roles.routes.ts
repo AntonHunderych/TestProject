@@ -25,21 +25,21 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
     '/admin/',
     {
       schema: {},
-      preHandler: roleHook([RoleEnum.ADMIN])
+      preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async () => {
       return await workSpaceRolesRepo.getAll();
-    }
+    },
   );
 
   f.get(
     '/',
     {
       schema: {
-        response: { 200: z.array(getWorkSpaceRoleSchema) }
-      }
+        response: { 200: z.array(getWorkSpaceRoleSchema) },
+      },
     },
-    async (req) => await workSpaceRolesRepo.getWorkSpaceRoles(req.workSpace.id)
+    async (req) => await workSpaceRolesRepo.getWorkSpaceRoles(req.workSpace.id),
   );
 
   f.post(
@@ -47,35 +47,37 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
     {
       schema: {
         response: { 200: getWorkSpaceRoleSchema },
-        body: createWorkSpaceRoleSchema
+        body: createWorkSpaceRoleSchema,
       },
-      preHandler: permissionsAccessHook(Permissions.createRole)
+      preHandler: permissionsAccessHook(Permissions.createRole),
     },
-    async (req, res) => await createRoleHandler(workSpaceRolesRepo, req.workSpace.id, req.body.name, req.body.permissions, res)
+    async (req, res) =>
+      await createRoleHandler(workSpaceRolesRepo, req.workSpace.id, req.body.name, req.body.permissions, res),
   );
   f.put(
     '/',
     {
       schema: {
         response: { 200: getWorkSpaceRoleSchema },
-        body: createWorkSpaceRoleSchema
+        body: createWorkSpaceRoleSchema,
       },
-      preHandler: permissionsAccessHook(Permissions.updateRole)
+      preHandler: permissionsAccessHook(Permissions.updateRole),
     },
-    async (req) => await workSpaceRolesRepo.updatePermissionOnRole(req.workSpace.id, req.body.name, req.body.permissions)
+    async (req) =>
+      await workSpaceRolesRepo.updatePermissionOnRole(req.workSpace.id, req.body.name, req.body.permissions),
   );
   f.delete(
     '/',
     {
       schema: {
         response: { 200: z.boolean() },
-        body: deleteWorkSpaceRoleSchema
+        body: deleteWorkSpaceRoleSchema,
       },
-      preHandler: permissionsAccessHook(Permissions.deleteRole)
+      preHandler: permissionsAccessHook(Permissions.deleteRole),
     },
     async (req) => {
-      return  await workSpaceRolesRepo.delete(req.workSpace.id, req.body.name);
-    }
+      return await workSpaceRolesRepo.delete(req.workSpace.id, req.body.name);
+    },
   );
 };
 export default routes;

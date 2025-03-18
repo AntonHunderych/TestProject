@@ -8,10 +8,10 @@ import { WorkSpaceComment } from './WorkSpaceComment';
 @Entity()
 @Unique(['userId', 'workSpaceId'])
 export class WorkSpaceUser {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   userId: string;
 
-  @PrimaryColumn("uuid")
+  @PrimaryColumn('uuid')
   workSpaceId: string;
 
   @ManyToOne(() => User, (user) => user.wsUsers, { onDelete: 'CASCADE' })
@@ -22,10 +22,13 @@ export class WorkSpaceUser {
   @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpace;
 
-  @OneToMany(() => WorkSpaceTodo, (todo) => todo.creator)
-  todos: WorkSpaceTodo[];
+  @OneToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.creator)
+  createdTodos: WorkSpaceTodo[];
 
-  @OneToMany(()=> WorkSpaceComment, (comment) => comment.creator)
+  @ManyToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.contributors)
+  contributedTodos: WorkSpaceTodo[];
+
+  @OneToMany(() => WorkSpaceComment, (comment) => comment.creator)
   comments: WorkSpaceComment[];
 
   @ManyToMany(() => WorkSpaceRoles, (workSpace) => workSpace.workSpaceUsers)

@@ -10,7 +10,7 @@ export function roleHook(requiredRoles: string[]) {
 
     for (const role of requiredRoles) {
       if (!user.roles.some((r) => r.value === role)) {
-        reply.status(403).send({ message: "You·don't·have·permission·to·access·this·resource" });
+        reply.status(403).send({ message: 'You·dont·have·permission·to·access·this·resource' });
       }
     }
   };

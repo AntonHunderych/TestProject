@@ -3,10 +3,10 @@ import { WorkSpaceRoles } from './WorkSpaceRoles';
 
 @Entity()
 export class WorkSpacePermissions {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({unique: true})
+  @Column({ unique: true })
   value: string;
 
   @ManyToMany(() => WorkSpaceRoles, (workSpaceRoles) => workSpaceRoles.permissions)

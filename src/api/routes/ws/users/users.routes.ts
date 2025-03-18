@@ -25,13 +25,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/admin/roles/:id',
     {
       schema: {
-        params: UUIDGetter
+        params: UUIDGetter,
       },
-      preHandler: [dataFetchHook, roleHook([RoleEnum.ADMIN])]
+      preHandler: [dataFetchHook, roleHook([RoleEnum.ADMIN])],
     },
     async (req) => {
       return await workSpaceUserRoleRepo.getAllUserRoles(req.params.id, req.workSpace.id);
-    }
+    },
   );
 
   f.get(
@@ -39,11 +39,11 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         response: {
-          200: z.array(getWorkSpaceSchema)
-        }
-      }
+          200: z.array(getWorkSpaceSchema),
+        },
+      },
     },
-    async (req) => await workSpaceUserRepo.getUserAllWorkSpaces(req.userData.id)
+    async (req) => await workSpaceUserRepo.getUserAllWorkSpaces(req.userData.id),
   );
 
   f.get(
@@ -51,26 +51,26 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         response: {
-          200: z.array(getWorkSpaceSchema)
-        }
-      }
+          200: z.array(getWorkSpaceSchema),
+        },
+      },
     },
-    async (req) => await workSpaceUserRepo.getAllCreatedWorkSpaces(req.userData.id)
+    async (req) => await workSpaceUserRepo.getAllCreatedWorkSpaces(req.userData.id),
   );
 
   f.get(
     '/',
     {
-      schema:{
+      schema: {
         response: {
-          200: z.array(getWorkSpaceUserSchema)
-        }
-      }
+          200: z.array(getWorkSpaceUserSchema),
+        },
+      },
     },
     async (req) => {
-      return await getUsersInWorkSpaceHandler(workSpaceUserRepo,req.workSpace.id)
-    }
-  )
+      return await getUsersInWorkSpaceHandler(workSpaceUserRepo, req.workSpace.id);
+    },
+  );
 
   f.post(
     '/addUser/',
@@ -78,25 +78,25 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         body: z.object({
           userId: z.string(),
-          workSpaceId: z.string()
-        })
+          workSpaceId: z.string(),
+        }),
       },
-      preHandler: permissionsAccessHook(Permissions.addUserToWorkSpace)
+      preHandler: permissionsAccessHook(Permissions.addUserToWorkSpace),
     },
-    async (req) => await workSpaceUserRepo.addUserToWorkSpace(req.body.workSpaceId, req.body.userId)
+    async (req) => await workSpaceUserRepo.addUserToWorkSpace(req.body.workSpaceId, req.body.userId),
   );
 
   f.delete(
     '/deleteUser/:id',
     {
       schema: {
-        params: UUIDGetter
+        params: UUIDGetter,
       },
-      preHandler: permissionsAccessHook(Permissions.deleteUserFromWorkSpace)
+      preHandler: permissionsAccessHook(Permissions.deleteUserFromWorkSpace),
     },
     async (req) => {
       return await workSpaceUserRepo.deleteUserFromWorkSpace(req.workSpace.id, req.params.id);
-    }
+    },
   );
 };
 export default routes;

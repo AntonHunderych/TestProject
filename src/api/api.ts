@@ -34,7 +34,7 @@ declare module 'fastify' {
     };
     workSpace: {
       id: string;
-    }
+    };
   }
 }
 
@@ -67,11 +67,11 @@ async function run() {
 
   f.addHook('preHandler', authHook);
   f.addHook('preHandler', async function (request: FastifyRequest) {
-    request.userData =  {...f.getUserDataFromJWT(request),isAdmin:false};
+    const userData = { ...f.getUserDataFromJWT(request), isAdmin: false };
 
-    const user = await this.repos.userRepo.getUserById(request.userData.id);
+    const user = await this.repos.userRepo.getUserById(userData.id);
 
-    request.userData.isAdmin = user.roles.some((r) => r.value === "ADMIN")
+    Object.assign(request, { userData: { ...userData, isAdmin: user.roles.some((r) => r.value === 'ADMIN') } });
   });
 
   f.decorate('repos', getRepos(await initDB()));

@@ -38,7 +38,7 @@ export function getTodosRepo(db: DataSource): ITodosRepo {
       try {
         return await todoRepo.find({ where: { creatorId } });
       } catch (error) {
-        throw new DBError('Error fetching todos by creator id', error);
+        throw new DBError('Error fetching createdTodos by creator id', error);
       }
     },
 
@@ -46,7 +46,7 @@ export function getTodosRepo(db: DataSource): ITodosRepo {
       try {
         return await todoRepo.find({ relations: { creator: true } });
       } catch (error) {
-        throw new DBError('Error fetching all todos', error);
+        throw new DBError('Error fetching all createdTodos', error);
       }
     },
 

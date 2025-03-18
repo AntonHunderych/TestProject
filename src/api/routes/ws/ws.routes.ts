@@ -24,13 +24,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/admin/:id',
     {
       schema: {
-        params: UUIDGetter
+        params: UUIDGetter,
       },
-      preHandler: roleHook([RoleEnum.USER])
+      preHandler: roleHook([RoleEnum.USER]),
     },
     async (req) => {
       return await workSpaceRepo.getWorkSpaceById(req.params.id);
-    }
+    },
   );
 
   f.get(
@@ -41,11 +41,11 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
         response: {
           200: startWorkSpaceSchema,
           401: z.object({
-            message: z.string()
-          })
-        }
+            message: z.string(),
+          }),
+        },
       },
-      preHandler: [(req, reply) => accessToWorkSpaceHookArgWorkSpaceId(req.params.id).bind(f)(req, reply)]
+      preHandler: [(req, reply) => accessToWorkSpaceHookArgWorkSpaceId(req.params.id).bind(f)(req, reply)],
     },
     async (req, reply) => {
       const user = await workSpaceUser.existUserInWorkSpace(req.params.id, req.userData.id);
@@ -56,10 +56,10 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       return {
         workSpaceAccessToken: f.jwt.sign({
           ...req.userData,
-          workSpaceId: req.params.id
-        })
+          workSpaceId: req.params.id,
+        }),
       };
-    }
+    },
   );
 
   f.delete(
@@ -68,16 +68,16 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         response: {
           200: stopWorkSpaceSchema,
-        }
-      }
+        },
+      },
     },
     async (req) => {
       return {
         casualToken: f.jwt.sign({
-          ...req.userData
-        })
+          ...req.userData,
+        }),
       };
-    }
+    },
   );
 
   f.post(
@@ -86,17 +86,17 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         body: createWorkSpaceSchema,
         response: {
-          200: getWorkSpaceSchema
-        }
-      }
+          200: getWorkSpaceSchema,
+        },
+      },
     },
     async (req) => {
       const workSpace = await workSpaceRepo.createWorkSpace({ ...req.body, creatorId: req.userData.id });
       await workSpaceUser.addUserToWorkSpace(workSpace.id, req.userData.id);
       await addStandardRoleToWorkSpace(workSpaceRoleRepo, workSpace.id);
-      await addWorkSpaceRoleToUser(workSpaceUserRoleRepo,req.userData.id,workSpace.id,"Creator")
+      await addWorkSpaceRoleToUser(workSpaceUserRoleRepo, req.userData.id, workSpace.id, 'Creator');
       return workSpace;
-    }
+    },
   );
 };
 

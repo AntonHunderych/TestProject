@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest, preHandlerAsyncHookHandler } from 'fastify';
 
-export function accessToWorkSpaceHookArgWorkSpaceId(workSpaceId:string): preHandlerAsyncHookHandler{
-  return  async function (request: FastifyRequest, reply: FastifyReply) {
-
-    if (request.userData.isAdmin)
-      return
+export function accessToWorkSpaceHookArgWorkSpaceId(workSpaceId: string): preHandlerAsyncHookHandler {
+  return async function (request: FastifyRequest, reply: FastifyReply) {
+    if (request.userData.isAdmin) {
+      return;
+    }
 
     const userWorkSpaceRepo = this.repos.workSpaceUserRepo;
 
@@ -14,10 +14,13 @@ export function accessToWorkSpaceHookArgWorkSpaceId(workSpaceId:string): preHand
       reply.status(401).send({ message: 'You dont have access to this WorkSpace' });
       return;
     }
-  }
+  };
 }
 
-export const accessToWorkSpaceHook: preHandlerAsyncHookHandler = async function (request: FastifyRequest, reply: FastifyReply){
+export const accessToWorkSpaceHook: preHandlerAsyncHookHandler = async function (
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
   const userWorkSpaceRepo = this.repos.workSpaceUserRepo;
 
   const user = await userWorkSpaceRepo.existUserInWorkSpace(request.workSpace.id, request.userData.id);
@@ -26,5 +29,4 @@ export const accessToWorkSpaceHook: preHandlerAsyncHookHandler = async function 
     reply.status(401).send({ message: 'You dont have access to this WorkSpace' });
     return;
   }
-}
-
+};

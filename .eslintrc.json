@@ -1,14 +1,8 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint/eslint-plugin",
-    "prettier"
-  ],
-  "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
-  ],
+  "plugins": ["@typescript-eslint/eslint-plugin", "prettier"],
+  "extends": ["plugin:@typescript-eslint/recommended", "plugin:prettier/recommended", "prettier"],
   "ignorePatterns": ["node_modules/", "dist/"],
   "rules": {
     "max-len": [
@@ -48,7 +42,7 @@
     "curly": "error",
     "no-async-promise-executor": ["error"],
     //"no-console": "error",
-    "semi": "error",
+    //"semi": "error",
     //"comma-dangle": "error",
     "object-shorthand": ["error", "always"],
     "@typescript-eslint/no-unused-vars": [

@@ -8,13 +8,13 @@ export async function createRoleHandler(
   workSpaceId: string,
   roleName: string,
   permissions: Permissions[],
-  reply: FastifyReply
+  reply: FastifyReply,
 ): Promise<WorkSpaceRoles> {
   try {
-    await workSpaceRoleRepo.create(workSpaceId, roleName)
-    return await workSpaceRoleRepo.updatePermissionOnRole(workSpaceId,roleName, permissions)
+    await workSpaceRoleRepo.create(workSpaceId, roleName);
+    return await workSpaceRoleRepo.updatePermissionOnRole(workSpaceId, roleName, permissions);
   } catch (e) {
-    reply.status(400).send({error: e})
-    throw e
+    reply.status(400).send({ error: e });
+    throw e;
   }
 }

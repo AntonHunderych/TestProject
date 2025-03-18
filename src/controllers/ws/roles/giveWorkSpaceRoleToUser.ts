@@ -5,6 +5,7 @@ export async function addWorkSpaceRoleToUser(
   workSpaceUserRoleRepo: IWorkSpaceUserRoleRepo,
   userId: string,
   workSpaceId: string,
-  roleValue: string): Promise<WorkSpaceUser> {
-  return await workSpaceUserRoleRepo.giveRoleToUser(userId,workSpaceId,roleValue);
+  roleValue: string,
+): Promise<WorkSpaceUser> {
+  return await workSpaceUserRoleRepo.giveRoleToUser(userId, workSpaceId, roleValue);
 }

@@ -33,7 +33,7 @@ export function getWorkSpaceRoles(db: DataSource): IWorkSpaceRolesRepo {
     },
     async create(workSpaceId: string, name: string): Promise<WorkSpaceRoles> {
       try {
-        return await workSpaceRolesRepo.save({ name: name, workSpaceId: workSpaceId });
+        return await workSpaceRolesRepo.save({ name, workSpaceId });
       } catch (error) {
         throw new DBError('Error creating workspace role', error);
       }
@@ -45,15 +45,19 @@ export function getWorkSpaceRoles(db: DataSource): IWorkSpaceRolesRepo {
         throw new DBError('Error deleting workspace role', error);
       }
     },
-    async updatePermissionOnRole(workSpaceId: string, name: string, permissionsValue: Permissions[]): Promise<WorkSpaceRoles> {
+    async updatePermissionOnRole(
+      workSpaceId: string,
+      name: string,
+      permissionsValue: Permissions[],
+    ): Promise<WorkSpaceRoles> {
       try {
         const permissions = await Promise.all(
-          permissionsValue.map(value => workSpacePermissions.findOneOrFail({ where: { value } }))
+          permissionsValue.map((value) => workSpacePermissions.findOneOrFail({ where: { value } })),
         );
 
         const role = await workSpaceRolesRepo.findOneOrFail({
           where: { workSpaceId, name },
-          relations: { permissions: true }
+          relations: { permissions: true },
         });
 
         role.permissions = permissions;
@@ -61,6 +65,6 @@ export function getWorkSpaceRoles(db: DataSource): IWorkSpaceRolesRepo {
       } catch (error) {
         throw new DBError('Error updating permissions on workspace role', error);
       }
-    }
+    },
   };
 }

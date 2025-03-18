@@ -32,7 +32,6 @@ export class BasicComment {
 
 @Entity()
 export class Comment extends BasicComment {
-
   @ManyToOne(() => User, (user) => user.comments)
   @JoinTable({ name: 'authorId' })
   author: User;

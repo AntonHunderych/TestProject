@@ -26,13 +26,11 @@ export class BasicTodo {
 }
 
 @Entity()
-export class Todo extends BasicTodo{
-
+export class Todo extends BasicTodo {
   @ManyToOne(() => User, (user) => user.todos)
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
   @OneToMany(() => Comment, (comment) => comment.todo)
   comments: Comment[];
-
 }

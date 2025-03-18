@@ -21,7 +21,7 @@ export function getWorkSpaceTodoRepo(db: DataSource): IWsTodoRepo {
         return await wsTodoRepo.save({
           workSpaceId,
           creatorId,
-          ...todo
+          ...todo,
         });
       } catch (error) {
         throw new DBError('Error creating workspace todo', error);
@@ -40,7 +40,7 @@ export function getWorkSpaceTodoRepo(db: DataSource): IWsTodoRepo {
       try {
         return await wsTodoRepo.find({ where: { workSpaceId } });
       } catch (error) {
-        throw new DBError('Error fetching all todos in workspace', error);
+        throw new DBError('Error fetching all createdTodos in workspace', error);
       }
     },
 
@@ -48,11 +48,11 @@ export function getWorkSpaceTodoRepo(db: DataSource): IWsTodoRepo {
       try {
         return await wsTodoRepo.find();
       } catch (error) {
-        throw new DBError('Error fetching all workspace todos', error);
+        throw new DBError('Error fetching all workspace createdTodos', error);
       }
     },
 
-    async update(id: string, todo: Partial<Omit<ITodo, "id">>): Promise<WorkSpaceTodo> {
+    async update(id: string, todo: Partial<Omit<ITodo, 'id'>>): Promise<WorkSpaceTodo> {
       try {
         await wsTodoRepo.update(id, todo);
         return await wsTodoRepo.findOneByOrFail({ id });
@@ -67,6 +67,6 @@ export function getWorkSpaceTodoRepo(db: DataSource): IWsTodoRepo {
       } catch (error) {
         throw new DBError('Error deleting workspace todo', error);
       }
-    }
+    },
   };
 }

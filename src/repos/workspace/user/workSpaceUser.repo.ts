@@ -47,7 +47,7 @@ export function getWorkSpaceUserRepo(db: DataSource): IWorkSpaceUserRepo {
       try {
         return await workSpaceUserRepo.find({
           where: { workSpaceId },
-          relations: { user: true, roles: true, todos: true },
+          relations: { user: true, roles: true, createdTodos: true },
         });
       } catch (error) {
         throw new DBError('Error fetching users in workspace', error);
@@ -70,9 +70,7 @@ export function getWorkSpaceUserRepo(db: DataSource): IWorkSpaceUserRepo {
           where: { userId: id },
           relations: { workSpace: true },
         });
-        return user
-          .map((wsUser) => wsUser.workSpace)
-          .filter((workSpace) => workSpace?.creatorId === id);
+        return user.map((wsUser) => wsUser.workSpace).filter((workSpace) => workSpace?.creatorId === id);
       } catch (error) {
         throw new DBError('Error fetching all created workspaces for user', error);
       }

@@ -51,18 +51,16 @@ const rolePermissions: Record<string, Permissions[]> = {
     Permissions.changeCategory,
     Permissions.manageNotifications,
   ],
-  Visitor: [
-    Permissions.writeComment,
-    Permissions.changeComment,
-    Permissions.deleteComment,
-  ],
+  Visitor: [Permissions.writeComment, Permissions.changeComment, Permissions.deleteComment],
 };
 
-export async function addStandardRoleToWorkSpace (workSpaceRoleRepo: IWorkSpaceRolesRepo, workSpaceId: string): Promise<void> {
-
-  await workSpaceRoleRepo.create(workSpaceId, "Creator")
-  await workSpaceRoleRepo.create(workSpaceId, "User")
-  await workSpaceRoleRepo.create(workSpaceId, "Visitor")
+export async function addStandardRoleToWorkSpace(
+  workSpaceRoleRepo: IWorkSpaceRolesRepo,
+  workSpaceId: string,
+): Promise<void> {
+  await workSpaceRoleRepo.create(workSpaceId, 'Creator');
+  await workSpaceRoleRepo.create(workSpaceId, 'User');
+  await workSpaceRoleRepo.create(workSpaceId, 'Visitor');
 
   for (const [role, permissions] of Object.entries(rolePermissions)) {
     await workSpaceRoleRepo.updatePermissionOnRole(workSpaceId, role, permissions);

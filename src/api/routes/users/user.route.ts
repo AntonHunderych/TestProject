@@ -17,7 +17,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const userRepo = f.repos.userRepo;
   const userRoleRepo = f.repos.userRoleRepo;
 
-  f.addHook("preHandler",roleHook([RoleEnum.USER]))
+  f.addHook('preHandler', roleHook([RoleEnum.USER]));
 
   f.get(
     '/admin/',

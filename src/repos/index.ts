@@ -10,6 +10,7 @@ import { getWorkSpaceUserRepo } from './workspace/user/workSpaceUser.repo';
 import { getWorkSpaceRoles } from './workspace/roles/workSpaceRoles.repo';
 import { getWorkSpacePermissionsRepo } from './workspace/permissions/workSpacePermissions.repo';
 import { getWorkSpaceUserRoleRepo } from './workspace/userRole/workSpaceUserRole.repo';
+import { getTodoContributorRepo } from './workspace/todoContributor/todoContributor.repo';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -23,7 +24,8 @@ export default function getRepos(db: DataSource) {
     workSpaceUserRepo: getWorkSpaceUserRepo(db),
     workSpaceRolesRepo: getWorkSpaceRoles(db),
     workSpacePermissionsRepo: getWorkSpacePermissionsRepo(db),
-    workSpaceUserRoleRepo: getWorkSpaceUserRoleRepo(db)
+    workSpaceUserRoleRepo: getWorkSpaceUserRoleRepo(db),
+    workSpaceContributorRepo: getTodoContributorRepo(db),
   };
 }
 

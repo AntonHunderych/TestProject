@@ -6,8 +6,7 @@ import { WorkSpacePermissions } from './WorkSpacePermissions';
 @Entity()
 @Unique(['workSpaceId', 'name'])
 export class WorkSpaceRoles {
-
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()

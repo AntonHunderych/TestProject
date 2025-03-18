@@ -9,5 +9,5 @@ export class WorkSpaceComment extends BasicComment {
   creator: WorkSpaceUser;
 
   @ManyToOne(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.comments)
-  todo: WorkSpaceTodo
+  todo: WorkSpaceTodo;
 }

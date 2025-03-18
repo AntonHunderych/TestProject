@@ -1,8 +1,7 @@
-
 services:
   postgres:
     image: postgres:15.3
-    container_name: postgres_db
+    container_name: postgres_database
     restart: always
     environment:
       POSTGRES_USER: ${DB_USERNAME}

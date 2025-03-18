@@ -6,7 +6,7 @@ import { roleHook } from '../../../hooks/roleHook';
 const routes: FastifyPluginAsyncZod = async (f) => {
   const userRoleRepo = f.repos.userRoleRepo;
 
-  f.addHook("preHandler",roleHook([RoleEnum.ADMIN]))
+  f.addHook('preHandler', roleHook([RoleEnum.ADMIN]));
 
   f.post(
     '/:id',
