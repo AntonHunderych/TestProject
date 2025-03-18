@@ -24,6 +24,6 @@ export class WorkSpaceTodo extends BasicTodo {
   @JoinTable()
   contributors: WorkSpaceUser[];
 
-  @OneToMany(() => WorkSpaceComment, (workSpaceComment) => workSpaceComment.todo)
+  @OneToMany(() => WorkSpaceComment, (workSpaceComment) => workSpaceComment.todo, { cascade: ['remove'] })
   comments: Comment[];
 }

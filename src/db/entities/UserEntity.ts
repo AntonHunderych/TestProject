@@ -31,6 +31,6 @@ export class User {
   @OneToMany(() => Comment, (comments) => comments.author)
   comments: Comment[];
 
-  @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.user)
+  @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.user, { cascade: ['remove'] })
   wsUsers: WorkSpaceUser[];
 }

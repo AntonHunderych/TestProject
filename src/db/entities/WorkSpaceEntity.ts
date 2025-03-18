@@ -18,12 +18,12 @@ export class WorkSpace {
   @Column()
   creatorId: string;
 
-  @OneToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.workSpace)
+  @OneToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.workSpace, { cascade: ['remove'] })
   workSpaceTodos: WorkSpaceTodo[];
 
-  @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.workSpace)
+  @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.workSpace, { cascade: ['remove'] })
   workSpaceUsers: WorkSpaceUser[];
 
-  @OneToMany(() => WorkSpaceRoles, (workSpaceUser) => workSpaceUser.workSpace)
+  @OneToMany(() => WorkSpaceRoles, (workSpaceRoles) => workSpaceRoles.workSpace, { cascade: ['remove'] })
   workSpaceRoles: WorkSpaceRoles[];
 }

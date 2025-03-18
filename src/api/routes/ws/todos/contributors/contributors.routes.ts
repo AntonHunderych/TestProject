@@ -4,7 +4,9 @@ import { RoleEnum } from '../../../../../Types/Enum/RoleEnum';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { UUIDGetter } from '../../../schemas/UUIDGetter';
-import z from 'zod';
+import { addDeleteContributorSchema } from './schema/addDeleteContributorSchema';
+import { permissionsAccessHook } from '../../hooks/permissionsAccessHook';
+import { Permissions } from '../../../../../Types/Enum/PermisionsEnum';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -30,11 +32,9 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/',
     {
       schema: {
-        body: z.object({
-          todoId: z.string(),
-          userId: z.string(),
-        }),
+        body: addDeleteContributorSchema,
       },
+      preHandler: permissionsAccessHook(Permissions.addPerformersTodo),
     },
     async (req) => {
       await contributorRepos.addContributor(req.workSpace.id, req.body.userId, req.body.todoId);
@@ -45,11 +45,9 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/',
     {
       schema: {
-        body: z.object({
-          todoId: z.string(),
-          userId: z.string(),
-        }),
+        body: addDeleteContributorSchema,
       },
+      preHandler: permissionsAccessHook(Permissions.removePerformersTodo),
     },
     async (req) => {
       await contributorRepos.deleteContributor(req.workSpace.id, req.body.userId, req.body.todoId);

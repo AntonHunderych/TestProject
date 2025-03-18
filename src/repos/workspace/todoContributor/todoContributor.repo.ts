@@ -11,6 +11,7 @@ export interface IGetTodoContributorRepo {
 
 export function getTodoContributorRepo(db: DataSource): IGetTodoContributorRepo {
   const workSpaceTodo = db.getRepository(WorkSpaceTodo);
+  const workSpaceUser = db.getRepository(WorkSpaceUser);
 
   return {
     async getTodoContributor(workSpaceId: string, todoId: string): Promise<WorkSpaceUser[]> {
@@ -24,28 +25,27 @@ export function getTodoContributorRepo(db: DataSource): IGetTodoContributorRepo 
         throw new DBError('Error getting contributors', error);
       }
     },
-    async addContributor(workSpaceId: string, userId: string, todoId: string): Promise<void> {
+    async addContributor(workSpaceId: string, userId: string, todoId: string): Promise<any> {
       try {
+        const user = await workSpaceUser.findOneOrFail({ where: { workSpaceId, userId } });
         const todo = await workSpaceTodo.findOneOrFail({
           where: { workSpaceId, id: todoId },
           relations: { contributors: true },
         });
-        Object.assign(todo, { ...todo, contributors: userId });
-        await workSpaceTodo.save(todo);
+        todo.contributors.push(user);
+        return await workSpaceTodo.save(todo);
       } catch (error) {
         throw new DBError('Error adding contributor', error);
       }
     },
     async deleteContributor(workSpaceId: string, userId: string, todoId: string): Promise<void> {
       try {
+        const user = await workSpaceUser.findOneOrFail({ where: { workSpaceId, userId } });
         const todo = await workSpaceTodo.findOneOrFail({
           where: { workSpaceId, id: todoId },
           relations: { contributors: true },
         });
-        Object.assign(todo, {
-          ...todo,
-          contributors: todo.contributors.filter((contributor) => contributor.userId !== userId),
-        });
+        todo.contributors = todo.contributors.filter((contributor) => contributor.userId !== user.userId);
         await workSpaceTodo.save(todo);
       } catch (error) {
         throw new DBError('Error deleting contributor', error);

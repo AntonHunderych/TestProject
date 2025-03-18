@@ -22,15 +22,15 @@ export class WorkSpaceUser {
   @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpace;
 
-  @OneToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.creator)
+  @OneToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.creator, { cascade: ['remove'] })
   createdTodos: WorkSpaceTodo[];
 
-  @ManyToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.contributors)
+  @ManyToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.contributors, { cascade: ['remove'] })
   contributedTodos: WorkSpaceTodo[];
 
-  @OneToMany(() => WorkSpaceComment, (comment) => comment.creator)
+  @OneToMany(() => WorkSpaceComment, (comment) => comment.creator, { cascade: ['remove'] })
   comments: WorkSpaceComment[];
 
-  @ManyToMany(() => WorkSpaceRoles, (workSpace) => workSpace.workSpaceUsers)
+  @ManyToMany(() => WorkSpaceRoles, (workSpace) => workSpace.workSpaceUsers, { cascade: ['remove'] })
   roles: WorkSpaceRoles[];
 }
