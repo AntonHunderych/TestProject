@@ -4,6 +4,7 @@ import { Todo } from './TodoEntity';
 import { Comment } from './CommentEntity';
 import { WorkSpaceUser } from './WorkSpace/WorkSpaceUserEntity';
 import { Tag } from './TagEntity';
+import { Category } from './CategoryEntity';
 
 @Entity()
 export class User {
@@ -34,6 +35,9 @@ export class User {
 
   @OneToMany(() => Tag, (tag) => tag.user)
   tags: Tag[];
+
+  @OneToMany(() => Category, (category) => category.user)
+  categories: Category[];
 
   @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.user, { cascade: ['remove'] })
   wsUsers: WorkSpaceUser[];

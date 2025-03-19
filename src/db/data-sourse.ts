@@ -13,6 +13,8 @@ import { WorkSpaceComment } from './entities/WorkSpace/WorkSpaceCommentEntity';
 import dotenv from 'dotenv';
 import { Tag } from './entities/TagEntity';
 import { WorkSpaceTag, WorkSpaceTagTodo } from './entities/WorkSpace/WorkSpaceTagEntity';
+import { Category } from './entities/CategoryEntity';
+import { WorkSpaceCategory, WorkSpaceCategoryConf } from './entities/WorkSpace/WorkSpaceCategoryEntity';
 
 dotenv.config();
 
@@ -32,6 +34,7 @@ export const pgDataSource = new DataSource({
     Todo,
     Comment,
     Tag,
+    Category,
     WorkSpace,
     WorkSpaceTodo,
     WorkSpaceUser,
@@ -39,7 +42,9 @@ export const pgDataSource = new DataSource({
     WorkSpacePermissions,
     WorkSpaceComment,
     WorkSpaceTag,
-    WorkSpaceTagTodo
+    WorkSpaceTagTodo,
+    WorkSpaceCategory,
+    WorkSpaceCategoryConf
   ],
 });
 

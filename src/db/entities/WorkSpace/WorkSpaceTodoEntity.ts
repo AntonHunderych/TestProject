@@ -4,6 +4,7 @@ import { WorkSpace } from './WorkSpaceEntity';
 import { WorkSpaceUser } from './WorkSpaceUserEntity';
 import { WorkSpaceComment } from './WorkSpaceCommentEntity';
 import { WorkSpaceTagTodo } from './WorkSpaceTagEntity';
+import { WorkSpaceCategoryConf } from './WorkSpaceCategoryEntity';
 
 @Entity()
 export class WorkSpaceTodo extends BasicTodo {
@@ -17,7 +18,7 @@ export class WorkSpaceTodo extends BasicTodo {
   @ManyToOne(() => WorkSpaceUser, (worksSpaceUser) => worksSpaceUser.createdTodos)
   @JoinColumn([
     { name: 'creatorId', referencedColumnName: 'userId' },
-    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
+    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' }
   ])
   creator: WorkSpaceUser;
 
@@ -30,4 +31,7 @@ export class WorkSpaceTodo extends BasicTodo {
 
   @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.workSpaceTodo)
   tags: WorkSpaceTagTodo[];
+
+  @ManyToOne(() => WorkSpaceCategoryConf, (workSpaceCategoryTodo) => workSpaceCategoryTodo.todos)
+  category: WorkSpaceCategoryConf;
 }

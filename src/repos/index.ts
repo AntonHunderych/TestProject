@@ -14,6 +14,7 @@ import { getTodoContributorRepo } from './workspace/todoContributor/todoContribu
 import { getWorkSpaceCommentRepos } from './workspace/comments/comments.repo';
 import { getTagsRepos } from './tags/tags.repo';
 import { getWorkSpaceTagRepo } from './workspace/tags/workSpaceTags.repos';
+import { getWorkSpaceCategoriesRepo } from './workspace/categories/workSpaceCategories.repo';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -31,7 +32,8 @@ export default function getRepos(db: DataSource) {
     workSpaceUserRoleRepo: getWorkSpaceUserRoleRepo(db),
     workSpaceContributorRepo: getTodoContributorRepo(db),
     workSpaceCommentRepo: getWorkSpaceCommentRepos(db),
-    workSpaceTagRepo: getWorkSpaceTagRepo(db)
+    workSpaceTagRepo: getWorkSpaceTagRepo(db),
+    workSpaceCategoriesRepo: getWorkSpaceCategoriesRepo(db),
   };
 }
 

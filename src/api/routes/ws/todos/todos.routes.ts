@@ -22,9 +22,9 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/',
     {
       schema: {
-        response: {
+        /*response: {
           200: z.array(TodoSchemaResp),
-        },
+        },*/
       },
     },
     async (req) => {

@@ -38,7 +38,7 @@ export function getWorkSpaceTodoRepo(db: DataSource): IWsTodoRepo {
 
     async findAllTodoInWorkSpace(workSpaceId: string): Promise<WorkSpaceTodo[]> {
       try {
-        return await wsTodoRepo.find({ where: { workSpaceId }, relations: {creator:true, comments:true, contributors:true, tags: true} });
+        return await wsTodoRepo.find({ where: { workSpaceId }, relations: {creator:true, comments:true, contributors:true, tags: true, category:true} });
       } catch (error) {
         throw new DBError('Error fetching all createdTodos in workspace', error);
       }

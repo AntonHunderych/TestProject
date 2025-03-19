@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMan
 import { User } from './UserEntity';
 import { Comment } from './CommentEntity';
 import { Tag } from './TagEntity';
+import { Category } from './CategoryEntity';
 
 export class BasicTodo {
   @PrimaryGeneratedColumn('uuid')
@@ -37,4 +38,7 @@ export class Todo extends BasicTodo {
 
   @ManyToMany(()=>Tag,(tag)=>tag.todos)
   tags: Tag[];
+
+  @ManyToOne(() => Category, (category) => category.todos)
+  category: Category;
 }
