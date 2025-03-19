@@ -1,8 +1,9 @@
-import { BasicTodo } from './TodoEntity';
+import { BasicTodo } from '../TodoEntity';
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { WorkSpace } from './WorkSpaceEntity';
-import { WorkSpaceUser } from './WorkSpaceUser';
-import { WorkSpaceComment } from './WorkSpaceComment';
+import { WorkSpaceUser } from './WorkSpaceUserEntity';
+import { WorkSpaceComment } from './WorkSpaceCommentEntity';
+import { WorkSpaceTagTodo } from './WorkSpaceTagEntity';
 
 @Entity()
 export class WorkSpaceTodo extends BasicTodo {
@@ -26,4 +27,7 @@ export class WorkSpaceTodo extends BasicTodo {
 
   @OneToMany(() => WorkSpaceComment, (workSpaceComment) => workSpaceComment.todo, { cascade: ['remove'] })
   comments: Comment[];
+
+  @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.workSpaceTodo)
+  tags: WorkSpaceTagTodo[];
 }

@@ -36,7 +36,7 @@ export function getTodosRepo(db: DataSource): ITodosRepo {
 
     findByCreatorId: async (creatorId: string): Promise<ITodo[]> => {
       try {
-        return await todoRepo.find({ where: { creatorId } });
+        return await todoRepo.find({ where: { creatorId }, relations: ["tags", "comments"] });
       } catch (error) {
         throw new DBError('Error fetching createdTodos by creator id', error);
       }
@@ -44,7 +44,7 @@ export function getTodosRepo(db: DataSource): ITodosRepo {
 
     findAll: async (): Promise<ITodo[]> => {
       try {
-        return await todoRepo.find({ relations: { creator: true } });
+        return await todoRepo.find({ relations: { creator: true, comments: true, tags: true }});
       } catch (error) {
         throw new DBError('Error fetching all createdTodos', error);
       }

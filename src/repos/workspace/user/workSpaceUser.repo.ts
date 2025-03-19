@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { WorkSpaceUser } from '../../../db/entities/WorkSpaceUser';
+import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 import { IWorkspace } from '../../../db/schemas/WorkSpaceSchema';
 import { DBError } from '../../../Types/Errors/DBError';
 

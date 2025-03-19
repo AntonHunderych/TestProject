@@ -4,13 +4,15 @@ import { User } from './entities/UserEntity';
 import { Role } from './entities/RoleEntity';
 import { Todo } from './entities/TodoEntity';
 import { Comment } from './entities/CommentEntity';
-import { WorkSpace } from './entities/WorkSpaceEntity';
-import { WorkSpaceTodo } from './entities/WorkSpaceTodo';
-import { WorkSpaceUser } from './entities/WorkSpaceUser';
-import { WorkSpaceRoles } from './entities/WorkSpaceRoles';
-import { WorkSpacePermissions } from './entities/WorkSpacePermissions';
-import { WorkSpaceComment } from './entities/WorkSpaceComment';
+import { WorkSpace } from './entities/WorkSpace/WorkSpaceEntity';
+import { WorkSpaceTodo } from './entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceUser } from './entities/WorkSpace/WorkSpaceUserEntity';
+import { WorkSpaceRoles } from './entities/WorkSpace/WorkSpaceRolesEntity';
+import { WorkSpacePermissions } from './entities/WorkSpace/WorkSpacePermissionsEntity';
+import { WorkSpaceComment } from './entities/WorkSpace/WorkSpaceCommentEntity';
 import dotenv from 'dotenv';
+import { Tag } from './entities/TagEntity';
+import { WorkSpaceTag, WorkSpaceTagTodo } from './entities/WorkSpace/WorkSpaceTagEntity';
 
 dotenv.config();
 
@@ -29,12 +31,15 @@ export const pgDataSource = new DataSource({
     Role,
     Todo,
     Comment,
+    Tag,
     WorkSpace,
     WorkSpaceTodo,
     WorkSpaceUser,
     WorkSpaceRoles,
     WorkSpacePermissions,
     WorkSpaceComment,
+    WorkSpaceTag,
+    WorkSpaceTagTodo
   ],
 });
 

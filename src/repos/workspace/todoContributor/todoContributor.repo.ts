@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
-import { WorkSpaceTodo } from '../../../db/entities/WorkSpaceTodo';
+import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
 import { DBError } from '../../../Types/Errors/DBError';
-import { WorkSpaceUser } from '../../../db/entities/WorkSpaceUser';
+import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 
 export interface IGetTodoContributorRepo {
   addContributor(workSpaceId: string, userId: string, todoId: string): Promise<void>;

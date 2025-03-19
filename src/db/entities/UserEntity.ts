@@ -2,7 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMan
 import { Role } from './RoleEntity';
 import { Todo } from './TodoEntity';
 import { Comment } from './CommentEntity';
-import { WorkSpaceUser } from './WorkSpaceUser';
+import { WorkSpaceUser } from './WorkSpace/WorkSpaceUserEntity';
+import { Tag } from './TagEntity';
 
 @Entity()
 export class User {
@@ -30,6 +31,9 @@ export class User {
 
   @OneToMany(() => Comment, (comments) => comments.author)
   comments: Comment[];
+
+  @OneToMany(() => Tag, (tag) => tag.user)
+  tags: Tag[];
 
   @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.user, { cascade: ['remove'] })
   wsUsers: WorkSpaceUser[];

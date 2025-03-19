@@ -1,7 +1,7 @@
-import { BasicComment } from './CommentEntity';
+import { BasicComment } from '../CommentEntity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { WorkSpaceTodo } from './WorkSpaceTodo';
-import { WorkSpaceUser } from './WorkSpaceUser';
+import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
+import { WorkSpaceUser } from './WorkSpaceUserEntity';
 
 @Entity()
 export class WorkSpaceComment extends BasicComment {

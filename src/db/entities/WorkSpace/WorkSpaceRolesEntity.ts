@@ -1,7 +1,7 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { WorkSpace } from './WorkSpaceEntity';
-import { WorkSpaceUser } from './WorkSpaceUser';
-import { WorkSpacePermissions } from './WorkSpacePermissions';
+import { WorkSpaceUser } from './WorkSpaceUserEntity';
+import { WorkSpacePermissions } from './WorkSpacePermissionsEntity';
 
 @Entity()
 @Unique(['workSpaceId', 'name'])

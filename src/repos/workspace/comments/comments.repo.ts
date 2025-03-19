@@ -1,5 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
-import { WorkSpaceComment } from '../../../db/entities/WorkSpaceComment';
+import { WorkSpaceComment } from '../../../db/entities/WorkSpace/WorkSpaceCommentEntity';
 import { DBError } from '../../../Types/Errors/DBError';
 
 export interface IWorkSpaceCommentRepos {

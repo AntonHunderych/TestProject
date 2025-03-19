@@ -1,5 +1,5 @@
 import { IWorkSpaceUserRoleRepo } from '../../../repos/workspace/userRole/workSpaceUserRole.repo';
-import { WorkSpaceUser } from '../../../db/entities/WorkSpaceUser';
+import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 
 export async function addWorkSpaceRoleToUser(
   workSpaceUserRoleRepo: IWorkSpaceUserRoleRepo,

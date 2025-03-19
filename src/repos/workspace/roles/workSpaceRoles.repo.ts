@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
-import { WorkSpaceRoles } from '../../../db/entities/WorkSpaceRoles';
+import { WorkSpaceRoles } from '../../../db/entities/WorkSpace/WorkSpaceRolesEntity';
 import { Permissions } from '../../../Types/Enum/PermisionsEnum';
-import { WorkSpacePermissions } from '../../../db/entities/WorkSpacePermissions';
+import { WorkSpacePermissions } from '../../../db/entities/WorkSpace/WorkSpacePermissionsEntity';
 import { DBError } from '../../../Types/Errors/DBError';
 
 export interface IWorkSpaceRolesRepo {

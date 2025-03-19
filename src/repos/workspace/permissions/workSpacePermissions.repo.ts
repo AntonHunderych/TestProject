@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { WorkSpacePermissions } from '../../../db/entities/WorkSpacePermissions';
+import { WorkSpacePermissions } from '../../../db/entities/WorkSpace/WorkSpacePermissionsEntity';
 import { DBError } from '../../../Types/Errors/DBError';
 
 export interface IWorkSpacePermissions {

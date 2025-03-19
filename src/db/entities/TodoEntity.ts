@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, ManyToMany } from 'typeorm';
 import { User } from './UserEntity';
 import { Comment } from './CommentEntity';
+import { Tag } from './TagEntity';
 
 export class BasicTodo {
   @PrimaryGeneratedColumn('uuid')
@@ -33,4 +34,7 @@ export class Todo extends BasicTodo {
 
   @OneToMany(() => Comment, (comment) => comment.todo)
   comments: Comment[];
+
+  @ManyToMany(()=>Tag,(tag)=>tag.todos)
+  tags: Tag[];
 }

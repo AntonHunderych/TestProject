@@ -1,9 +1,10 @@
 import { Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, Unique } from 'typeorm';
-import { User } from './UserEntity';
+import { User } from '../UserEntity';
 import { WorkSpace } from './WorkSpaceEntity';
-import { WorkSpaceTodo } from './WorkSpaceTodo';
-import { WorkSpaceRoles } from './WorkSpaceRoles';
-import { WorkSpaceComment } from './WorkSpaceComment';
+import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
+import { WorkSpaceRoles } from './WorkSpaceRolesEntity';
+import { WorkSpaceComment } from './WorkSpaceCommentEntity';
+import { WorkSpaceTag, WorkSpaceTagTodo } from './WorkSpaceTagEntity';
 
 @Entity()
 @Unique(['userId', 'workSpaceId'])
@@ -33,4 +34,11 @@ export class WorkSpaceUser {
 
   @ManyToMany(() => WorkSpaceRoles, (workSpace) => workSpace.workSpaceUsers, { cascade: ['remove'] })
   roles: WorkSpaceRoles[];
+
+  @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.assignedBy)
+  assignedTags: WorkSpaceTagTodo[];
+
+  @OneToMany(()=> WorkSpaceTag, (workSpaceTag) => workSpaceTag.creator)
+  createdTags: WorkSpaceTag[];
+
 }

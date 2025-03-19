@@ -1,7 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { WorkSpaceUser } from './WorkSpaceUser';
-import { WorkSpaceTodo } from './WorkSpaceTodo';
-import { WorkSpaceRoles } from './WorkSpaceRoles';
+import { WorkSpaceUser } from './WorkSpaceUserEntity';
+import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
+import { WorkSpaceRoles } from './WorkSpaceRolesEntity';
+import { WorkSpaceTag } from './WorkSpaceTagEntity';
 
 @Entity()
 @Unique(['name', 'creatorId'])
@@ -26,4 +27,7 @@ export class WorkSpace {
 
   @OneToMany(() => WorkSpaceRoles, (workSpaceRoles) => workSpaceRoles.workSpace, { cascade: ['remove'] })
   workSpaceRoles: WorkSpaceRoles[];
+
+  @OneToMany(()=> WorkSpaceTag, (workSpaceTag) => workSpaceTag.workSpace)
+  tags: WorkSpaceTag[];
 }

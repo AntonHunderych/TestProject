@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { WorkSpaceRoles } from './WorkSpaceRoles';
+import { WorkSpaceRoles } from './WorkSpaceRolesEntity';
 
 @Entity()
 export class WorkSpacePermissions {

@@ -1,6 +1,6 @@
 import { IWorkSpaceUserRepo } from '../../../repos/workspace/user/workSpaceUser.repo';
-import { WorkSpaceTodo } from '../../../db/entities/WorkSpaceTodo';
-import { WorkSpaceRoles } from '../../../db/entities/WorkSpaceRoles';
+import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceRoles } from '../../../db/entities/WorkSpace/WorkSpaceRolesEntity';
 
 export interface IGetUsersInWorkSpaceHandler {
   id: string;
