@@ -26,16 +26,20 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      const { hash, salt } = await crypto.hash(req.body.password);
-      const token = f.jwt.sign(
-        await createUserHandler(userRepo, userRoleRepo, {
-          username: req.body.username,
-          email: req.body.email,
-          password: hash,
-          salt,
-        }),
-      );
-      return { token };
+      try{
+        const { hash, salt } = await crypto.hash(req.body.password);
+        const token = f.jwt.sign(
+          await createUserHandler(userRepo, userRoleRepo, {
+            username: req.body.username,
+            email: req.body.email,
+            password: hash,
+            salt,
+          }),
+        );
+        return { token };
+      } catch (e) {
+        console.log(e);
+      }
     },
   );
 

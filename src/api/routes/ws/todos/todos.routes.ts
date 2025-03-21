@@ -12,7 +12,6 @@ import { TodoSchemaResp } from '../../todos/schemas/getTodoShema';
 import { filterEntityByUserCommand } from '../hooks/filterEntityByUserCommand';
 import { WorkSpaceTodo } from '../../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
 import { getAllTodoInWorkSpaceByCommand } from '../../../../controllers/ws/todos/getAllTodoInWorkSpaceByCommand';
-import timePlugin from  "../../../plugins/responseTime"
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -22,8 +21,6 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
-
-  f.register(timePlugin)
 
   f.get(
     '/admin/',

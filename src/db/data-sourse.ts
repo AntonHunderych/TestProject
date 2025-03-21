@@ -48,6 +48,7 @@ export const pgDataSource = new DataSource({
     WorkSpaceCategoryConf,
     WorkSpaceCommand,
   ],
+  migrations: ['./migrations/*.ts'],
 });
 
 export const initDB = async (): Promise<DataSource> => {

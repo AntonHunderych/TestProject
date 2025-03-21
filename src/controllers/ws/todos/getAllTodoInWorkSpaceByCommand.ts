@@ -1,5 +1,5 @@
 import { IWorkSpaceTodoRepo } from '../../../repos/workspace/todos/workSpaceTodos.repo';
-import { IWorkSpaceCommandsRepo } from '../../../repos/workspace/commands/workSpaceCommands.repo';
+import { IWorkSpaceCommandsRepo } from '../../../repos/workspace/commands/workSpaceCommand.repo';
 import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
 
 export async function getAllTodoInWorkSpaceByCommand(workSpaceTodoRepo: IWorkSpaceTodoRepo, workSpaceCommand: IWorkSpaceCommandsRepo, workSpaceId:string, userId:string): Promise<WorkSpaceTodo[]>{
