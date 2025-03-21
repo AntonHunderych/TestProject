@@ -2,9 +2,7 @@
 # Project Name
 
 ## Description
-A brief description of what this project does and its purpose. This can include details about the problem you're solving, who the intended users are, or the project's general goals.
-
-## Installation
+Real cool todo list app 
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (version 14.x or higher)
@@ -69,4 +67,4 @@ We welcome contributions to this project. Please follow these steps to contribut
 
 ---
 
-This README was generated with :heart: by [Anton].
+This README was generated with :heart: by Anton.
