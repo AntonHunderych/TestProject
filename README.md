@@ -24,7 +24,7 @@ A brief description of what this project does and its purpose. This can include 
    Navigate into the project directory and install the necessary packages:
 
    ```bash
-   cd project-name
+   cd TestProject
    npm install
    ```
 
