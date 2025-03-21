@@ -2,7 +2,7 @@ import { IUsersRepos } from '../../repos/users/users.repo';
 import { UserSchema } from '../../db/schemas/UserSchema';
 import { IUserRoleRepo } from '../../repos/user-role/user-role.repo';
 import z from 'zod';
-import { RoleEnum } from '../../Types/Enum/RoleEnum';
+import { RoleEnum } from '../../types/Enum/RoleEnum';
 
 interface ICreateUser {
   username: string;

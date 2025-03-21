@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { User } from '../../db/entities/UserEntity';
-import { DBError } from '../../Types/Errors/DBError';
+import { DBError } from '../../types/Errors/DBError';
 
 export interface IUsersRepos {
   getAllUsers: () => Promise<User[]>;

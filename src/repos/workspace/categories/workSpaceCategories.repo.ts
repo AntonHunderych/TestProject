@@ -1,6 +1,6 @@
 import { WorkSpaceCategory, WorkSpaceCategoryConf } from '../../../db/entities/WorkSpace/WorkSpaceCategoryEntity';
 import { DataSource } from 'typeorm';
-import { DBError } from '../../../Types/Errors/DBError';
+import { DBError } from '../../../types/Errors/DBError';
 import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
 
 export function getWorkSpaceCategoriesRepo(db: DataSource) {

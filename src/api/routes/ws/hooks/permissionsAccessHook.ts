@@ -1,4 +1,4 @@
-import { Permissions } from '../../../../Types/Enum/PermisionsEnum';
+import { Permissions } from '../../../../types/Enum/PermisionsEnum';
 import { preHandlerAsyncHookHandler } from 'fastify';
 
 export function permissionsAccessHook(requiredPermissions: Permissions): preHandlerAsyncHookHandler {

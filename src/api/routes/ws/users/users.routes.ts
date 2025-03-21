@@ -3,13 +3,13 @@ import z from 'zod';
 import { UUIDGetter } from '../../schemas/UUIDGetter';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../Types/Enum/RoleEnum';
+import { RoleEnum } from '../../../../types/Enum/RoleEnum';
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
 import { getWorkSpaceSchema } from '../schema/getWorkSpaceSchema';
 import { getWorkSpaceUserSchema } from './schema/getWorkSpaceUserSchema';
 import { getUsersInWorkSpaceHandler } from '../../../../controllers/ws/users/getUsersInWorkSpace';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../Types/Enum/PermisionsEnum';
+import { Permissions } from '../../../../types/Enum/PermisionsEnum';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

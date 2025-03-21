@@ -9,7 +9,7 @@ import { updateCommentHandler } from '../../../../controllers/comments/updateCom
 import { getCommentSchema } from './schemas/getCommentSchema';
 import { updateCommentSchema } from './schemas/updateCommentSchema';
 import { createCommentSchema } from './schemas/createCommentSchema';
-import { RoleEnum } from '../../../../Types/Enum/RoleEnum';
+import { RoleEnum } from '../../../../types/Enum/RoleEnum';
 
 export const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

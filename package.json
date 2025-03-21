@@ -8,7 +8,12 @@
     "start:dev": "nodemon --exec ts-node src/api/api.ts",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "typeorm:ts": "typeorm-ts-node-commonjs",
+    "db:show:migrations": "npm run typeorm:ts -- migration:show -d typeorm-config.ts",
+    "db:run:migrations": "npm run typeorm:ts -- migration:run -d typeorm-config.ts",
+    "db:make:migration": "npm run typeorm:ts -- migration:generate -d typeorm-config.ts",
+    "db:make:rollback": "npm run typeorm:ts -- migration:revert -d typeorm-config.ts"
   },
   "dependencies": {
     "@fastify/autoload": "^6.1.0",

@@ -1,7 +1,7 @@
 import { IComment } from '../../db/schemas/CommentSchema';
 import { DataSource } from 'typeorm';
 import { Comment } from '../../db/entities/CommentEntity';
-import { DBError } from '../../Types/Errors/DBError';
+import { DBError } from '../../types/Errors/DBError';
 
 export type ICreateComment = Omit<IComment, 'createdAt' | 'updatedAt' | 'id'>;
 export type IUpdateComment = Pick<IComment, 'text'>;

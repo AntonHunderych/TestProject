@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
 import { WorkSpaceCommand } from '../../../db/entities/WorkSpace/WorkSpaceCommandEntity';
-import { DBError } from '../../../Types/Errors/DBError';
+import { DBError } from '../../../types/Errors/DBError';
 
 export interface IGetWorkSpaceCommandTodoRepo {
   addCommandToTodo(todoId: string, workSpaceId: string, value: string): Promise<void>;

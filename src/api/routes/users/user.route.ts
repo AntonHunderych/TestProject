@@ -10,7 +10,7 @@ import getAllUsersHandler from '../../../controllers/users/getUsers';
 import { deleteRespUserSchema } from './schemas/deleteRespUserSchema';
 import { updateUserSchema } from './schemas/updateUserSchema';
 import { roleHook } from '../../hooks/roleHook';
-import { RoleEnum } from '../../../Types/Enum/RoleEnum';
+import { RoleEnum } from '../../../types/Enum/RoleEnum';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

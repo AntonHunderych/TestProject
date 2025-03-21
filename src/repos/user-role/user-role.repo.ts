@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { User } from '../../db/entities/UserEntity';
 import { Role } from '../../db/entities/RoleEntity';
-import { DBError } from '../../Types/Errors/DBError';
+import { DBError } from '../../types/Errors/DBError';
 
 export interface IUserRoleRepo {
   giveRoleToUser(userId: string, roleValue: string): Promise<boolean>;

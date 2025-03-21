@@ -1,7 +1,7 @@
 import { Brackets, DataSource } from 'typeorm';
 import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
 import { ITodo } from '../../../db/schemas/TodoSchema';
-import { DBError } from '../../../Types/Errors/DBError';
+import { DBError } from '../../../types/Errors/DBError';
 
 export interface IWorkSpaceTodoRepo {
   create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo>;

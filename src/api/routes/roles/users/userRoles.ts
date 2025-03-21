@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import z from 'zod';
-import { RoleEnum } from '../../../../Types/Enum/RoleEnum';
+import { RoleEnum } from '../../../../types/Enum/RoleEnum';
 import { roleHook } from '../../../hooks/roleHook';
 
 const routes: FastifyPluginAsyncZod = async (f) => {

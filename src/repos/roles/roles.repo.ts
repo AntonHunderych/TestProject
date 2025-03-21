@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Role } from '../../db/entities/RoleEntity';
-import { DBError } from '../../Types/Errors/DBError';
+import { DBError } from '../../types/Errors/DBError';
 
 export interface IRolesRepo {
   getRoleByValue(value: string): Promise<Role>;

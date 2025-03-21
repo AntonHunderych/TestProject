@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from 'zod';
 import { roleHook } from '../../hooks/roleHook';
-import { RoleEnum } from '../../../Types/Enum/RoleEnum';
+import { RoleEnum } from '../../../types/Enum/RoleEnum';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

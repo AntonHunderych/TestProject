@@ -1,8 +1,8 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { permissionsAccessHook } from '../../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../../Types/Enum/PermisionsEnum';
+import { Permissions } from '../../../../../types/Enum/PermisionsEnum';
 import { roleHook } from '../../../../hooks/roleHook';
-import { RoleEnum } from '../../../../../Types/Enum/RoleEnum';
+import { RoleEnum } from '../../../../../types/Enum/RoleEnum';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { addDeleteRoleUserSchema } from './schema/addDeleteRoleUserSchema';

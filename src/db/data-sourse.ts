@@ -19,37 +19,41 @@ import { WorkSpaceCommand } from './entities/WorkSpace/WorkSpaceCommandEntity';
 
 dotenv.config();
 
-export const pgDataSource = new DataSource({
-  type: 'postgres',
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT || '5432'),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-  synchronize: true,
-  //dropSchema: true,
-  logging: true,
-  entities: [
-    User,
-    Role,
-    Todo,
-    Comment,
-    Tag,
-    Category,
-    WorkSpace,
-    WorkSpaceTodo,
-    WorkSpaceUser,
-    WorkSpaceRoles,
-    WorkSpacePermissions,
-    WorkSpaceComment,
-    WorkSpaceTag,
-    WorkSpaceTagTodo,
-    WorkSpaceCategory,
-    WorkSpaceCategoryConf,
-    WorkSpaceCommand,
-  ],
-  migrations: ['./migrations/*.ts'],
-});
+export function getDataSource(){
+  return new DataSource({
+    type: 'postgres',
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || '5432'),
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    synchronize: true,
+    //dropSchema: true,
+    logging: true,
+    entities: [
+      User,
+      Role,
+      Todo,
+      Comment,
+      Tag,
+      Category,
+      WorkSpace,
+      WorkSpaceTodo,
+      WorkSpaceUser,
+      WorkSpaceRoles,
+      WorkSpacePermissions,
+      WorkSpaceComment,
+      WorkSpaceTag,
+      WorkSpaceTagTodo,
+      WorkSpaceCategory,
+      WorkSpaceCategoryConf,
+      WorkSpaceCommand,
+    ],
+    migrations: ['./migrations/*.ts'],
+  });
+}
+
+export const pgDataSource = getDataSource()
 
 export const initDB = async (): Promise<DataSource> => {
   return await pgDataSource.initialize();

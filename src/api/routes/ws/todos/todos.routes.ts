@@ -2,10 +2,10 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../Types/Enum/PermisionsEnum';
+import { Permissions } from '../../../../types/Enum/PermisionsEnum';
 import { createTodoSchema } from '../../todos/schemas/createTodoSchema';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../Types/Enum/RoleEnum';
+import { RoleEnum } from '../../../../types/Enum/RoleEnum';
 import { UUIDGetter } from '../../schemas/UUIDGetter';
 import z from 'zod';
 import { TodoSchemaResp } from '../../todos/schemas/getTodoShema';

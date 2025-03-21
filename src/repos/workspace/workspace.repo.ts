@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { WorkSpace } from '../../db/entities/WorkSpace/WorkSpaceEntity';
 import { IWorkspace } from '../../db/schemas/WorkSpaceSchema';
-import { DBError } from '../../Types/Errors/DBError';
+import { DBError } from '../../types/Errors/DBError';
 
 export interface IWorkSpaceRepos {
   createWorkSpace(workSpace: IWorkSpaceCreate): Promise<IWorkspace>;
