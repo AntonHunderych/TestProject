@@ -5,6 +5,7 @@ import { WorkSpaceUser } from './WorkSpaceUserEntity';
 import { WorkSpaceComment } from './WorkSpaceCommentEntity';
 import { WorkSpaceTagTodo } from './WorkSpaceTagEntity';
 import { WorkSpaceCategoryConf } from './WorkSpaceCategoryEntity';
+import { WorkSpaceCommand } from './WorkSpaceCommandEntity';
 
 @Entity()
 export class WorkSpaceTodo extends BasicTodo {
@@ -32,6 +33,20 @@ export class WorkSpaceTodo extends BasicTodo {
   @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.workSpaceTodo)
   tags: WorkSpaceTagTodo[];
 
-  @ManyToOne(() => WorkSpaceCategoryConf, (workSpaceCategoryTodo) => workSpaceCategoryTodo.todos)
+  @Column({ nullable: true })
+  categoryId: string | null;
+
+  @ManyToOne(() => WorkSpaceCategoryConf, (WorkSpaceCategoryConf) => WorkSpaceCategoryConf.todos)
+  @JoinColumn([{ name: 'categoryId', referencedColumnName: 'categoryId' }, { name: 'id', referencedColumnName: 'todoId' }])
   category: WorkSpaceCategoryConf;
+
+  @ManyToOne(() => WorkSpaceCommand, (workSpaceCommand) => workSpaceCommand)
+  @JoinColumn(
+    [
+      { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
+      { name: 'commandValue', referencedColumnName: 'value'}
+    ]
+  )
+  command: WorkSpaceCommand | null;
+
 }

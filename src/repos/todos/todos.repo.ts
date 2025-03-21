@@ -44,7 +44,7 @@ export function getTodosRepo(db: DataSource): ITodosRepo {
 
     findAll: async (): Promise<ITodo[]> => {
       try {
-        return await todoRepo.find({ relations: { creator: true, comments: true, tags: true }});
+        return await todoRepo.find({ relations: { creator: true, comments: true, tags: true,  }});
       } catch (error) {
         throw new DBError('Error fetching all createdTodos', error);
       }

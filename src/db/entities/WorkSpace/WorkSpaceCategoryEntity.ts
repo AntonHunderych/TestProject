@@ -3,8 +3,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  OneToMany, PrimaryColumn
 } from 'typeorm';
 import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
 import { WorkSpaceUser } from './WorkSpaceUserEntity';
@@ -38,17 +37,14 @@ export class WorkSpaceCategory extends BasicCategory {
 @Entity()
 export class WorkSpaceCategoryConf {
 
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column(/*{unique: true}*/)
+  @PrimaryColumn({unique: true})
   todoId: string;
 
   @ManyToOne(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.category)
   @JoinColumn({ 'name': 'todoId' })
   todos: WorkSpaceTodo;
 
-  @Column()
+  @PrimaryColumn()
   categoryId: string;
 
   @ManyToOne(() => WorkSpaceCategory, (workSpaceCategory) => workSpaceCategory.todos)

@@ -2,6 +2,7 @@ import { IUsersRepos } from '../../repos/users/users.repo';
 import { UserSchema } from '../../db/schemas/UserSchema';
 import { IUserRoleRepo } from '../../repos/user-role/user-role.repo';
 import z from 'zod';
+import { RoleEnum } from '../../Types/Enum/RoleEnum';
 
 interface ICreateUser {
   username: string;
@@ -25,7 +26,7 @@ export default async function createUserHandler(
 ): Promise<IUserControllerResp> {
   try {
     const user = UserSchema.parse(await rep.createUser(date));
-    await userRoleRepo.giveRoleToUser(user.id, 'USER');
+    await userRoleRepo.giveRoleToUser(user.id, RoleEnum.USER);
     return UserControllerRespSchema.parse(await rep.getUserById(user.id));
   } catch (e) {
     console.log(e);

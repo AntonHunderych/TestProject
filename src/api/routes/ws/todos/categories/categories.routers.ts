@@ -5,6 +5,7 @@ import { roleHook } from '../../../../hooks/roleHook';
 import { RoleEnum } from '../../../../../Types/Enum/RoleEnum';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
+import { UUIDGetter } from '../../../schemas/UUIDGetter';
 
 const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -25,7 +26,57 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       }
     },
     async (req) => {
-      return await workSpaceCategoriesRepo.create(req.workSpace.id, {...req.body, creatorId: req.userData.id});
+      return await workSpaceCategoriesRepo.create(req.workSpace.id, { ...req.body, creatorId: req.userData.id });
+    }
+  );
+
+  f.delete(
+    '/:id',
+    {
+      schema: {
+        params: UUIDGetter
+      }
+    },
+    async (req) => {
+      return await workSpaceCategoriesRepo.delete(req.params.id);
+    }
+  );
+
+  f.get(
+    '/',
+    {
+      schema: {}
+    },
+    async (req) => {
+      return await workSpaceCategoriesRepo.get(req.workSpace.id);
+    }
+  );
+
+  f.get(
+    '/:id',
+    {
+      schema: {
+        params: UUIDGetter
+      }
+    },
+    async (req) => {
+      return await workSpaceCategoriesRepo.getAllCategoryTodos(req.params.id);
+    }
+  );
+
+  f.put(
+    '/',
+    {
+      schema: {
+        body: z.object({
+          categoryId: z.string(),
+          value: z.string(),
+          description: z.string().optional()
+        })
+      }
+    },
+    async (req) => {
+      return await workSpaceCategoriesRepo.update(req.body.categoryId, req.body.value, req.body.description);
     }
   );
 
@@ -40,10 +91,21 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       }
     },
     async (req) => {
-        return await workSpaceCategoriesRepo.attachTodo(req.body.todoId, req.body.categoryId, req.userData.id);
+      return await workSpaceCategoriesRepo.attachTodo(req.body.todoId, req.body.categoryId, req.userData.id);
     }
   );
 
+  f.delete(
+    '/remove/:id',
+    {
+      schema: {
+        params: UUIDGetter
+      }
+    },
+    async (req) => {
+      return await workSpaceCategoriesRepo.removeTodo(req.params.id);
+    }
+  );
 };
 
 export default routers;

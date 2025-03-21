@@ -1,0 +1,30 @@
+import { FastifyReply, FastifyRequest, preSerializationAsyncHookHandler } from 'fastify';
+
+interface EntityWithCommand {
+  command: { value: string } | null;
+}
+
+export const filterEntityByUserCommand = <T extends EntityWithCommand>(): preSerializationAsyncHookHandler => {
+  return async function(request: FastifyRequest, reply: FastifyReply, payload): Promise<T[]> {
+
+    if (!Array.isArray(payload)) {
+      throw new Error('Bad payload');
+    }
+
+    const payloadArray = payload as T[];
+
+    const workSpaceCommandRepo = this.repos.workSpaceCommandRepo;
+    const userCommands = await workSpaceCommandRepo.getUserCommands(request.userData.id, request.workSpace.id);
+
+    const userCommandsValue = new Set<string>(userCommands.map(command => command.value));
+
+    return payloadArray.filter((data) => {
+      if (data.command === null) {
+        return true;
+      } else {
+        return userCommandsValue.has(data.command.value);
+      }
+    });
+
+  };
+};

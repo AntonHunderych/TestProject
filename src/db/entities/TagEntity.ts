@@ -14,7 +14,6 @@ export class BasicTag {
 
 @Entity()
 export class Tag extends BasicTag {
-
   @ManyToMany(() => Todo, (todo) => todo.tags)
   @JoinTable()
   todos: Todo[];

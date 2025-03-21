@@ -15,6 +15,8 @@ import { getWorkSpaceCommentRepos } from './workspace/comments/comments.repo';
 import { getTagsRepos } from './tags/tags.repo';
 import { getWorkSpaceTagRepo } from './workspace/tags/workSpaceTags.repos';
 import { getWorkSpaceCategoriesRepo } from './workspace/categories/workSpaceCategories.repo';
+import { getWorkSpaceCommands } from './workspace/commands/workSpaceCommand.repo';
+import { getWorkSpaceCommandsTodoRepo } from './workspace/commandsTodo/workSpaceCommandsTodo.repo';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -34,6 +36,9 @@ export default function getRepos(db: DataSource) {
     workSpaceCommentRepo: getWorkSpaceCommentRepos(db),
     workSpaceTagRepo: getWorkSpaceTagRepo(db),
     workSpaceCategoriesRepo: getWorkSpaceCategoriesRepo(db),
+    workSpaceCommandRepo: getWorkSpaceCommands(db),
+    workSpaceCommandsTodoRepo: getWorkSpaceCommandsTodoRepo(db),
+
   };
 }
 
