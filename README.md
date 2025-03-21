@@ -26,14 +26,7 @@ Real cool todo list app
    npm install
    ```
 
-3. **Run database migrations:**
-
-   After configuring your database, run the migrations to set up the required tables and initial data:
-
-   ```bash
-   npm run db:run:migrations
-   ```
-4. **Create env file 
+3. **Create env file**
   Example 
   ```env
   DB_USERNAME=username
@@ -42,6 +35,13 @@ DB_DATABASE=database
 DB_HOST=localhost
 DB_PORT=5432
 ```
+4. **Run database migrations:**
+
+   After configuring your database, run the migrations to set up the required tables and initial data:
+
+   ```bash
+   npm run db:run:migrations
+   ```
 
 5. **Start the application:**
 
