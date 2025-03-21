@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { WorkSpaceCommand } from '../../../db/entities/WorkSpace/WorkSpaceCommandEntity';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
-import { DBError } from '../../../Types/Errors/DBError';
+import { DBError } from '../../../types/Errors/DBError';
 
 export interface IWorkSpaceCommandsRepo {
   create(workSpaceId: string, value: string): Promise<WorkSpaceCommand>;

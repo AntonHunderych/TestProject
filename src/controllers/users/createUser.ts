@@ -29,11 +29,6 @@ export default async function createUserHandler(
     await userRoleRepo.giveRoleToUser(user.id, RoleEnum.USER);
     return UserControllerRespSchema.parse(await rep.getUserById(user.id));
   } catch (e) {
-    console.log(e);
-    return {
-      id: '',
-      username: '',
-      email: '',
-    };
+    throw Error("Shoto pishlo ne tak");
   }
 }

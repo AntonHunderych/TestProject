@@ -16,6 +16,7 @@ import { WorkSpaceTag, WorkSpaceTagTodo } from './entities/WorkSpace/WorkSpaceTa
 import { Category } from './entities/CategoryEntity';
 import { WorkSpaceCategory, WorkSpaceCategoryConf } from './entities/WorkSpace/WorkSpaceCategoryEntity';
 import { WorkSpaceCommand } from './entities/WorkSpace/WorkSpaceCommandEntity';
+import { TokenEntity } from './entities/tokenEntity';
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ export function getDataSource(){
       Comment,
       Tag,
       Category,
+      TokenEntity,
       WorkSpace,
       WorkSpaceTodo,
       WorkSpaceUser,

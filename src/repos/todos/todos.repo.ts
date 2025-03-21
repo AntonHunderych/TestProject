@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { Todo } from '../../db/entities/TodoEntity';
 import { ITodo } from '../../db/schemas/TodoSchema';
-import { DBError } from '../../Types/Errors/DBError';
+import { DBError } from '../../types/Errors/DBError';
 import { util } from 'zod';
 import Omit = util.Omit;
 

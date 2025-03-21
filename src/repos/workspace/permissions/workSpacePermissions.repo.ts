@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { WorkSpacePermissions } from '../../../db/entities/WorkSpace/WorkSpacePermissionsEntity';
-import { DBError } from '../../../Types/Errors/DBError';
+import { DBError } from '../../../types/Errors/DBError';
 
 export interface IWorkSpacePermissions {
   getAll(): Promise<WorkSpacePermissions[]>;

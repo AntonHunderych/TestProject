@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
-import { DBError } from '../../../Types/Errors/DBError';
+import { DBError } from '../../../types/Errors/DBError';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 
 export interface IGetTodoContributorRepo {

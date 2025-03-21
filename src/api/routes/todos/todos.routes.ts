@@ -7,7 +7,7 @@ import { createTodoSchema } from './schemas/createTodoSchema';
 import { createTodosHandler } from '../../../controllers/todos/todos.create';
 import { getAllUserTodos } from '../../../controllers/todos/getAllUserTodos';
 import { updateTodoSchema } from './schemas/updateTodoSchema';
-import { RoleEnum } from '../../../Types/Enum/RoleEnum';
+import { RoleEnum } from '../../../types/Enum/RoleEnum';
 
 export const routes: FastifyPluginAsyncZod = async function (fastify) {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

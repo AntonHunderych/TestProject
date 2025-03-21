@@ -7,7 +7,7 @@ export interface IRegisterResp {
   email: string;
 }
 
-export async function registerHandler(
+export async function loginHandler(
   userRepo: IUsersRepos,
   crypto: ICrypto,
   password: string,

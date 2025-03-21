@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 import { IWorkspace } from '../../../db/schemas/WorkSpaceSchema';
-import { DBError } from '../../../Types/Errors/DBError';
+import { DBError } from '../../../types/Errors/DBError';
 
 export interface IWorkSpaceUserRepo {
   addUserToWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUser>;

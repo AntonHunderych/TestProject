@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { WorkSpaceTag, WorkSpaceTagTodo } from '../../../db/entities/WorkSpace/WorkSpaceTagEntity';
-import { DBError } from '../../../Types/Errors/DBError';
+import { DBError } from '../../../types/Errors/DBError';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 
 export interface IGetWorkSpaceTagRepo {

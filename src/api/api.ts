@@ -14,11 +14,15 @@ import { getUserDataFromJWT } from './plugins/getUserDataFromJWT';
 import { IUserControllerResp } from '../controllers/users/createUser';
 import { authHook } from './hooks/authHook';
 import dotenv from 'dotenv';
+import fastifyOauth2 from 'fastify-oauth2';
+import { OAuth2Namespace } from '@fastify/oauth2';
+import fastifyCookie from '@fastify/cookie';
 
 dotenv.config();
 
 declare module 'fastify' {
   export interface FastifyInstance {
+    googleOAuth2: OAuth2Namespace;
     repos: IRepos;
     crypto: ICrypto;
     getUserDataFromJWT: (req: FastifyRequest) => IUserControllerResp;
@@ -63,9 +67,27 @@ async function run() {
     secret: 'your-secret-key',
   });
 
+  console.log(process.env.GOOGLE_REDIRECT_URI);
+
+  f.register(fastifyCookie)
+
+  f.register(fastifyOauth2, {
+    name: 'googleOAuth2',
+    scope: ['profile', 'email'],
+    credentials: {
+      client: {
+        id: process.env.GOOGLE_CLIENT_ID!,
+        secret: process.env.GOOGLE_CLIENT_SECRET!,
+      },
+      auth: fastifyOauth2.GOOGLE_CONFIGURATION,
+    },
+    startRedirectPath: '/auth/google',
+    callbackUri:process.env.GOOGLE_REDIRECT_URI!,
+  });
+
   setupSwagger(f);
 
-  f.addHook('preHandler', authHook);
+  //f.addHook('preHandler', authHook);
   f.addHook('preHandler', async function (request: FastifyRequest) {
     const userData = { ...f.getUserDataFromJWT(request), isAdmin: false };
 

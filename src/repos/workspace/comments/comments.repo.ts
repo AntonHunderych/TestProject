@@ -1,6 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
 import { WorkSpaceComment } from '../../../db/entities/WorkSpace/WorkSpaceCommentEntity';
-import { DBError } from '../../../Types/Errors/DBError';
+import { DBError } from '../../../types/Errors/DBError';
 
 export interface IWorkSpaceCommentRepos {
   createComment(commentData: Partial<WorkSpaceComment>): Promise<WorkSpaceComment>;

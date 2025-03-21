@@ -17,6 +17,7 @@ import { getWorkSpaceTagRepo } from './workspace/tags/workSpaceTags.repos';
 import { getWorkSpaceCategoriesRepo } from './workspace/categories/workSpaceCategories.repo';
 import { getWorkSpaceCommands } from './workspace/commands/workSpaceCommand.repo';
 import { getWorkSpaceCommandsTodoRepo } from './workspace/commandsTodo/workSpaceCommandsTodo.repo';
+import { getTokenRepo } from './token/token.repo';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -26,6 +27,7 @@ export default function getRepos(db: DataSource) {
     todoRepo: getTodosRepo(db),
     commentRepo: getCommentsRepo(db),
     tagRepo: getTagsRepos(db),
+    tokenRepo: getTokenRepo(db),
     workSpaceRepo: getWorkSpaceRepos(db),
     workSpaceTodoRepo: getWorkSpaceTodoRepo(db),
     workSpaceUserRepo: getWorkSpaceUserRepo(db),

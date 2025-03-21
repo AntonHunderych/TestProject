@@ -1,7 +1,7 @@
 import { Tag } from '../../db/entities/TagEntity';
 import { DataSource } from 'typeorm';
 import { Todo } from '../../db/entities/TodoEntity';
-import { DBError } from '../../Types/Errors/DBError';
+import { DBError } from '../../types/Errors/DBError';
 
 export interface IGetTagsRepos {
   getTags(userId: string): Promise<Tag[]>;
