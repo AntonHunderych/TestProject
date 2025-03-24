@@ -1,11 +1,12 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { Todo } from '../../db/entities/TodoEntity';
 import { ITodo } from '../../db/schemas/TodoSchema';
 import { DBError } from '../../types/Errors/DBError';
 import { util } from 'zod';
 import Omit = util.Omit;
+import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface ITodosRepo {
+export interface ITodosRepo extends IRecreateRepo{
   create(todo: Omit<ITodo, 'id'>): Promise<ITodo>;
   findById(id: string): Promise<ITodo>;
   findAll(): Promise<ITodo[]>;
@@ -14,7 +15,7 @@ export interface ITodosRepo {
   findByCreatorId(creatorId: string): Promise<ITodo[]>;
 }
 
-export function getTodosRepo(db: DataSource): ITodosRepo {
+export function getTodosRepo(db: DataSource | EntityManager): ITodosRepo {
   const todoRepo = db.getRepository(Todo);
 
   return {
@@ -70,5 +71,6 @@ export function getTodosRepo(db: DataSource): ITodosRepo {
         throw new DBError('Error deleting todo', error);
       }
     },
+    __recreateFunction: getTodosRepo
   };
 }

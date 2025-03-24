@@ -1,8 +1,9 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { User } from '../../db/entities/UserEntity';
 import { DBError } from '../../types/Errors/DBError';
+import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface IUsersRepos {
+export interface IUsersRepos extends IRecreateRepo {
   getAllUsers: () => Promise<User[]>;
   getUserById: (id: string) => Promise<User>;
   getUserByEmail: (email: string) => Promise<User | null>;
@@ -11,10 +12,10 @@ export interface IUsersRepos {
   deleteUser: (id: string) => Promise<boolean>;
 }
 
-export function getUserRepo(db: DataSource): IUsersRepos {
-  const _usersRepo = db.getRepository(User);
+export function getUserRepo(db: DataSource | EntityManager): IUsersRepos {
+  let _usersRepo = db.getRepository(User);
 
-  return {
+  return  {
     getAllUsers: async () => {
       try {
         return await _usersRepo.find();
@@ -76,5 +77,7 @@ export function getUserRepo(db: DataSource): IUsersRepos {
         throw new DBError('Error deleting user', error);
       }
     },
+    __recreateFunction: getUserRepo
   };
+
 }

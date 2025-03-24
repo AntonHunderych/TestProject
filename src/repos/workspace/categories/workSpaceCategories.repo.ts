@@ -1,9 +1,20 @@
 import { WorkSpaceCategory, WorkSpaceCategoryConf } from '../../../db/entities/WorkSpace/WorkSpaceCategoryEntity';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { DBError } from '../../../types/Errors/DBError';
 import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export function getWorkSpaceCategoriesRepo(db: DataSource) {
+export interface IWorkSpaceCategoriesRepo extends IRecreateRepo {
+  create(workSpaceId: string, data: { value: string; description?: string; creatorId: string }): Promise<WorkSpaceCategory>;
+  get(workSpaceId: string): Promise<WorkSpaceCategory[]>;
+  delete(categoryId: string): Promise<void>;
+  getAllCategoryTodos(categoryId: string): Promise<WorkSpaceTodo[]>;
+  update(categoryId: string, value?: string, description?: string): Promise<WorkSpaceCategory>;
+  attachTodo(todoId: string, categoryId: string, userId: string): Promise<void>;
+  removeTodo(todoId: string): Promise<void>;
+}
+
+export function getWorkSpaceCategoriesRepo(db: DataSource| EntityManager): IWorkSpaceCategoriesRepo {
 
   const workSpaceCategoryRepo = db.getRepository(WorkSpaceCategory);
   const workSpaceCategoryTodoRepo = db.getRepository(WorkSpaceCategoryConf);
@@ -77,6 +88,7 @@ export function getWorkSpaceCategoriesRepo(db: DataSource) {
       } catch (error) {
         throw new DBError('Failed to detach categories', error);
       }
-    }
+    },
+    __recreateFunction: getWorkSpaceCategoriesRepo
   };
 }

@@ -1,9 +1,10 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 import { IWorkspace } from '../../../db/schemas/WorkSpaceSchema';
 import { DBError } from '../../../types/Errors/DBError';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceUserRepo {
+export interface IWorkSpaceUserRepo extends IRecreateRepo{
   addUserToWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUser>;
   getUserAllWorkSpaces(id: string): Promise<IWorkspace[]>;
   getAllCreatedWorkSpaces(id: string): Promise<IWorkspace[]>;
@@ -12,7 +13,7 @@ export interface IWorkSpaceUserRepo {
   getUserInWorkSpace(workSpaceId: string): Promise<WorkSpaceUser[]>;
 }
 
-export function getWorkSpaceUserRepo(db: DataSource): IWorkSpaceUserRepo {
+export function getWorkSpaceUserRepo(db: DataSource| EntityManager): IWorkSpaceUserRepo {
   const workSpaceUserRepo = db.getRepository(WorkSpaceUser);
 
   return {
@@ -86,5 +87,6 @@ export function getWorkSpaceUserRepo(db: DataSource): IWorkSpaceUserRepo {
         throw new DBError('Error checking if user exists in workspace', error);
       }
     },
+    __recreateFunction: getWorkSpaceUserRepo
   };
 }

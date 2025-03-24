@@ -1,9 +1,11 @@
 import { Tag } from '../../db/entities/TagEntity';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { Todo } from '../../db/entities/TodoEntity';
 import { DBError } from '../../types/Errors/DBError';
+import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface IGetTagsRepos {
+
+export interface IGetTagsRepos extends IRecreateRepo {
   getTags(userId: string): Promise<Tag[]>;
 
   createTag(userId: string, value: string): Promise<Tag>;
@@ -17,7 +19,7 @@ export interface IGetTagsRepos {
   removeTag(todoId: string, tagId: string): Promise<void>;
 }
 
-export function getTagsRepos(db: DataSource): IGetTagsRepos {
+export function getTagsRepos(db: DataSource| EntityManager): IGetTagsRepos {
 
   const tagRepo = db.getRepository<Tag>(Tag);
 
@@ -84,7 +86,7 @@ export function getTagsRepos(db: DataSource): IGetTagsRepos {
       } catch (error) {
         throw new DBError('Failed to remove tag', error);
       }
-    }
-
+    },
+    __recreateFunction: getTagsRepos,
   };
 }

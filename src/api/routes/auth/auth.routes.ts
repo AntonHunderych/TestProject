@@ -1,11 +1,14 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
-import { createUserSchema } from '../users/schemas/createUserSchema';
-import createUserHandler from '../../../controllers/users/createUser';
-import { RegisterSchema } from './schemas/registerSchema';
+import { loginSchema } from './schemas/loginSchema';
 import { loginHandler } from '../../../controllers/auth/loginHandler';
-import z, { string } from 'zod';
-import { registerLoginRespSchema } from './schemas/registerLoginRespSchema';
+import { tokenResponseSchema } from './schemas/tokenResponseSchema';
 import { skipAuthHook } from '../../hooks/skipAuthHook';
+import { generateTokens } from '../../../controllers/auth/generateTokens';
+import { setRefreshTokenCookie } from '../../../controllers/auth/setRefreshTokenCookie';
+import { refreshToken } from '../../../controllers/auth/refreshToken';
+import { ErrorSchema } from '../schemas/ErrorSchema';
+import { registerSchema } from './schemas/registerSchema';
+import { registerHandler } from '../../../controllers/auth/registerHandler';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -20,33 +23,17 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/register',
     {
       schema: {
-        body: createUserSchema,
+        body: registerSchema,
         response: {
-          200: registerLoginRespSchema
+          200: tokenResponseSchema
         }
       }
     },
     async (req, reply) => {
       try {
-        const { hash, salt } = await crypto.hash(req.body.password);
-        const user = await createUserHandler(userRepo, userRoleRepo, {
-          username: req.body.username,
-          email: req.body.email,
-          password: hash,
-          salt
-        });
-        const accessToken = f.jwt.sign(user);
-        const refreshToken = f.jwt.sign(user, { expiresIn: '7d' });
-        await tokenRepo.createRefreshToken(user.id, refreshToken);
-        reply.setCookie(
-          'refreshToken',
-          refreshToken,
-          {
-            httpOnly: true,
-            sameSite: 'strict',
-            maxAge: 60 * 60 * 24 * 7
-          }
-        );
+        const user = await registerHandler(userRepo, userRoleRepo, crypto, req.body);
+        const { accessToken, refreshToken } = await generateTokens(user, f.jwt, tokenRepo);
+        setRefreshTokenCookie(reply, refreshToken);
         return { token: accessToken };
       } catch (e) {
         console.log(e);
@@ -59,34 +46,17 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         response: {
-          200: registerLoginRespSchema
+          200: tokenResponseSchema,
+          400: ErrorSchema
         }
       }
     },
     async (req, reply) => {
-      const refreshTokenDB = await tokenRepo.findTokenById(req.cookies.refreshToken!);
-      if (refreshTokenDB.value !== req.cookies.refreshToken!) {
-        throw new Error('Invalid refresh token');
+      if (req.cookies.refreshToken) {
+        await refreshToken(req.cookies.refreshToken, f.jwt, tokenRepo);
+      } else {
+        reply.status(400).send({ message: 'No refresh token provided' });
       }
-      const userData = f.jwt.verify(refreshTokenDB.value) as { id: string, email: string, username: string };
-      return {
-        token: f.jwt.sign({
-          id: userData.id,
-          email: userData.email,
-          username: userData.username
-        })
-      };
-    }
-  );
-
-  f.get(
-    '/google/callback',
-    {
-      schema: {}
-    },
-    async (req) => {
-      const token = await f.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
-      return { token };
     }
   );
 
@@ -94,35 +64,33 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/login',
     {
       schema: {
-        body: RegisterSchema,
+        body: loginSchema,
         response: {
-          400: z.object({
-            message: z.string()
-          }),
-          200: registerLoginRespSchema
+          200: tokenResponseSchema,
+          400: ErrorSchema
         }
       }
     },
     async (req, reply) => {
       try {
         const user = await loginHandler(userRepo, crypto, req.body.password, req.body.email);
-        const accessToken = f.jwt.sign(user);
-        const refreshToken = f.jwt.sign(user, { expiresIn: '7d' });
-        reply.setCookie(
-          'refreshToken',
-          refreshToken,
-          {
-            httpOnly: true,
-            sameSite: 'strict',
-            maxAge: 60 * 60 * 24 * 7
-          }
-        );
+        const { accessToken, refreshToken } = await generateTokens(user, f.jwt, tokenRepo);
+        setRefreshTokenCookie(reply, refreshToken);
         return { token: accessToken };
       } catch (e: any) {
         reply.status(400).send({
           message: e.message
         });
       }
+    }
+  );
+
+  f.get(
+    '/google/callback',
+    {},
+    async (req) => {
+      const token = await f.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
+      return { token };
     }
   );
 };

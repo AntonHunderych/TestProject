@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance, FastifyRequest } from 'fastify';
+import fastify, { FastifyInstance} from 'fastify';
 import fastifyAutoload from '@fastify/autoload';
 import { join } from 'node:path';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
@@ -12,7 +12,6 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import { skipAuthHook } from './hooks/skipAuthHook';
 import { getUserDataFromJWT } from './plugins/getUserDataFromJWT';
 import { IUserControllerResp } from '../controllers/users/createUser';
-import { authHook } from './hooks/authHook';
 import dotenv from 'dotenv';
 import fastifyOauth2 from 'fastify-oauth2';
 import { OAuth2Namespace } from '@fastify/oauth2';
@@ -61,7 +60,20 @@ function setupSwagger(f: FastifyInstance) {
 }
 
 async function run() {
-  const f = fastify({ logger: true });
+  const f = fastify({
+    logger: {
+      level: 'info',
+      transport: {
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+          translateTime: 'SYS:standard',
+          ignore: 'pid,hostname',
+          singleLine: true,
+        },
+      },
+    },
+  });
 
   f.register(fastifyJwt, {
     secret: 'your-secret-key',
@@ -87,14 +99,7 @@ async function run() {
 
   setupSwagger(f);
 
-  //f.addHook('preHandler', authHook);
-  f.addHook('preHandler', async function (request: FastifyRequest) {
-    const userData = { ...f.getUserDataFromJWT(request), isAdmin: false };
 
-    const user = await this.repos.userRepo.getUserById(userData.id);
-
-    Object.assign(request, { userData: { ...userData, isAdmin: user.roles.some((r) => r.value === 'ADMIN') } });
-  });
 
   f.decorate('repos', getRepos(await initDB()));
   f.decorate('crypto', getCryptoService());

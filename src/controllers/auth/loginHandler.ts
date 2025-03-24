@@ -1,7 +1,7 @@
 import { IUsersRepos } from '../../repos/users/users.repo';
 import ICrypto from '../../services/crypto/ICrypto';
 
-export interface IRegisterResp {
+export interface ILoginRegisterResp {
   id: string;
   username: string;
   email: string;
@@ -12,7 +12,7 @@ export async function loginHandler(
   crypto: ICrypto,
   password: string,
   email: string,
-): Promise<IRegisterResp> {
+): Promise<ILoginRegisterResp> {
   const user = await userRepo.getUserByEmail(email);
 
   if (!user) {

@@ -1,10 +1,11 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceRoles } from '../../../db/entities/WorkSpace/WorkSpaceRolesEntity';
 import { Permissions } from '../../../types/Enum/PermisionsEnum';
 import { WorkSpacePermissions } from '../../../db/entities/WorkSpace/WorkSpacePermissionsEntity';
 import { DBError } from '../../../types/Errors/DBError';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceRolesRepo {
+export interface IWorkSpaceRolesRepo extends IRecreateRepo{
   create(workSpaceId: string, name: string): Promise<WorkSpaceRoles>;
   delete(workSpaceId: string, name: string): Promise<boolean>;
   getAll(): Promise<WorkSpaceRoles[]>;
@@ -12,7 +13,7 @@ export interface IWorkSpaceRolesRepo {
   updatePermissionOnRole(workSpaceId: string, name: string, permissionsValue: Permissions[]): Promise<WorkSpaceRoles>;
 }
 
-export function getWorkSpaceRoles(db: DataSource): IWorkSpaceRolesRepo {
+export function getWorkSpaceRolesRepo(db: DataSource| EntityManager): IWorkSpaceRolesRepo {
   const workSpaceRolesRepo = db.getRepository(WorkSpaceRoles);
   const workSpacePermissions = db.getRepository(WorkSpacePermissions);
 
@@ -66,5 +67,6 @@ export function getWorkSpaceRoles(db: DataSource): IWorkSpaceRolesRepo {
         throw new DBError('Error updating permissions on workspace role', error);
       }
     },
+    __recreateFunction: getWorkSpaceRolesRepo,
   };
 }

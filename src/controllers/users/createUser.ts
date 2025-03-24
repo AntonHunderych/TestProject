@@ -1,8 +1,8 @@
 import { IUsersRepos } from '../../repos/users/users.repo';
-import { UserSchema } from '../../db/schemas/UserSchema';
-import { IUserRoleRepo } from '../../repos/user-role/user-role.repo';
+import { IUserRoleRepo } from '../../repos/userRole/userRole.repo';
 import z from 'zod';
 import { RoleEnum } from '../../types/Enum/RoleEnum';
+import { withTransaction } from '../../db/withTransaction';
 
 interface ICreateUser {
   username: string;
@@ -20,15 +20,20 @@ const UserControllerRespSchema = z.object({
 export type IUserControllerResp = z.infer<typeof UserControllerRespSchema>;
 
 export default async function createUserHandler(
-  rep: IUsersRepos,
+  userRepo: IUsersRepos,
   userRoleRepo: IUserRoleRepo,
   date: ICreateUser,
 ): Promise<IUserControllerResp> {
   try {
-    const user = UserSchema.parse(await rep.createUser(date));
-    await userRoleRepo.giveRoleToUser(user.id, RoleEnum.USER);
-    return UserControllerRespSchema.parse(await rep.getUserById(user.id));
-  } catch (e) {
-    throw Error("Shoto pishlo ne tak");
+    return await withTransaction(
+      {userRepo, userRoleRepo},
+      async (repos) => {
+        const user = await repos.userRepo.createUser(date);
+        await repos.userRoleRepo.giveRoleToUser(user.id, RoleEnum.USER);
+        return UserControllerRespSchema.parse(await repos.userRepo.getUserById(user.id));
+      }
+    )
+  } catch (error) {
+    throw Error("Creating user error")
   }
 }

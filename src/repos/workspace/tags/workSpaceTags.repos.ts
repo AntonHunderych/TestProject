@@ -1,23 +1,24 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceTag, WorkSpaceTagTodo } from '../../../db/entities/WorkSpace/WorkSpaceTagEntity';
 import { DBError } from '../../../types/Errors/DBError';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IGetWorkSpaceTagRepo {
+export interface IGetWorkSpaceTagRepo extends IRecreateRepo{
   getTags(userId: string): Promise<WorkSpaceTag[]>;
 
-  createTag(userId: string, value: string): Promise<WorkSpaceTag>;
+  createTag(workSpaceId: string, userId: string, value: string): Promise<WorkSpaceTag>;
 
   updateTag(userId: string, value: string): Promise<WorkSpaceTag>;
 
-  deleteTag(userId: string, value: string): Promise<void>;
+  deleteTag(userId: string): Promise<void>;
 
-  addTag(todoId: string, tagId: string): Promise<void>;
+  addTag(todoId: string, tagId: string, userId: string, workSpaceId: string): Promise<void>;
 
   removeTag(todoId: string, tagId: string): Promise<void>;
 }
 
-export function getWorkSpaceTagRepo(db: DataSource) {
+export function getWorkSpaceTagRepo(db: DataSource| EntityManager) : IGetWorkSpaceTagRepo {
 
   const workSpaceTagRepo = db.getRepository<WorkSpaceTag>(WorkSpaceTag);
   const workSpaceTagTodoRepo = db.getRepository<WorkSpaceTagTodo>(WorkSpaceTagTodo);
@@ -81,6 +82,7 @@ export function getWorkSpaceTagRepo(db: DataSource) {
       } catch (error) {
         throw new DBError('Failed to remove tag', error);
       }
-    }
+    },
+    __recreateFunction: getWorkSpaceTagRepo,
   };
 }

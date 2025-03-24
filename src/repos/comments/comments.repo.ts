@@ -1,12 +1,13 @@
 import { IComment } from '../../db/schemas/CommentSchema';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { Comment } from '../../db/entities/CommentEntity';
 import { DBError } from '../../types/Errors/DBError';
+import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
 export type ICreateComment = Omit<IComment, 'createdAt' | 'updatedAt' | 'id'>;
 export type IUpdateComment = Pick<IComment, 'text'>;
 
-export interface ICommentsRepo {
+export interface ICommentsRepo extends IRecreateRepo {
   createComment: (data: ICreateComment) => Promise<IComment>;
   getCommentById: (id: string) => Promise<IComment>;
   getAllComments: () => Promise<IComment[]>;
@@ -15,7 +16,7 @@ export interface ICommentsRepo {
   getAllTodoComments: (id: string) => Promise<IComment[]>;
 }
 
-export const getCommentsRepo = (db: DataSource): ICommentsRepo => {
+export const getCommentsRepo = (db: DataSource| EntityManager): ICommentsRepo => {
   const commentRepo = db.getRepository(Comment);
 
   return {
@@ -63,5 +64,6 @@ export const getCommentsRepo = (db: DataSource): ICommentsRepo => {
         throw new DBError('Error updating comment', error);
       }
     },
+    __recreateFunction: getCommentsRepo
   };
 };

@@ -1,14 +1,15 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { User } from '../../db/entities/UserEntity';
 import { Role } from '../../db/entities/RoleEntity';
 import { DBError } from '../../types/Errors/DBError';
+import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface IUserRoleRepo {
+export interface IUserRoleRepo extends IRecreateRepo{
   giveRoleToUser(userId: string, roleValue: string): Promise<boolean>;
   removeRoleFromUser(userID: string, roleValue: string): Promise<boolean>;
 }
 
-export function userRoleRepo(db: DataSource) {
+export function getUserRoleRepo(db: DataSource|EntityManager) {
   const userRepo = db.getRepository(User);
   const roleRepo = db.getRepository(Role);
 
@@ -39,5 +40,6 @@ export function userRoleRepo(db: DataSource) {
         throw new DBError('Error removing role from user', error);
       }
     },
+    __recreateFunction: getUserRoleRepo,
   };
 }

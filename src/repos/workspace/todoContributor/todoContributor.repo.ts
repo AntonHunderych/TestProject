@@ -1,15 +1,16 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
 import { DBError } from '../../../types/Errors/DBError';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IGetTodoContributorRepo {
+export interface IGetTodoContributorRepo extends IRecreateRepo{
   addContributor(workSpaceId: string, userId: string, todoId: string): Promise<void>;
   deleteContributor(workSpaceId: string, userId: string, todoId: string): Promise<void>;
   getTodoContributor(workSpaceId: string, todoId: string): Promise<WorkSpaceUser[]>;
 }
 
-export function getTodoContributorRepo(db: DataSource): IGetTodoContributorRepo {
+export function getTodoContributorRepo(db: DataSource| EntityManager): IGetTodoContributorRepo {
   const workSpaceTodo = db.getRepository(WorkSpaceTodo);
   const workSpaceUser = db.getRepository(WorkSpaceUser);
 
@@ -51,5 +52,6 @@ export function getTodoContributorRepo(db: DataSource): IGetTodoContributorRepo 
         throw new DBError('Error deleting contributor', error);
       }
     },
+    __recreateFunction: getTodoContributorRepo
   };
 }

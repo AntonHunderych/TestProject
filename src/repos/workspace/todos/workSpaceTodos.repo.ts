@@ -1,9 +1,10 @@
-import { Brackets, DataSource } from 'typeorm';
+import { Brackets, DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
 import { ITodo } from '../../../db/schemas/TodoSchema';
 import { DBError } from '../../../types/Errors/DBError';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceTodoRepo {
+export interface IWorkSpaceTodoRepo extends IRecreateRepo{
   create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo>;
 
   findById(id: string): Promise<WorkSpaceTodo>;
@@ -19,7 +20,7 @@ export interface IWorkSpaceTodoRepo {
   delete(id: string): Promise<boolean>;
 }
 
-export function getWorkSpaceTodoRepo(db: DataSource): IWorkSpaceTodoRepo {
+export function getWorkSpaceTodoRepo(db: DataSource| EntityManager): IWorkSpaceTodoRepo {
   const wsTodoRepo = db.getRepository(WorkSpaceTodo);
 
   return {
@@ -113,6 +114,7 @@ export function getWorkSpaceTodoRepo(db: DataSource): IWorkSpaceTodoRepo {
       } catch (error) {
         throw new DBError('Error deleting workspace todo', error);
       }
-    }
+    },
+    __recreateFunction:getWorkSpaceTodoRepo
   };
 }

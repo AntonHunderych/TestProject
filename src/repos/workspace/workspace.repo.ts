@@ -1,9 +1,10 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpace } from '../../db/entities/WorkSpace/WorkSpaceEntity';
 import { IWorkspace } from '../../db/schemas/WorkSpaceSchema';
 import { DBError } from '../../types/Errors/DBError';
+import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceRepos {
+export interface IWorkSpaceRepos extends IRecreateRepo{
   createWorkSpace(workSpace: IWorkSpaceCreate): Promise<IWorkspace>;
   getWorkSpaceById(id: string): Promise<IWorkspace>;
   updateWorkSpace(id: string, workSpace: IWorkSpaceUpdate): Promise<IWorkspace>;
@@ -14,7 +15,7 @@ export interface IWorkSpaceRepos {
 export type IWorkSpaceCreate = Omit<IWorkspace, 'id'>;
 export type IWorkSpaceUpdate = Partial<Omit<IWorkspace, 'id' | 'creatorId'>>;
 
-export function getWorkSpaceRepos(db: DataSource): IWorkSpaceRepos {
+export function getWorkSpaceRepos(db: DataSource| EntityManager): IWorkSpaceRepos {
   const WorkSpaceRepos = db.getRepository(WorkSpace);
 
   return {
@@ -58,5 +59,6 @@ export function getWorkSpaceRepos(db: DataSource): IWorkSpaceRepos {
         throw new DBError('Error updating workspace', error);
       }
     },
+    __recreateFunction:getWorkSpaceRepos
   };
 }

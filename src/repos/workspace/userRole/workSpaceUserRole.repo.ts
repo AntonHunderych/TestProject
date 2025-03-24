@@ -1,15 +1,16 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceRoles } from '../../../db/entities/WorkSpace/WorkSpaceRolesEntity';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 import { DBError } from '../../../types/Errors/DBError';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceUserRoleRepo {
+export interface IWorkSpaceUserRoleRepo extends IRecreateRepo{
   giveRoleToUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUser>;
   removeRoleFromUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUser>;
   getAllUserRoles(userId: string, workSpaceId: string): Promise<WorkSpaceRoles[]>;
 }
 
-export function getWorkSpaceUserRoleRepo(db: DataSource): IWorkSpaceUserRoleRepo {
+export function getWorkSpaceUserRoleRepo(db: DataSource| EntityManager): IWorkSpaceUserRoleRepo {
   const workSpaceRolesRepository = db.getRepository(WorkSpaceRoles);
   const workSpaceUserRepository = db.getRepository(WorkSpaceUser);
 
@@ -52,5 +53,6 @@ export function getWorkSpaceUserRoleRepo(db: DataSource): IWorkSpaceUserRoleRepo
         throw new DBError('Error fetching all user roles', error);
       }
     },
+    __recreateFunction: getWorkSpaceUserRoleRepo
   };
 }

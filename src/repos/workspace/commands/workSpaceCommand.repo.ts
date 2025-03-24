@@ -1,9 +1,10 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceCommand } from '../../../db/entities/WorkSpace/WorkSpaceCommandEntity';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 import { DBError } from '../../../types/Errors/DBError';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceCommandsRepo {
+export interface IWorkSpaceCommandsRepo extends IRecreateRepo{
   create(workSpaceId: string, value: string): Promise<WorkSpaceCommand>;
 
   getAll(workSpaceId: string): Promise<WorkSpaceCommand[]>;
@@ -17,7 +18,7 @@ export interface IWorkSpaceCommandsRepo {
   getUserCommands(userId: string, workSpaceId: string): Promise<WorkSpaceCommand[]>
 }
 
-export function getWorkSpaceCommands(db: DataSource): IWorkSpaceCommandsRepo {
+export function getWorkSpaceCommands(db: DataSource| EntityManager): IWorkSpaceCommandsRepo {
 
   const workSpaceCommandRepo = db.getRepository<WorkSpaceCommand>(WorkSpaceCommand);
 
@@ -84,7 +85,7 @@ export function getWorkSpaceCommands(db: DataSource): IWorkSpaceCommandsRepo {
       } catch (error) {
         throw new DBError('Error fetching user commands', error);
       }
-
-    }
+    },
+    __recreateFunction: getWorkSpaceCommands
   };
 }

@@ -1,14 +1,15 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpacePermissions } from '../../../db/entities/WorkSpace/WorkSpacePermissionsEntity';
 import { DBError } from '../../../types/Errors/DBError';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpacePermissions {
+export interface IWorkSpacePermissions extends IRecreateRepo {
   getAll(): Promise<WorkSpacePermissions[]>;
   create(value: string): Promise<WorkSpacePermissions>;
   delete(id: string): Promise<boolean>;
 }
 
-export function getWorkSpacePermissionsRepo(db: DataSource): IWorkSpacePermissions {
+export function getWorkSpacePermissionsRepo(db: DataSource| EntityManager): IWorkSpacePermissions {
   const workSpacePermissions = db.getRepository(WorkSpacePermissions);
 
   return {
@@ -33,5 +34,6 @@ export function getWorkSpacePermissionsRepo(db: DataSource): IWorkSpacePermissio
         throw new DBError('Error fetching all workspace permissions', error);
       }
     },
+    __recreateFunction: getWorkSpacePermissionsRepo,
   };
 }

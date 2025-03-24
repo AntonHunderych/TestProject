@@ -1,15 +1,18 @@
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { Role } from '../../db/entities/RoleEntity';
 import { DBError } from '../../types/Errors/DBError';
+import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface IRolesRepo {
+
+
+export interface IRolesRepo extends IRecreateRepo {
   getRoleByValue(value: string): Promise<Role>;
   addRole(role: { value: string; description?: string }): Promise<Role>;
   getAllRoles(): Promise<Role[]>;
   deleteRole(id: string): Promise<boolean>;
 }
 
-export default function getRolesRepo(db: DataSource): IRolesRepo {
+export default function getRolesRepo(db: DataSource| EntityManager): IRolesRepo {
   const roleRepo = db.getRepository(Role);
 
   return {
@@ -46,5 +49,6 @@ export default function getRolesRepo(db: DataSource): IRolesRepo {
         throw new DBError('Error deleting role', error);
       }
     },
+    __recreateFunction: getRolesRepo
   };
 }

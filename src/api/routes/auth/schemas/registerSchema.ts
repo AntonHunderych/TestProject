@@ -1,6 +1,6 @@
 import z from 'zod';
+import { loginSchema } from './loginSchema';
 
-export const RegisterSchema = z.object({
-  email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+export const registerSchema = loginSchema.extend({
+  username: z.string().min(3).max(100),
 });
