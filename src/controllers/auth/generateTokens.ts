@@ -12,7 +12,11 @@ export interface IOutputTokenData {
   refreshToken: string;
 }
 
-export async function generateTokens(data: IInputTokenData, jwt: JWT, tokenRepo: ITokenRepo): Promise<IOutputTokenData> {
+export async function generateTokens(
+  data: IInputTokenData,
+  jwt: JWT,
+  tokenRepo: ITokenRepo,
+): Promise<IOutputTokenData> {
   try {
     const accessToken = jwt.sign(data);
     const refreshToken = jwt.sign(data, { expiresIn: '7d' });
@@ -20,8 +24,8 @@ export async function generateTokens(data: IInputTokenData, jwt: JWT, tokenRepo:
     await tokenRepo.saveRefreshToken(data.id, refreshToken);
 
     return {
-      accessToken: accessToken,
-      refreshToken: refreshToken
+      accessToken,
+      refreshToken,
     };
   } catch (e) {
     console.error('Fail to generate tokens', e);

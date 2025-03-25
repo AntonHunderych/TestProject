@@ -4,7 +4,7 @@ import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntit
 import { DBError } from '../../../types/Errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceCommandsRepo extends IRecreateRepo{
+export interface IWorkSpaceCommandsRepo extends IRecreateRepo {
   create(workSpaceId: string, value: string): Promise<WorkSpaceCommand>;
 
   getAll(workSpaceId: string): Promise<WorkSpaceCommand[]>;
@@ -15,15 +15,13 @@ export interface IWorkSpaceCommandsRepo extends IRecreateRepo{
 
   removeUser(workSpaceId: string, value: string, userId: string): Promise<void>;
 
-  getUserCommands(userId: string, workSpaceId: string): Promise<WorkSpaceCommand[]>
+  getUserCommands(userId: string, workSpaceId: string): Promise<WorkSpaceCommand[]>;
 }
 
-export function getWorkSpaceCommands(db: DataSource| EntityManager): IWorkSpaceCommandsRepo {
-
+export function getWorkSpaceCommands(db: DataSource | EntityManager): IWorkSpaceCommandsRepo {
   const workSpaceCommandRepo = db.getRepository<WorkSpaceCommand>(WorkSpaceCommand);
 
   return {
-
     async create(workSpaceId: string, value: string): Promise<WorkSpaceCommand> {
       try {
         return await workSpaceCommandRepo.save({ workSpaceId, value });
@@ -33,14 +31,14 @@ export function getWorkSpaceCommands(db: DataSource| EntityManager): IWorkSpaceC
     },
     async getAll(workSpaceId: string): Promise<WorkSpaceCommand[]> {
       try {
-        return await workSpaceCommandRepo.find({ where: { workSpaceId: workSpaceId } });
+        return await workSpaceCommandRepo.find({ where: { workSpaceId } });
       } catch (error) {
         throw new DBError('Error fetching all workspace commands', error);
       }
     },
     async delete(workSpaceId: string, value: string): Promise<void> {
       try {
-        await workSpaceCommandRepo.delete({ workSpaceId: workSpaceId, value: value  });
+        await workSpaceCommandRepo.delete({ workSpaceId, value });
       } catch (error) {
         throw new DBError('Error deleting workspace command', error);
       }
@@ -48,8 +46,8 @@ export function getWorkSpaceCommands(db: DataSource| EntityManager): IWorkSpaceC
     async addUser(workSpaceId: string, value: string, userId: string) {
       try {
         const command = await workSpaceCommandRepo.findOneOrFail({
-          where: { workSpaceId: workSpaceId, value: value },
-          relations: { users: true }
+          where: { workSpaceId, value },
+          relations: { users: true },
         });
         const user = new WorkSpaceUser();
         user.workSpaceId = workSpaceId;
@@ -63,13 +61,13 @@ export function getWorkSpaceCommands(db: DataSource| EntityManager): IWorkSpaceC
     async removeUser(workSpaceId: string, value: string, userId: string) {
       try {
         const command = await workSpaceCommandRepo.findOneOrFail({
-          where: { workSpaceId: workSpaceId, value: value },
-          relations: { users: true }
+          where: { workSpaceId, value },
+          relations: { users: true },
         });
         if (!command.users) {
           return;
         }
-        command.users = command.users.filter(user => user.userId !== userId);
+        command.users = command.users.filter((user) => user.userId !== userId);
         await workSpaceCommandRepo.save(command);
       } catch (error) {
         throw new DBError('Error removing user from workspace command', error);
@@ -77,7 +75,8 @@ export function getWorkSpaceCommands(db: DataSource| EntityManager): IWorkSpaceC
     },
     async getUserCommands(userId: string, workSpaceId: string): Promise<WorkSpaceCommand[]> {
       try {
-        return await workSpaceCommandRepo.createQueryBuilder('command')
+        return await workSpaceCommandRepo
+          .createQueryBuilder('command')
           .innerJoinAndSelect('command.users', 'user')
           .where('user.userId = :userId', { userId })
           .andWhere('command.workSpaceId = :workSpaceId', { workSpaceId })
@@ -86,6 +85,6 @@ export function getWorkSpaceCommands(db: DataSource| EntityManager): IWorkSpaceC
         throw new DBError('Error fetching user commands', error);
       }
     },
-    __recreateFunction: getWorkSpaceCommands
+    __recreateFunction: getWorkSpaceCommands,
   };
 }

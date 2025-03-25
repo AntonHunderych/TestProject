@@ -4,7 +4,7 @@ import { ITodo } from '../../../db/schemas/TodoSchema';
 import { DBError } from '../../../types/Errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceTodoRepo extends IRecreateRepo{
+export interface IWorkSpaceTodoRepo extends IRecreateRepo {
   create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo>;
 
   findById(id: string): Promise<WorkSpaceTodo>;
@@ -20,7 +20,7 @@ export interface IWorkSpaceTodoRepo extends IRecreateRepo{
   delete(id: string): Promise<boolean>;
 }
 
-export function getWorkSpaceTodoRepo(db: DataSource| EntityManager): IWorkSpaceTodoRepo {
+export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpaceTodoRepo {
   const wsTodoRepo = db.getRepository(WorkSpaceTodo);
 
   return {
@@ -29,7 +29,7 @@ export function getWorkSpaceTodoRepo(db: DataSource| EntityManager): IWorkSpaceT
         return await wsTodoRepo.save({
           workSpaceId,
           creatorId,
-          ...todo
+          ...todo,
         });
       } catch (error) {
         throw new DBError('Error creating workspace todo', error);
@@ -54,8 +54,8 @@ export function getWorkSpaceTodoRepo(db: DataSource| EntityManager): IWorkSpaceT
             contributors: true,
             tags: { workSpaceTag: true },
             category: { category: true },
-            command: true
-          }
+            command: true,
+          },
         });
       } catch (error) {
         throw new DBError('Error fetching all createdTodos in workspace', error);
@@ -64,25 +64,25 @@ export function getWorkSpaceTodoRepo(db: DataSource| EntityManager): IWorkSpaceT
 
     async findAllTodoInWorkSpaceByCommand(workSpaceId: string, commandValue: string[]): Promise<WorkSpaceTodo[]> {
       try {
-        const query = wsTodoRepo.createQueryBuilder("wsTodo")
-          .leftJoinAndSelect("wsTodo.creator", "creator")
-          .leftJoinAndSelect("wsTodo.comments", "comments")
-          .leftJoinAndSelect("wsTodo.contributors", "contributors")
-          .leftJoinAndSelect("wsTodo.tags", "tags")
-          .leftJoinAndSelect("tags.workSpaceTag", "workSpaceTag")
-          .leftJoinAndSelect("wsTodo.category", "category")
-          .leftJoinAndSelect("wsTodo.command", "command")
-          .where("wsTodo.workSpaceId = :workSpaceId", { workSpaceId });
+        const query = wsTodoRepo
+          .createQueryBuilder('wsTodo')
+          .leftJoinAndSelect('wsTodo.creator', 'creator')
+          .leftJoinAndSelect('wsTodo.comments', 'comments')
+          .leftJoinAndSelect('wsTodo.contributors', 'contributors')
+          .leftJoinAndSelect('wsTodo.tags', 'tags')
+          .leftJoinAndSelect('tags.workSpaceTag', 'workSpaceTag')
+          .leftJoinAndSelect('wsTodo.category', 'category')
+          .leftJoinAndSelect('wsTodo.command', 'command')
+          .where('wsTodo.workSpaceId = :workSpaceId', { workSpaceId });
 
         if (commandValue && commandValue.length > 0) {
           query.andWhere(
-            new Brackets(qb => {
-              qb.where("command.value IN (:...commandValue)", { commandValue })
-                .orWhere("command.value IS NULL");
-            })
+            new Brackets((qb) => {
+              qb.where('command.value IN (:...commandValue)', { commandValue }).orWhere('command.value IS NULL');
+            }),
           );
         } else {
-          query.andWhere("command.value IS NULL");
+          query.andWhere('command.value IS NULL');
         }
 
         return await query.getMany();
@@ -115,6 +115,6 @@ export function getWorkSpaceTodoRepo(db: DataSource| EntityManager): IWorkSpaceT
         throw new DBError('Error deleting workspace todo', error);
       }
     },
-    __recreateFunction:getWorkSpaceTodoRepo
+    __recreateFunction: getWorkSpaceTodoRepo,
   };
 }

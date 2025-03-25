@@ -10,8 +10,8 @@ import { UUIDGetter } from '../../../schemas/UUIDGetter';
 import { addRemoveTagSchema } from '../../../todos/tags/schema/addRemoveTagSchema';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
-  const f = fastify.withTypeProvider<ZodTypeProvider>()
-  const workSpaceTagRepo = f.repos.workSpaceTagRepo
+  const f = fastify.withTypeProvider<ZodTypeProvider>();
+  const workSpaceTagRepo = f.repos.workSpaceTagRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
@@ -22,13 +22,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         response: {
-          200: z.array(getTagSchema)
-        }
-      }
+          200: z.array(getTagSchema),
+        },
+      },
     },
     async (req) => {
       return await workSpaceTagRepo.getTags(req.workSpace.id);
-    }
+    },
   );
 
   f.post(
@@ -37,25 +37,25 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         body: createTagSchema,
         response: {
-          200: getTagSchema
-        }
-      }
+          200: getTagSchema,
+        },
+      },
     },
     async (req) => {
-      return await workSpaceTagRepo.createTag(req.workSpace.id,req.userData.id, req.body.value);
-    }
+      return await workSpaceTagRepo.createTag(req.workSpace.id, req.userData.id, req.body.value);
+    },
   );
 
   f.delete(
     '/:id',
     {
       schema: {
-        params: UUIDGetter
-      }
+        params: UUIDGetter,
+      },
     },
     async (req) => {
       return await workSpaceTagRepo.deleteTag(req.params.id);
-    }
+    },
   );
 
   f.put(
@@ -65,13 +65,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
         params: UUIDGetter,
         body: createTagSchema,
         response: {
-          200: getTagSchema
-        }
-      }
+          200: getTagSchema,
+        },
+      },
     },
     async (req) => {
       return await workSpaceTagRepo.updateTag(req.params.id, req.body.value);
-    }
+    },
   );
 
   f.post(
@@ -79,24 +79,24 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         body: addRemoveTagSchema,
-      }
+      },
     },
     async (req) => {
       return await workSpaceTagRepo.addTag(req.body.todoId, req.body.tagId, req.userData.id, req.workSpace.id);
-    }
+    },
   );
 
   f.delete(
     '/remove',
     {
       schema: {
-        body: addRemoveTagSchema
-      }
+        body: addRemoveTagSchema,
+      },
     },
     async (req) => {
       return await workSpaceTagRepo.removeTag(req.body.todoId, req.body.tagId);
-    }
+    },
   );
-}
+};
 
 export default routes;

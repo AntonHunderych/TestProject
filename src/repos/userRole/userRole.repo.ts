@@ -4,12 +4,12 @@ import { Role } from '../../db/entities/RoleEntity';
 import { DBError } from '../../types/Errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface IUserRoleRepo extends IRecreateRepo{
+export interface IUserRoleRepo extends IRecreateRepo {
   giveRoleToUser(userId: string, roleValue: string): Promise<boolean>;
   removeRoleFromUser(userID: string, roleValue: string): Promise<boolean>;
 }
 
-export function getUserRoleRepo(db: DataSource|EntityManager) {
+export function getUserRoleRepo(db: DataSource | EntityManager) {
   const userRepo = db.getRepository(User);
   const roleRepo = db.getRepository(Role);
 

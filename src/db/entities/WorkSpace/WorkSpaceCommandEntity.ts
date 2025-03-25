@@ -5,7 +5,6 @@ import { WorkSpace } from './WorkSpaceEntity';
 
 @Entity()
 export class WorkSpaceCommand {
-
   @PrimaryColumn()
   workSpaceId: string;
 
@@ -21,5 +20,4 @@ export class WorkSpaceCommand {
 
   @ManyToOne(() => WorkSpace, (workSpace) => workSpace.commands)
   workSpace: WorkSpace;
-
 }

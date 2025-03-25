@@ -16,7 +16,7 @@ export interface ICommentsRepo extends IRecreateRepo {
   getAllTodoComments: (id: string) => Promise<IComment[]>;
 }
 
-export const getCommentsRepo = (db: DataSource| EntityManager): ICommentsRepo => {
+export const getCommentsRepo = (db: DataSource | EntityManager): ICommentsRepo => {
   const commentRepo = db.getRepository(Comment);
 
   return {
@@ -64,6 +64,6 @@ export const getCommentsRepo = (db: DataSource| EntityManager): ICommentsRepo =>
         throw new DBError('Error updating comment', error);
       }
     },
-    __recreateFunction: getCommentsRepo
+    __recreateFunction: getCommentsRepo,
   };
 };

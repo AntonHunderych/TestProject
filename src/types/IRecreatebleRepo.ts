@@ -1,3 +1,3 @@
 export interface IRecreateRepo {
-  __recreateFunction: any
+  __recreateFunction: any;
 }

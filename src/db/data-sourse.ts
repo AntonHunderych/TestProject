@@ -20,7 +20,7 @@ import { TokenEntity } from './entities/tokenEntity';
 
 dotenv.config();
 
-export function getDataSource(){
+export function getDataSource() {
   return new DataSource({
     type: 'postgres',
     host: process.env.DB_HOST,
@@ -55,7 +55,7 @@ export function getDataSource(){
   });
 }
 
-export const pgDataSource = getDataSource()
+export const pgDataSource = getDataSource();
 
 export const initDB = async (): Promise<DataSource> => {
   return await pgDataSource.initialize();

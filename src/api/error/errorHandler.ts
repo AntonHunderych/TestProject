@@ -3,7 +3,6 @@ import util from 'util';
 import { HttpError } from './HttpError';
 import { EErrorCode } from '../../types/Enum/EErrorCode';
 
-
 const isProduction = process.env.NODE_ENV === 'production';
 
 export const errorHandler = function (error: Error, request: FastifyRequest, reply: FastifyReply) {
@@ -29,6 +28,6 @@ export const errorHandler = function (error: Error, request: FastifyRequest, rep
   return reply.status(statusCode).send({
     code: errorCode,
     message,
-    ...(isProduction ? {} : { info: util.inspect(error) })
+    ...(isProduction ? {} : { info: util.inspect(error) }),
   });
 };

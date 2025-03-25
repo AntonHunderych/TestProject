@@ -6,31 +6,31 @@ import { WorkSpace } from './WorkSpaceEntity';
 
 @Entity()
 export class WorkSpaceTag extends BasicTag {
-
   @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.workSpaceTodo)
-  @JoinColumn({ 'name': 'todoId' })
+  @JoinColumn({ name: 'todoId' })
   todos: WorkSpaceTodo[];
 
   @Column()
   creatorId: string;
 
   @ManyToOne(() => WorkSpaceUser, (workSpaceUser) => workSpaceUser.createdTags)
-  @JoinColumn([{ 'name': 'creatorId',referencedColumnName: "userId" }, {name: 'workSpaceId', referencedColumnName: "workSpaceId"}])
+  @JoinColumn([
+    { name: 'creatorId', referencedColumnName: 'userId' },
+    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
+  ])
   creator: WorkSpaceUser;
 
   @Column()
   workSpaceId: string;
 
   @ManyToOne(() => WorkSpace, (workSpace) => workSpace.tags)
-  @JoinColumn({ 'name': 'workSpaceId' })
+  @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpace;
-
 }
 
 @Entity()
 @Unique(['todoId', 'tagId'])
 export class WorkSpaceTagTodo {
-
   @PrimaryColumn()
   todoId: string;
 
@@ -47,5 +47,4 @@ export class WorkSpaceTagTodo {
 
   @ManyToOne(() => WorkSpaceUser, (workSpaceUser) => workSpaceUser.assignedTags)
   assignedBy: WorkSpaceUser;
-
 }

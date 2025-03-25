@@ -6,7 +6,7 @@ import { util } from 'zod';
 import Omit = util.Omit;
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface ITodosRepo extends IRecreateRepo{
+export interface ITodosRepo extends IRecreateRepo {
   create(todo: Omit<ITodo, 'id'>): Promise<ITodo>;
   findById(id: string): Promise<ITodo>;
   findAll(): Promise<ITodo[]>;
@@ -37,7 +37,7 @@ export function getTodosRepo(db: DataSource | EntityManager): ITodosRepo {
 
     findByCreatorId: async (creatorId: string): Promise<ITodo[]> => {
       try {
-        return await todoRepo.find({ where: { creatorId }, relations: ["tags", "comments"] });
+        return await todoRepo.find({ where: { creatorId }, relations: ['tags', 'comments'] });
       } catch (error) {
         throw new DBError('Error fetching createdTodos by creator id', error);
       }
@@ -45,7 +45,7 @@ export function getTodosRepo(db: DataSource | EntityManager): ITodosRepo {
 
     findAll: async (): Promise<ITodo[]> => {
       try {
-        return await todoRepo.find({ relations: { creator: true, comments: true, tags: true,  }});
+        return await todoRepo.find({ relations: { creator: true, comments: true, tags: true } });
       } catch (error) {
         throw new DBError('Error fetching all createdTodos', error);
       }
@@ -71,6 +71,6 @@ export function getTodosRepo(db: DataSource | EntityManager): ITodosRepo {
         throw new DBError('Error deleting todo', error);
       }
     },
-    __recreateFunction: getTodosRepo
+    __recreateFunction: getTodosRepo,
   };
 }

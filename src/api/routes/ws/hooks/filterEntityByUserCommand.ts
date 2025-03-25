@@ -5,8 +5,7 @@ interface EntityWithCommand {
 }
 
 export const filterEntityByUserCommand = <T extends EntityWithCommand>(): preSerializationAsyncHookHandler => {
-  return async function(request: FastifyRequest, reply: FastifyReply, payload): Promise<T[]> {
-
+  return async function (request: FastifyRequest, reply: FastifyReply, payload): Promise<T[]> {
     if (!Array.isArray(payload)) {
       throw new Error('Bad payload');
     }
@@ -16,7 +15,7 @@ export const filterEntityByUserCommand = <T extends EntityWithCommand>(): preSer
     const workSpaceCommandRepo = this.repos.workSpaceCommandRepo;
     const userCommands = await workSpaceCommandRepo.getUserCommands(request.userData.id, request.workSpace.id);
 
-    const userCommandsValue = new Set<string>(userCommands.map(command => command.value));
+    const userCommandsValue = new Set<string>(userCommands.map((command) => command.value));
 
     return payloadArray.filter((data) => {
       if (data.command === null) {
@@ -25,6 +24,5 @@ export const filterEntityByUserCommand = <T extends EntityWithCommand>(): preSer
         return userCommandsValue.has(data.command.value);
       }
     });
-
   };
 };

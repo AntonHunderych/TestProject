@@ -24,7 +24,7 @@ export class User {
   @Column()
   salt: string;
 
-  @OneToOne(() => TokenEntity, token => token.user)
+  @OneToOne(() => TokenEntity, (token) => token.user)
   token: TokenEntity;
 
   @ManyToMany(() => Role, (role) => role.users)

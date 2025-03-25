@@ -36,7 +36,7 @@ export class Todo extends BasicTodo {
   @OneToMany(() => Comment, (comment) => comment.todo)
   comments: Comment[];
 
-  @ManyToMany(()=>Tag,(tag)=>tag.todos)
+  @ManyToMany(() => Tag, (tag) => tag.todos)
   tags: Tag[];
 
   @ManyToOne(() => Category, (category) => category.todos)

@@ -4,14 +4,13 @@ import { WorkSpaceCommand } from '../../../db/entities/WorkSpace/WorkSpaceComman
 import { DBError } from '../../../types/Errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IGetWorkSpaceCommandTodoRepo extends IRecreateRepo{
+export interface IGetWorkSpaceCommandTodoRepo extends IRecreateRepo {
   addCommandToTodo(todoId: string, workSpaceId: string, value: string): Promise<void>;
 
   removeCommandFromTodo(todoId: string): Promise<void>;
 }
 
-export function getWorkSpaceCommandsTodoRepo(db: DataSource| EntityManager): IGetWorkSpaceCommandTodoRepo {
-
+export function getWorkSpaceCommandsTodoRepo(db: DataSource | EntityManager): IGetWorkSpaceCommandTodoRepo {
   const workSpaceTodoRepo = db.getRepository<WorkSpaceTodo>(WorkSpaceTodo);
 
   return {
@@ -36,6 +35,6 @@ export function getWorkSpaceCommandsTodoRepo(db: DataSource| EntityManager): IGe
         throw new DBError('Failed to remove command from todo', error);
       }
     },
-    __recreateFunction: getWorkSpaceCommandsTodoRepo
+    __recreateFunction: getWorkSpaceCommandsTodoRepo,
   };
 }

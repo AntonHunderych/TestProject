@@ -3,17 +3,15 @@ import { User } from './UserEntity';
 
 @Entity()
 export class TokenEntity {
-
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-    value: string;
+  value: string;
 
   @Column()
   userId: string;
 
-  @OneToOne(()=> User, user => user.token)
+  @OneToOne(() => User, (user) => user.token)
   user: User;
-
 }

@@ -5,7 +5,7 @@ import { WorkSpacePermissions } from '../../../db/entities/WorkSpace/WorkSpacePe
 import { DBError } from '../../../types/Errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceRolesRepo extends IRecreateRepo{
+export interface IWorkSpaceRolesRepo extends IRecreateRepo {
   create(workSpaceId: string, name: string): Promise<WorkSpaceRoles>;
   delete(workSpaceId: string, name: string): Promise<boolean>;
   getAll(): Promise<WorkSpaceRoles[]>;
@@ -13,7 +13,7 @@ export interface IWorkSpaceRolesRepo extends IRecreateRepo{
   updatePermissionOnRole(workSpaceId: string, name: string, permissionsValue: Permissions[]): Promise<WorkSpaceRoles>;
 }
 
-export function getWorkSpaceRolesRepo(db: DataSource| EntityManager): IWorkSpaceRolesRepo {
+export function getWorkSpaceRolesRepo(db: DataSource | EntityManager): IWorkSpaceRolesRepo {
   const workSpaceRolesRepo = db.getRepository(WorkSpaceRoles);
   const workSpacePermissions = db.getRepository(WorkSpacePermissions);
 

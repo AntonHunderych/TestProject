@@ -44,5 +44,4 @@ export class WorkSpaceUser {
 
   @ManyToMany(() => WorkSpaceCommand, (workSpaceCommand) => workSpaceCommand.users)
   commands: WorkSpaceCommand[];
-
 }

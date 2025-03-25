@@ -19,7 +19,7 @@ export class WorkSpaceTodo extends BasicTodo {
   @ManyToOne(() => WorkSpaceUser, (worksSpaceUser) => worksSpaceUser.createdTodos)
   @JoinColumn([
     { name: 'creatorId', referencedColumnName: 'userId' },
-    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' }
+    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
   ])
   creator: WorkSpaceUser;
 
@@ -37,16 +37,16 @@ export class WorkSpaceTodo extends BasicTodo {
   categoryId: string | null;
 
   @ManyToOne(() => WorkSpaceCategoryConf, (WorkSpaceCategoryConf) => WorkSpaceCategoryConf.todos)
-  @JoinColumn([{ name: 'categoryId', referencedColumnName: 'categoryId' }, { name: 'id', referencedColumnName: 'todoId' }])
+  @JoinColumn([
+    { name: 'categoryId', referencedColumnName: 'categoryId' },
+    { name: 'id', referencedColumnName: 'todoId' },
+  ])
   category: WorkSpaceCategoryConf;
 
   @ManyToOne(() => WorkSpaceCommand, (workSpaceCommand) => workSpaceCommand)
-  @JoinColumn(
-    [
-      { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
-      { name: 'commandValue', referencedColumnName: 'value'}
-    ]
-  )
+  @JoinColumn([
+    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
+    { name: 'commandValue', referencedColumnName: 'value' },
+  ])
   command: WorkSpaceCommand | null;
-
 }

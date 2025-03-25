@@ -1,3 +1,3 @@
 export enum EErrorCode {
-  GENERAL_ERROR = 1000
+  GENERAL_ERROR = 1000,
 }

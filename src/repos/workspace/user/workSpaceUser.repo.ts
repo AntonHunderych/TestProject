@@ -4,7 +4,7 @@ import { IWorkspace } from '../../../db/schemas/WorkSpaceSchema';
 import { DBError } from '../../../types/Errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceUserRepo extends IRecreateRepo{
+export interface IWorkSpaceUserRepo extends IRecreateRepo {
   addUserToWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUser>;
   getUserAllWorkSpaces(id: string): Promise<IWorkspace[]>;
   getAllCreatedWorkSpaces(id: string): Promise<IWorkspace[]>;
@@ -13,7 +13,7 @@ export interface IWorkSpaceUserRepo extends IRecreateRepo{
   getUserInWorkSpace(workSpaceId: string): Promise<WorkSpaceUser[]>;
 }
 
-export function getWorkSpaceUserRepo(db: DataSource| EntityManager): IWorkSpaceUserRepo {
+export function getWorkSpaceUserRepo(db: DataSource | EntityManager): IWorkSpaceUserRepo {
   const workSpaceUserRepo = db.getRepository(WorkSpaceUser);
 
   return {
@@ -87,6 +87,6 @@ export function getWorkSpaceUserRepo(db: DataSource| EntityManager): IWorkSpaceU
         throw new DBError('Error checking if user exists in workspace', error);
       }
     },
-    __recreateFunction: getWorkSpaceUserRepo
+    __recreateFunction: getWorkSpaceUserRepo,
   };
 }

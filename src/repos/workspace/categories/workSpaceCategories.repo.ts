@@ -5,7 +5,10 @@ import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntit
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IWorkSpaceCategoriesRepo extends IRecreateRepo {
-  create(workSpaceId: string, data: { value: string; description?: string; creatorId: string }): Promise<WorkSpaceCategory>;
+  create(
+    workSpaceId: string,
+    data: { value: string; description?: string; creatorId: string },
+  ): Promise<WorkSpaceCategory>;
   get(workSpaceId: string): Promise<WorkSpaceCategory[]>;
   delete(categoryId: string): Promise<void>;
   getAllCategoryTodos(categoryId: string): Promise<WorkSpaceTodo[]>;
@@ -14,20 +17,22 @@ export interface IWorkSpaceCategoriesRepo extends IRecreateRepo {
   removeTodo(todoId: string): Promise<void>;
 }
 
-export function getWorkSpaceCategoriesRepo(db: DataSource| EntityManager): IWorkSpaceCategoriesRepo {
-
+export function getWorkSpaceCategoriesRepo(db: DataSource | EntityManager): IWorkSpaceCategoriesRepo {
   const workSpaceCategoryRepo = db.getRepository(WorkSpaceCategory);
   const workSpaceCategoryTodoRepo = db.getRepository(WorkSpaceCategoryConf);
   const workSpaceTodoRepo = db.getRepository(WorkSpaceTodo);
 
   return {
-    async create(workSpaceId: string, data: {
-      value: string,
-      description?: string,
-      creatorId: string,
-    }): Promise<WorkSpaceCategory> {
+    async create(
+      workSpaceId: string,
+      data: {
+        value: string;
+        description?: string;
+        creatorId: string;
+      },
+    ): Promise<WorkSpaceCategory> {
       try {
-        const newCategory = workSpaceCategoryRepo.create({ workSpaceId: workSpaceId, ...data });
+        const newCategory = workSpaceCategoryRepo.create({ workSpaceId, ...data });
         return await workSpaceCategoryRepo.save(newCategory);
       } catch (error) {
         throw new DBError('Failed to create categories', error);
@@ -49,8 +54,8 @@ export function getWorkSpaceCategoriesRepo(db: DataSource| EntityManager): IWork
     },
     async getAllCategoryTodos(categoryId: string): Promise<WorkSpaceTodo[]> {
       try {
-        const configs = await workSpaceCategoryTodoRepo.find({ where: { categoryId }, relations: {todos:true} });
-        return configs.map(conf => conf.todos);
+        const configs = await workSpaceCategoryTodoRepo.find({ where: { categoryId }, relations: { todos: true } });
+        return configs.map((conf) => conf.todos);
       } catch (error) {
         throw new DBError('Failed to get categories', error);
       }
@@ -58,7 +63,7 @@ export function getWorkSpaceCategoriesRepo(db: DataSource| EntityManager): IWork
     async update(categoryId: string, value?: string, description?: string): Promise<WorkSpaceCategory> {
       try {
         const category = await workSpaceCategoryRepo.findOneOrFail({ where: { id: categoryId } });
-        Object.assign(category, { value: value, description: description });
+        Object.assign(category, { value, description });
         return await workSpaceCategoryRepo.save(category);
       } catch (error) {
         throw new DBError('Failed to update categories', error);
@@ -69,7 +74,7 @@ export function getWorkSpaceCategoriesRepo(db: DataSource| EntityManager): IWork
         await workSpaceCategoryTodoRepo.save({
           todoId,
           categoryId,
-          attachedByUserId: userId
+          attachedByUserId: userId,
         });
         const todo = await workSpaceTodoRepo.findOneOrFail({ where: { id: todoId } });
         todo.categoryId = categoryId;
@@ -83,12 +88,12 @@ export function getWorkSpaceCategoriesRepo(db: DataSource| EntityManager): IWork
         const todo = await workSpaceTodoRepo.findOneOrFail({ where: { id: todoId }, relations: { category: true } });
         await workSpaceTodoRepo.update(todoId, { categoryId: null });
         if (todo.categoryId) {
-          await workSpaceCategoryTodoRepo.delete({ todoId: todoId, categoryId: todo.categoryId });
+          await workSpaceCategoryTodoRepo.delete({ todoId, categoryId: todo.categoryId });
         }
       } catch (error) {
         throw new DBError('Failed to detach categories', error);
       }
     },
-    __recreateFunction: getWorkSpaceCategoriesRepo
+    __recreateFunction: getWorkSpaceCategoriesRepo,
   };
 }

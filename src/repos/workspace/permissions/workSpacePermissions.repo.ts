@@ -9,7 +9,7 @@ export interface IWorkSpacePermissions extends IRecreateRepo {
   delete(id: string): Promise<boolean>;
 }
 
-export function getWorkSpacePermissionsRepo(db: DataSource| EntityManager): IWorkSpacePermissions {
+export function getWorkSpacePermissionsRepo(db: DataSource | EntityManager): IWorkSpacePermissions {
   const workSpacePermissions = db.getRepository(WorkSpacePermissions);
 
   return {

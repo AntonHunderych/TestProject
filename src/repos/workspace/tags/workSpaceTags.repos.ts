@@ -4,7 +4,7 @@ import { DBError } from '../../../types/Errors/DBError';
 import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IGetWorkSpaceTagRepo extends IRecreateRepo{
+export interface IGetWorkSpaceTagRepo extends IRecreateRepo {
   getTags(userId: string): Promise<WorkSpaceTag[]>;
 
   createTag(workSpaceId: string, userId: string, value: string): Promise<WorkSpaceTag>;
@@ -18,22 +18,21 @@ export interface IGetWorkSpaceTagRepo extends IRecreateRepo{
   removeTag(todoId: string, tagId: string): Promise<void>;
 }
 
-export function getWorkSpaceTagRepo(db: DataSource| EntityManager) : IGetWorkSpaceTagRepo {
-
+export function getWorkSpaceTagRepo(db: DataSource | EntityManager): IGetWorkSpaceTagRepo {
   const workSpaceTagRepo = db.getRepository<WorkSpaceTag>(WorkSpaceTag);
   const workSpaceTagTodoRepo = db.getRepository<WorkSpaceTagTodo>(WorkSpaceTagTodo);
 
   return {
     async getTags(workSpaceId: string): Promise<WorkSpaceTag[]> {
       try {
-        return await workSpaceTagRepo.find({ where: { workSpaceId: workSpaceId } });
+        return await workSpaceTagRepo.find({ where: { workSpaceId } });
       } catch (error) {
         throw new DBError('Failed to get tags', error);
       }
     },
     async createTag(workSpaceId: string, userId: string, value: string): Promise<WorkSpaceTag> {
       try {
-        const newTag = workSpaceTagRepo.create({ workSpaceId: workSpaceId, creatorId: userId, value: value });
+        const newTag = workSpaceTagRepo.create({ workSpaceId, creatorId: userId, value });
         return await workSpaceTagRepo.save(newTag);
       } catch (error) {
         throw new DBError('Failed to create tag', error);
@@ -64,13 +63,13 @@ export function getWorkSpaceTagRepo(db: DataSource| EntityManager) : IGetWorkSpa
     },
     async addTag(todoId: string, tagId: string, userId: string, workSpaceId: string): Promise<void> {
       try {
-        const user: WorkSpaceUser = new WorkSpaceUser;
+        const user: WorkSpaceUser = new WorkSpaceUser();
         user.userId = userId;
         user.workSpaceId = workSpaceId;
         await workSpaceTagTodoRepo.save({
-          todoId: todoId,
-          tagId: tagId,
-          assignedBy: user
+          todoId,
+          tagId,
+          assignedBy: user,
         });
       } catch (error) {
         throw new DBError('Failed to add tag', error);

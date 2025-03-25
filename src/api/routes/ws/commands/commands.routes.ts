@@ -16,11 +16,11 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   f.get(
     '/',
     {
-      schema: {}
+      schema: {},
     },
     async (req) => {
       return await workSpaceCommandRepo.getAll(req.workSpace.id);
-    }
+    },
   );
 
   f.post(
@@ -28,13 +28,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         body: z.object({
-          value: z.string()
-        })
-      }
+          value: z.string(),
+        }),
+      },
     },
     async (req) => {
       return await workSpaceCommandRepo.create(req.workSpace.id, req.body.value);
-    }
+    },
   );
 
   f.delete(
@@ -42,13 +42,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         body: z.object({
-          value: z.string()
-        })
-      }
+          value: z.string(),
+        }),
+      },
     },
     async (req) => {
       return await workSpaceCommandRepo.delete(req.workSpace.id, req.body.value);
-    }
+    },
   );
 
   f.post(
@@ -57,13 +57,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         body: z.object({
           value: z.string(),
-          userId: z.string()
-        })
-      }
+          userId: z.string(),
+        }),
+      },
     },
     async (req) => {
       return await workSpaceCommandRepo.addUser(req.workSpace.id, req.body.value, req.body.userId);
-    }
+    },
   );
 
   f.delete(
@@ -72,15 +72,14 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         body: z.object({
           value: z.string(),
-          userId: z.string()
-        })
-      }
+          userId: z.string(),
+        }),
+      },
     },
     async (req) => {
       return await workSpaceCommandRepo.removeUser(req.workSpace.id, req.body.value, req.body.userId);
-    }
+    },
   );
-
 };
 
 export default routes;

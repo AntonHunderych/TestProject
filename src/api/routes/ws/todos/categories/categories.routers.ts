@@ -21,47 +21,47 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       schema: {
         body: z.object({
           value: z.string(),
-          description: z.string().optional()
-        })
-      }
+          description: z.string().optional(),
+        }),
+      },
     },
     async (req) => {
       return await workSpaceCategoriesRepo.create(req.workSpace.id, { ...req.body, creatorId: req.userData.id });
-    }
+    },
   );
 
   f.delete(
     '/:id',
     {
       schema: {
-        params: UUIDGetter
-      }
+        params: UUIDGetter,
+      },
     },
     async (req) => {
       return await workSpaceCategoriesRepo.delete(req.params.id);
-    }
+    },
   );
 
   f.get(
     '/',
     {
-      schema: {}
+      schema: {},
     },
     async (req) => {
       return await workSpaceCategoriesRepo.get(req.workSpace.id);
-    }
+    },
   );
 
   f.get(
     '/:id',
     {
       schema: {
-        params: UUIDGetter
-      }
+        params: UUIDGetter,
+      },
     },
     async (req) => {
       return await workSpaceCategoriesRepo.getAllCategoryTodos(req.params.id);
-    }
+    },
   );
 
   f.put(
@@ -71,13 +71,13 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
         body: z.object({
           categoryId: z.string(),
           value: z.string(),
-          description: z.string().optional()
-        })
-      }
+          description: z.string().optional(),
+        }),
+      },
     },
     async (req) => {
       return await workSpaceCategoriesRepo.update(req.body.categoryId, req.body.value, req.body.description);
-    }
+    },
   );
 
   f.post(
@@ -86,25 +86,25 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       schema: {
         body: z.object({
           categoryId: z.string(),
-          todoId: z.string()
-        })
-      }
+          todoId: z.string(),
+        }),
+      },
     },
     async (req) => {
       return await workSpaceCategoriesRepo.attachTodo(req.body.todoId, req.body.categoryId, req.userData.id);
-    }
+    },
   );
 
   f.delete(
     '/remove/:id',
     {
       schema: {
-        params: UUIDGetter
-      }
+        params: UUIDGetter,
+      },
     },
     async (req) => {
       return await workSpaceCategoriesRepo.removeTodo(req.params.id);
-    }
+    },
   );
 };
 

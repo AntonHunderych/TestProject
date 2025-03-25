@@ -3,13 +3,11 @@ import { Todo } from './TodoEntity';
 import { User } from './UserEntity';
 
 export class BasicTag {
-
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({unique: true})
+  @Column({ unique: true })
   value: string;
-
 }
 
 @Entity()
@@ -22,7 +20,6 @@ export class Tag extends BasicTag {
   userId: string;
 
   @ManyToOne(() => User, (user) => user.tags)
-  @JoinColumn({ 'name': 'userId' })
+  @JoinColumn({ name: 'userId' })
   user: User;
-
 }

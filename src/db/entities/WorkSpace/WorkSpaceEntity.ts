@@ -29,9 +29,9 @@ export class WorkSpace {
   @OneToMany(() => WorkSpaceRoles, (workSpaceRoles) => workSpaceRoles.workSpace, { cascade: ['remove'] })
   workSpaceRoles: WorkSpaceRoles[];
 
-  @OneToMany(()=> WorkSpaceTag, (workSpaceTag) => workSpaceTag.workSpace)
+  @OneToMany(() => WorkSpaceTag, (workSpaceTag) => workSpaceTag.workSpace)
   tags: WorkSpaceTag[];
 
-  @OneToMany(()=> WorkSpaceCommand, (workSpaceCommand) => workSpaceCommand.workSpace)
+  @OneToMany(() => WorkSpaceCommand, (workSpaceCommand) => workSpaceCommand.workSpace)
   commands: WorkSpaceCommand[];
 }

@@ -3,7 +3,7 @@ export class HttpError extends Error {
     readonly statusCode: number,
     readonly message: string,
     readonly cause?: Error | unknown,
-    readonly errorCode?: number
+    readonly errorCode?: number,
   ) {
     super(message);
   }

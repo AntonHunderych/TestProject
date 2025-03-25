@@ -3,7 +3,7 @@ import { WorkSpaceComment } from '../../../db/entities/WorkSpace/WorkSpaceCommen
 import { DBError } from '../../../types/Errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceCommentRepos extends IRecreateRepo{
+export interface IWorkSpaceCommentRepos extends IRecreateRepo {
   createComment(commentData: Partial<WorkSpaceComment>): Promise<WorkSpaceComment>;
   getCommentById(id: string): Promise<WorkSpaceComment>;
   updateComment(id: string, updateData: Partial<WorkSpaceComment>): Promise<WorkSpaceComment>;
@@ -11,7 +11,7 @@ export interface IWorkSpaceCommentRepos extends IRecreateRepo{
   getCommentsByTodoId(todoId: string): Promise<WorkSpaceComment[]>;
 }
 
-export function getWorkSpaceCommentRepos(db: DataSource| EntityManager): IWorkSpaceCommentRepos {
+export function getWorkSpaceCommentRepos(db: DataSource | EntityManager): IWorkSpaceCommentRepos {
   const commentRepo: Repository<WorkSpaceComment> = db.getRepository(WorkSpaceComment);
 
   return {
@@ -57,6 +57,6 @@ export function getWorkSpaceCommentRepos(db: DataSource| EntityManager): IWorkSp
         throw new DBError('Error fetching comments by todo id', error);
       }
     },
-    __recreateFunction: getWorkSpaceCommentRepos
+    __recreateFunction: getWorkSpaceCommentRepos,
   };
 }
