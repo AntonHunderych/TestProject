@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance} from 'fastify';
+import fastify, { FastifyInstance } from 'fastify';
 import fastifyAutoload from '@fastify/autoload';
 import { join } from 'node:path';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
@@ -11,7 +11,6 @@ import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import { skipAuthHook } from './hooks/skipAuthHook';
 import { getUserDataFromJWT } from './plugins/getUserDataFromJWT';
-import { IUserControllerResp } from '../controllers/users/createUser';
 import dotenv from 'dotenv';
 import fastifyOauth2 from 'fastify-oauth2';
 import { OAuth2Namespace } from '@fastify/oauth2';
@@ -25,7 +24,7 @@ declare module 'fastify' {
     googleOAuth2: OAuth2Namespace;
     repos: IRepos;
     crypto: ICrypto;
-    getUserDataFromJWT: (req: FastifyRequest) => IUserControllerResp;
+    getUserDataFromJWT: (req: FastifyRequest) => { id: string; username: string; email: string };
   }
 
   export interface FastifyRequest {
@@ -88,7 +87,7 @@ async function run() {
   f.register(fastifyJwt, {
     secret: 'your-secret-key',
   });
-  f.register(fastifyCookie)
+  f.register(fastifyCookie);
   f.register(fastifyOauth2, {
     name: 'googleOAuth2',
     scope: ['profile', 'email'],
@@ -100,11 +99,11 @@ async function run() {
       auth: fastifyOauth2.GOOGLE_CONFIGURATION,
     },
     startRedirectPath: '/auth/google',
-    callbackUri:process.env.GOOGLE_REDIRECT_URI!,
+    callbackUri: process.env.GOOGLE_REDIRECT_URI!,
   });
   setupSwagger(f);
 
-  f.setErrorHandler(errorHandler)
+  f.setErrorHandler(errorHandler);
 
   f.decorate('repos', getRepos(await initDB()));
   f.decorate('crypto', getCryptoService());

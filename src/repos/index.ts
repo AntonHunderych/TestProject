@@ -12,7 +12,7 @@ import { getWorkSpacePermissionsRepo } from './workspace/permissions/workSpacePe
 import { getWorkSpaceUserRoleRepo } from './workspace/userRole/workSpaceUserRole.repo';
 import { getTodoContributorRepo } from './workspace/todoContributor/todoContributor.repo';
 import { getWorkSpaceCommentRepos } from './workspace/comments/comments.repo';
-import { getTagsRepos } from './tags/tags.repo';
+import { getTagsRepo } from './tags/tags.repo';
 import { getWorkSpaceTagRepo } from './workspace/tags/workSpaceTags.repos';
 import { getWorkSpaceCategoriesRepo } from './workspace/categories/workSpaceCategories.repo';
 import { getWorkSpaceCommands } from './workspace/commands/workSpaceCommand.repo';
@@ -20,14 +20,13 @@ import { getWorkSpaceCommandsTodoRepo } from './workspace/commandsTodo/workSpace
 import { getTokenRepo } from './token/token.repo';
 
 export default function getRepos(db: DataSource | EntityManager) {
-
   return {
     userRepo: getUserRepo(db),
     roleRepo: getRolesRepo(db),
     userRoleRepo: getUserRoleRepo(db),
     todoRepo: getTodosRepo(db),
     commentRepo: getCommentsRepo(db),
-    tagRepo: getTagsRepos(db),
+    tagRepo: getTagsRepo(db),
     tokenRepo: getTokenRepo(db),
     workSpaceRepo: getWorkSpaceRepos(db),
     workSpaceTodoRepo: getWorkSpaceTodoRepo(db),
@@ -41,7 +40,6 @@ export default function getRepos(db: DataSource | EntityManager) {
     workSpaceCategoriesRepo: getWorkSpaceCategoriesRepo(db),
     workSpaceCommandRepo: getWorkSpaceCommands(db),
     workSpaceCommandsTodoRepo: getWorkSpaceCommandsTodoRepo(db),
-
   };
 }
 

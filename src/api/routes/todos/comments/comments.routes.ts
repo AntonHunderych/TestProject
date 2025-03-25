@@ -2,14 +2,16 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import { roleHook } from '../../../hooks/roleHook';
 import { UUIDGetter } from '../../schemas/UUIDGetter';
 import z from 'zod';
-import { getTodoCommentsHandler } from '../../../../controllers/comments/getTodoCommentsHandler';
-import { createCommentHandler } from '../../../../controllers/comments/createComment';
-import { deleteCommentHandler } from '../../../../controllers/comments/deleteCommentHandler';
-import { updateCommentHandler } from '../../../../controllers/comments/updateCommentHandler';
+import { getTodoComments } from '../../../../controllers/comments/getTodoComments';
+import { createComment } from '../../../../controllers/comments/createComment';
+import { deleteComment } from '../../../../controllers/comments/deleteComment';
+import { updateComment } from '../../../../controllers/comments/updateComment';
 import { getCommentSchema } from './schemas/getCommentSchema';
 import { updateCommentSchema } from './schemas/updateCommentSchema';
 import { createCommentSchema } from './schemas/createCommentSchema';
 import { RoleEnum } from '../../../../types/Enum/RoleEnum';
+import { getAllComments } from '../../../../controllers/comments/getAllComment';
+import { getCommentById } from '../../../../controllers/comments/getCommentById';
 
 export const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -28,7 +30,7 @@ export const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async () => {
-      return await commentsRepo.getAllComments();
+      return await getAllComments(commentsRepo);
     },
   );
 
@@ -44,7 +46,7 @@ export const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      return await commentsRepo.getCommentById(req.params.id);
+      return await getCommentById(commentsRepo, req.params.id);
     },
   );
 
@@ -58,7 +60,7 @@ export const routes: FastifyPluginAsyncZod = async (fastify) => {
         },
       },
     },
-    async (req) => await getTodoCommentsHandler(commentsRepo, req.params.id),
+    async (req) => await getTodoComments(commentsRepo, req.params.id),
   );
 
   f.post(
@@ -72,8 +74,7 @@ export const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      console.log(req.userData);
-      return await createCommentHandler(commentsRepo, { ...req.body, authorId: req.userData.id });
+      return await createComment(commentsRepo, { ...req.body, authorId: req.userData.id });
     },
   );
 
@@ -87,7 +88,7 @@ export const routes: FastifyPluginAsyncZod = async (fastify) => {
         },
       },
     },
-    async (req) => await deleteCommentHandler(commentsRepo, req.params.id),
+    async (req) => await deleteComment(commentsRepo, req.params.id),
   );
 
   f.put(
@@ -101,7 +102,7 @@ export const routes: FastifyPluginAsyncZod = async (fastify) => {
         },
       },
     },
-    async (req) => await updateCommentHandler(commentsRepo, req.params.id, req.body),
+    async (req) => await updateComment(commentsRepo, req.params.id, req.body),
   );
 };
 

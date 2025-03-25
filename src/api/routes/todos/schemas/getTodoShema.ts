@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { getCommentSchema } from '../comments/schemas/getCommentSchema';
 
 export const TodoSchemaResp = z.object({
   id: z.string().uuid().min(1),
@@ -6,5 +7,5 @@ export const TodoSchemaResp = z.object({
   description: z.string().optional().nullable(),
   eliminatedDate: z.date().optional().nullable(),
   importance: z.number().int().optional().nullable(),
-  creatorId: z.string().uuid().min(1),
+  comments: z.array(getCommentSchema).optional().nullable(),
 });

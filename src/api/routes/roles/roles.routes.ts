@@ -2,6 +2,13 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import z from 'zod';
 import { roleHook } from '../../hooks/roleHook';
 import { RoleEnum } from '../../../types/Enum/RoleEnum';
+import { createRoleSchema } from './schemas/createRoleShema';
+import { valueRoleGetter } from './schemas/valueRoleGetter';
+import { getRoleSchema } from './schemas/getRoleSchema';
+import { getAllRoles } from '../../../controllers/roles/getAllRole';
+import { getRoleByValue } from '../../../controllers/roles/getRoleByValue';
+import { createRole } from '../../../controllers/roles/createRole';
+import { deleteRole } from '../../../controllers/roles/deleteRole';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -12,10 +19,14 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   f.get(
     '/',
     {
-      schema: {},
+      schema: {
+        response: {
+          200: z.array(getRoleSchema),
+        },
+      },
     },
     async () => {
-      return await roleRepo.getAllRoles();
+      return await getAllRoles(roleRepo);
     },
   );
 
@@ -23,11 +34,14 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/:value',
     {
       schema: {
-        params: z.object({ value: z.string().min(1).max(100) }),
+        params: valueRoleGetter,
+        response: {
+          200: getRoleSchema,
+        },
       },
     },
     async (req) => {
-      return await roleRepo.getRoleByValue(req.params.value);
+      return await getRoleByValue(roleRepo, req.params.value);
     },
   );
 
@@ -35,31 +49,29 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     '/:value',
     {
       schema: {
-        params: z.object({
-          value: z.string().min(1).max(100),
-        }),
-        body: z
-          .object({
-            description: z.string().optional(),
-          })
-          .optional()
-          .nullable(),
+        body: createRoleSchema,
+        response: {
+          200: getRoleSchema,
+        },
       },
     },
     async (req) => {
-      return await roleRepo.addRole({ value: req.params.value, description: req.body?.description });
+      return await createRole(roleRepo, req.body);
     },
   );
 
   f.delete(
-    '/:id',
+    '/:value',
     {
       schema: {
-        params: z.object({ id: z.string() }),
+        params: valueRoleGetter,
+        response: {
+          200: z.boolean(),
+        },
       },
     },
     async (req) => {
-      return await roleRepo.deleteRole(req.params.id);
+      return await deleteRole(roleRepo, req.params.value);
     },
   );
 };

@@ -4,8 +4,7 @@ import { Todo } from '../../db/entities/TodoEntity';
 import { DBError } from '../../types/Errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-
-export interface IGetTagsRepos extends IRecreateRepo {
+export interface ITagsRepo extends IRecreateRepo {
   getTags(userId: string): Promise<Tag[]>;
 
   createTag(userId: string, value: string): Promise<Tag>;
@@ -19,21 +18,20 @@ export interface IGetTagsRepos extends IRecreateRepo {
   removeTag(todoId: string, tagId: string): Promise<void>;
 }
 
-export function getTagsRepos(db: DataSource| EntityManager): IGetTagsRepos {
-
+export function getTagsRepo(db: DataSource | EntityManager): ITagsRepo {
   const tagRepo = db.getRepository<Tag>(Tag);
 
   return {
     async getTags(userId: string): Promise<Tag[]> {
       try {
-        return await tagRepo.find({ where: { userId: userId } });
+        return await tagRepo.find({ where: { userId } });
       } catch (error) {
         throw new DBError('Failed to get tags', error);
       }
     },
     async createTag(userId: string, value: string): Promise<Tag> {
       try {
-        const newTag = tagRepo.create({ userId: userId, value: value });
+        const newTag = tagRepo.create({ userId, value });
         return await tagRepo.save(newTag);
       } catch (error) {
         throw new DBError('Failed to create tag', error);
@@ -66,7 +64,7 @@ export function getTagsRepos(db: DataSource| EntityManager): IGetTagsRepos {
       try {
         const tag = await tagRepo.findOneOrFail({
           where: { id: tagId },
-          relations: { todos: true }
+          relations: { todos: true },
         });
         const todo = new Todo();
         todo.id = todoId;
@@ -75,7 +73,8 @@ export function getTagsRepos(db: DataSource| EntityManager): IGetTagsRepos {
       } catch (error) {
         throw new DBError('Failed to add tag', error);
       }
-    }, async removeTag(todoId: string, tagId: string): Promise<void> {
+    },
+    async removeTag(todoId: string, tagId: string): Promise<void> {
       try {
         const tags = await tagRepo.find({ where: { id: todoId } });
         for (const tag of tags) {
@@ -87,6 +86,6 @@ export function getTagsRepos(db: DataSource| EntityManager): IGetTagsRepos {
         throw new DBError('Failed to remove tag', error);
       }
     },
-    __recreateFunction: getTagsRepos,
+    __recreateFunction: getTagsRepo,
   };
 }

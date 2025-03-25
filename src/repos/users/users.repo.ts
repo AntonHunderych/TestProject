@@ -4,18 +4,18 @@ import { DBError } from '../../types/Errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
 export interface IUsersRepos extends IRecreateRepo {
-  getAllUsers: () => Promise<User[]>;
-  getUserById: (id: string) => Promise<User>;
-  getUserByEmail: (email: string) => Promise<User | null>;
-  createUser: (userData: Partial<User>) => Promise<User>;
-  updateUser: (id: string, userData: Partial<User>) => Promise<User>;
-  deleteUser: (id: string) => Promise<boolean>;
+  getAllUsers(): Promise<User[]>;
+  getUserById(id: string): Promise<User>;
+  getUserByEmail(email: string): Promise<User | null>;
+  createUser(userData: Partial<User>): Promise<User>;
+  updateUser(id: string, userData: Partial<User>): Promise<User>;
+  deleteUser(id: string): Promise<boolean>;
 }
 
 export function getUserRepo(db: DataSource | EntityManager): IUsersRepos {
-  let _usersRepo = db.getRepository(User);
+  const _usersRepo = db.getRepository(User);
 
-  return  {
+  return {
     getAllUsers: async () => {
       try {
         return await _usersRepo.find();
@@ -77,7 +77,6 @@ export function getUserRepo(db: DataSource | EntityManager): IUsersRepos {
         throw new DBError('Error deleting user', error);
       }
     },
-    __recreateFunction: getUserRepo
+    __recreateFunction: getUserRepo,
   };
-
 }

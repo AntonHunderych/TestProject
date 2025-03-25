@@ -6,6 +6,12 @@ import { getTagSchema } from './schema/getTagSchema';
 import { createTagSchema } from './schema/createTagSchema';
 import { addRemoveTagSchema } from './schema/addRemoveTagSchema';
 import { UUIDGetter } from '../../schemas/UUIDGetter';
+import { getTags } from '../../../../controllers/tags/getTags';
+import { createTag } from '../../../../controllers/tags/createTag';
+import { deleteTag } from '../../../../controllers/tags/deleteTag';
+import { updateTag } from '../../../../controllers/tags/updateTag';
+import { addTagToTodo } from '../../../../controllers/tags/addTagToTodo';
+import { removeTagFromTodo } from '../../../../controllers/tags/removeTagFromTodo';
 
 const routers: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -18,13 +24,13 @@ const routers: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         response: {
-          200: z.array(getTagSchema)
-        }
-      }
+          200: z.array(getTagSchema),
+        },
+      },
     },
     async (req) => {
-      return await tagRepo.getTags(req.userData.id);
-    }
+      return await getTags(tagRepo, req.userData.id);
+    },
   );
 
   f.post(
@@ -33,25 +39,25 @@ const routers: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         body: createTagSchema,
         response: {
-          200: getTagSchema
-        }
-      }
+          200: getTagSchema,
+        },
+      },
     },
     async (req) => {
-      return await tagRepo.createTag(req.userData.id, req.body.value);
-    }
+      return await createTag(tagRepo, req.userData.id, req.body.value);
+    },
   );
 
   f.delete(
     '/:id',
     {
       schema: {
-        params: UUIDGetter
-      }
+        params: UUIDGetter,
+      },
     },
     async (req) => {
-      return await tagRepo.deleteTag(req.params.id);
-    }
+      return await deleteTag(tagRepo, req.params.id);
+    },
   );
 
   f.put(
@@ -61,13 +67,13 @@ const routers: FastifyPluginAsyncZod = async (fastify) => {
         params: UUIDGetter,
         body: createTagSchema,
         response: {
-          200: getTagSchema
-        }
-      }
+          200: getTagSchema,
+        },
+      },
     },
     async (req) => {
-      return await tagRepo.updateTag(req.params.id, req.body.value);
-    }
+      return await updateTag(tagRepo, req.params.id, req.body.value);
+    },
   );
 
   f.post(
@@ -75,23 +81,23 @@ const routers: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         body: addRemoveTagSchema,
-      }
+      },
     },
     async (req) => {
-      return await tagRepo.addTag(req.body.todoId, req.body.tagId);
-    }
+      return await addTagToTodo(tagRepo, req.body.tagId, req.body.todoId);
+    },
   );
 
   f.delete(
     '/remove',
     {
       schema: {
-        body: addRemoveTagSchema
-      }
+        body: addRemoveTagSchema,
+      },
     },
     async (req) => {
-      return await tagRepo.removeTag(req.body.todoId, req.body.tagId);
-    }
+      return await removeTagFromTodo(tagRepo, req.body.tagId, req.body.todoId);
+    },
   );
 };
 

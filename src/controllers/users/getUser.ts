@@ -1,30 +1,11 @@
-import { User, UserSchema } from '../../db/schemas/UserSchema';
+import { User } from '../../db/schemas/UserSchema';
 import { IUsersRepos } from '../../repos/users/users.repo';
+import { HttpError } from '../../api/error/HttpError';
 
-export default async function getUserByIdHandler(rep: IUsersRepos, id: string): Promise<User> {
+export default async function getUserById(rep: IUsersRepos, id: string): Promise<User> {
   try {
-    const user = await rep.getUserById(id);
-    console.log(user);
-    if (!user) {
-      console.error('User not found');
-      return {
-        id: '',
-        username: '',
-        email: '',
-        password: '',
-        salt: '',
-      };
-    }
-
-    return UserSchema.parse(user);
+    return await rep.getUserById(id);
   } catch (e) {
-    console.log(e);
-    return {
-      id: '',
-      username: '',
-      email: '',
-      password: '',
-      salt: '',
-    };
+    throw new HttpError(400, 'User dont exist');
   }
 }

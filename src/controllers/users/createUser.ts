@@ -1,8 +1,8 @@
 import { IUsersRepos } from '../../repos/users/users.repo';
 import { IUserRoleRepo } from '../../repos/userRole/userRole.repo';
-import z from 'zod';
-import { RoleEnum } from '../../types/Enum/RoleEnum';
 import { withTransaction } from '../../db/withTransaction';
+import { User } from '../../db/schemas/UserSchema';
+import { giveDefaultRoleToUser } from '../userRole/giveDefaultRoleToUser';
 
 interface ICreateUser {
   username: string;
@@ -11,29 +11,18 @@ interface ICreateUser {
   salt: string;
 }
 
-const UserControllerRespSchema = z.object({
-  id: z.string(),
-  username: z.string(),
-  email: z.string(),
-});
-
-export type IUserControllerResp = z.infer<typeof UserControllerRespSchema>;
-
-export default async function createUserHandler(
+export default async function createUser(
   userRepo: IUsersRepos,
   userRoleRepo: IUserRoleRepo,
   date: ICreateUser,
-): Promise<IUserControllerResp> {
+): Promise<User> {
   try {
-    return await withTransaction(
-      {userRepo, userRoleRepo},
-      async (repos) => {
-        const user = await repos.userRepo.createUser(date);
-        await repos.userRoleRepo.giveRoleToUser(user.id, RoleEnum.USER);
-        return UserControllerRespSchema.parse(await repos.userRepo.getUserById(user.id));
-      }
-    )
+    return await withTransaction({ userRepo, userRoleRepo }, async (repos) => {
+      const user = await repos.userRepo.createUser(date);
+      await giveDefaultRoleToUser(repos.userRoleRepo, user.id);
+      return await repos.userRepo.getUserById(user.id);
+    });
   } catch (error) {
-    throw Error("Creating user error")
+    throw Error('Creating user error');
   }
 }

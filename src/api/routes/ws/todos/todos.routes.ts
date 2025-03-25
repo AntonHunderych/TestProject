@@ -8,7 +8,6 @@ import { roleHook } from '../../../hooks/roleHook';
 import { RoleEnum } from '../../../../types/Enum/RoleEnum';
 import { UUIDGetter } from '../../schemas/UUIDGetter';
 import z from 'zod';
-import { TodoSchemaResp } from '../../todos/schemas/getTodoShema';
 import { filterEntityByUserCommand } from '../hooks/filterEntityByUserCommand';
 import { WorkSpaceTodo } from '../../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
 import { getAllTodoInWorkSpaceByCommand } from '../../../../controllers/ws/todos/getAllTodoInWorkSpaceByCommand';
@@ -31,21 +30,26 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
         },*/
       },
       preHandler: roleHook([RoleEnum.ADMIN]),
-      preSerialization: filterEntityByUserCommand<WorkSpaceTodo>()
+      preSerialization: filterEntityByUserCommand<WorkSpaceTodo>(),
     },
     async (req) => {
       return await workSpaceTodoRepo.findAllTodoInWorkSpace(req.workSpace.id);
-    }
+    },
   );
 
   f.get(
     '/',
     {
-      schema: {}
+      schema: {},
     },
     async (req) => {
-      return await getAllTodoInWorkSpaceByCommand(workSpaceTodoRepo, workSpaceCommandRepo, req.workSpace.id, req.userData.id);
-    }
+      return await getAllTodoInWorkSpaceByCommand(
+        workSpaceTodoRepo,
+        workSpaceCommandRepo,
+        req.workSpace.id,
+        req.userData.id,
+      );
+    },
   );
 
   f.get(
@@ -54,13 +58,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         params: UUIDGetter,
         response: {
-          200: TodoSchemaResp
-        }
-      }
+          //200: TodoSchemaResp
+        },
+      },
     },
     async (req) => {
       return await workSpaceTodoRepo.findById(req.params.id);
-    }
+    },
   );
 
   f.post(
@@ -69,14 +73,14 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         body: createTodoSchema,
         response: {
-          200: TodoSchemaResp
-        }
+          //200: TodoSchemaResp
+        },
       },
-      preHandler: permissionsAccessHook(Permissions.createTodo)
+      preHandler: permissionsAccessHook(Permissions.createTodo),
     },
     async (req) => {
       return await workSpaceTodoRepo.create(req.body, req.workSpace.id, req.userData.id);
-    }
+    },
   );
 
   f.delete(
@@ -85,14 +89,14 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         params: UUIDGetter,
         response: {
-          200: z.boolean()
-        }
+          200: z.boolean(),
+        },
       },
-      preHandler: permissionsAccessHook(Permissions.deleteTodo)
+      preHandler: permissionsAccessHook(Permissions.deleteTodo),
     },
     async (req) => {
       return await workSpaceTodoRepo.delete(req.params.id);
-    }
+    },
   );
 
   f.put(
@@ -100,13 +104,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         params: UUIDGetter,
-        body: createTodoSchema.partial()
+        body: createTodoSchema.partial(),
       },
-      preHandler: permissionsAccessHook(Permissions.changeTodo)
+      preHandler: permissionsAccessHook(Permissions.changeTodo),
     },
     async (req) => {
       return await workSpaceTodoRepo.update(req.params.id, req.body);
-    }
+    },
   );
 };
 export default routes;

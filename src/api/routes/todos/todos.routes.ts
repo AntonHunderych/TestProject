@@ -4,10 +4,14 @@ import z from 'zod';
 import { TodoSchemaResp } from './schemas/getTodoShema';
 import { UUIDGetter } from '../schemas/UUIDGetter';
 import { createTodoSchema } from './schemas/createTodoSchema';
-import { createTodosHandler } from '../../../controllers/todos/todos.create';
+import { createTodo } from '../../../controllers/todos/createTodo';
 import { getAllUserTodos } from '../../../controllers/todos/getAllUserTodos';
 import { updateTodoSchema } from './schemas/updateTodoSchema';
 import { RoleEnum } from '../../../types/Enum/RoleEnum';
+import { getAllTodos } from '../../../controllers/todos/getAllTodos';
+import { getTodoById } from '../../../controllers/todos/getTodoById';
+import { updateTodo } from '../../../controllers/todos/updateTodo';
+import { deleteTodo } from '../../../controllers/todos/deleteTodo';
 
 export const routes: FastifyPluginAsyncZod = async function (fastify) {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -26,7 +30,7 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
       preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async () => {
-      return await todoRepo.findAll();
+      return await getAllTodos(todoRepo);
     },
   );
   f.get(
@@ -41,12 +45,12 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
       preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async (req) => {
-      return await todoRepo.findById(req.params.id);
+      return await getTodoById(todoRepo, req.params.id);
     },
   );
 
   f.get(
-    '/user/:id',
+    '/user/admin/:id',
     {
       schema: {
         params: UUIDGetter,
@@ -54,6 +58,7 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
           200: z.array(TodoSchemaResp),
         },
       },
+      preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async (req) => {
       return await getAllUserTodos(todoRepo, req.params.id);
@@ -70,8 +75,7 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
       },
     },
     async (req) => {
-      const userData = f.getUserDataFromJWT(req);
-      return await getAllUserTodos(todoRepo, userData.id);
+      return await getAllUserTodos(todoRepo, req.userData.id);
     },
   );
 
@@ -86,10 +90,9 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
       },
     },
     async (req) => {
-      const userData = f.getUserDataFromJWT(req);
-      return await createTodosHandler(todoRepo, {
+      return await createTodo(todoRepo, {
         ...req.body,
-        creatorId: userData.id,
+        creatorId: req.userData.id,
       });
     },
   );
@@ -106,7 +109,7 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
       },
     },
     async (req) => {
-      return await todoRepo.update(req.params.id, req.body);
+      return await updateTodo(todoRepo, req.params.id, req.body);
     },
   );
   f.delete(
@@ -120,7 +123,7 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
       },
     },
     async (req) => {
-      return await todoRepo.delete(req.params.id);
+      return await deleteTodo(todoRepo, req.params.id);
     },
   );
 };

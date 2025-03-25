@@ -1,7 +1,9 @@
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import z from 'zod';
 import { RoleEnum } from '../../../../types/Enum/RoleEnum';
 import { roleHook } from '../../../hooks/roleHook';
+import { addRemoveRoleSchema } from './schemas/addRemoveRoleSchema';
+import { giveRoleToUser } from '../../../../controllers/userRole/giveRoleToUser';
+import { removeRoleFromUser } from '../../../../controllers/userRole/removeRoleFromUser';
 
 const routes: FastifyPluginAsyncZod = async (f) => {
   const userRoleRepo = f.repos.userRoleRepo;
@@ -12,14 +14,11 @@ const routes: FastifyPluginAsyncZod = async (f) => {
     '/:id',
     {
       schema: {
-        params: z.object({ id: z.string() }),
-        body: z.object({
-          roleValue: z.string(),
-        }),
+        body: addRemoveRoleSchema,
       },
     },
     async (req) => {
-      return await userRoleRepo.giveRoleToUser(req.params.id, req.body.roleValue);
+      return await giveRoleToUser(userRoleRepo, req.body.userId, req.body.roleValue);
     },
   );
 
@@ -27,14 +26,11 @@ const routes: FastifyPluginAsyncZod = async (f) => {
     '/:id',
     {
       schema: {
-        params: z.object({ id: z.string() }),
-        body: z.object({
-          roleValue: z.string(),
-        }),
+        body: addRemoveRoleSchema,
       },
     },
     async (req) => {
-      return await userRoleRepo.removeRoleFromUser(req.params.id, req.body.roleValue);
+      return await removeRoleFromUser(userRoleRepo, req.body.userId, req.body.roleValue);
     },
   );
 };

@@ -7,7 +7,7 @@ export interface ILoginRegisterResp {
   email: string;
 }
 
-export async function loginHandler(
+export async function login(
   userRepo: IUsersRepos,
   crypto: ICrypto,
   password: string,
@@ -16,12 +16,12 @@ export async function loginHandler(
   const user = await userRepo.getUserByEmail(email);
 
   if (!user) {
-    throw new Error('Bad data');
+    throw new Error();
   }
 
   const isValidPassword = await crypto.compare(password, user.password, user.salt);
   if (!isValidPassword) {
-    throw new Error('Bad data');
+    throw new Error();
   }
 
   return { email, username: user.username, id: user.id };

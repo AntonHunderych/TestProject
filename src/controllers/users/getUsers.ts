@@ -1,12 +1,10 @@
 import { IUsersRepos } from '../../repos/users/users.repo';
-import { User, UserSchema } from '../../db/schemas/UserSchema';
+import { User } from '../../db/schemas/UserSchema';
 
-export default async function getAllUsersHandler(rep: IUsersRepos): Promise<User[]> {
+export default async function getAllUsers(rep: IUsersRepos): Promise<User[]> {
   try {
-    const users = await rep.getAllUsers();
-    return users.map((user) => UserSchema.parse(user));
+    return await rep.getAllUsers();
   } catch (e) {
-    console.log(e);
-    return [];
+    throw new Error('Error in getAllUsersHandler');
   }
 }

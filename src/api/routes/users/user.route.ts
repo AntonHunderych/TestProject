@@ -1,16 +1,17 @@
-import { createRespUserSchema, createUserSchema } from './schemas/createUserSchema';
+import { createUserSchema } from './schemas/createUserSchema';
 import { getUsersRespSchema } from './schemas/getUsersSchema';
 import { UUIDGetter } from '../schemas/UUIDGetter';
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
-import createUserHandler from '../../../controllers/users/createUser';
-import getUserByIdHandler from '../../../controllers/users/getUser';
-import deleteUserHandler from '../../../controllers/users/deleteUser';
-import updateUserHandler from '../../../controllers/users/updateUser';
-import getAllUsersHandler from '../../../controllers/users/getUsers';
+import createUser from '../../../controllers/users/createUser';
+import getUserById from '../../../controllers/users/getUser';
+import deleteUser from '../../../controllers/users/deleteUser';
+import updateUser from '../../../controllers/users/updateUser';
+import getAllUsers from '../../../controllers/users/getUsers';
 import { deleteRespUserSchema } from './schemas/deleteRespUserSchema';
 import { updateUserSchema } from './schemas/updateUserSchema';
 import { roleHook } from '../../hooks/roleHook';
 import { RoleEnum } from '../../../types/Enum/RoleEnum';
+import { createRespUserSchema } from './schemas/createRespUserSchema';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -30,7 +31,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async () => {
-      const users = await getAllUsersHandler(userRepo);
+      const users = await getAllUsers(userRepo);
       return {
         data: users,
         count: users.length,
@@ -48,7 +49,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
         },
       },
     },
-    async (req) => await getUserByIdHandler(userRepo, req.params.id),
+    async (req) => await getUserById(userRepo, req.params.id),
   );
 
   f.post(
@@ -63,7 +64,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async (req) => {
-      await createUserHandler(userRepo, userRoleRepo, {
+      await createUser(userRepo, userRoleRepo, {
         ...req.body,
         salt: 'adminCreatedUserSalt',
       });
@@ -81,10 +82,10 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
       preHandler: roleHook([RoleEnum.ADMIN]),
     },
-    async (req) => await deleteUserHandler(userRepo, req.params.id),
+    async (req) => await deleteUser(userRepo, req.params.id),
   );
 
-  f.post(
+  f.put(
     '/admin/:id',
     {
       schema: {
@@ -96,7 +97,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
       preHandler: roleHook([RoleEnum.ADMIN]),
     },
-    async (req) => updateUserHandler(userRepo, req.params.id, req.body),
+    async (req) => updateUser(userRepo, req.params.id, req.body),
   );
 };
 

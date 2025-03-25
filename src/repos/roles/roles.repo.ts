@@ -3,16 +3,14 @@ import { Role } from '../../db/entities/RoleEntity';
 import { DBError } from '../../types/Errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-
-
 export interface IRolesRepo extends IRecreateRepo {
   getRoleByValue(value: string): Promise<Role>;
-  addRole(role: { value: string; description?: string }): Promise<Role>;
+  addRole(role: Partial<Role>): Promise<Role>;
   getAllRoles(): Promise<Role[]>;
   deleteRole(id: string): Promise<boolean>;
 }
 
-export default function getRolesRepo(db: DataSource| EntityManager): IRolesRepo {
+export default function getRolesRepo(db: DataSource | EntityManager): IRolesRepo {
   const roleRepo = db.getRepository(Role);
 
   return {
@@ -37,9 +35,9 @@ export default function getRolesRepo(db: DataSource| EntityManager): IRolesRepo 
         throw new DBError('Error fetching all roles', error);
       }
     },
-    deleteRole: async (id: string): Promise<boolean> => {
+    deleteRole: async (value: string): Promise<boolean> => {
       try {
-        const role = await roleRepo.findOne({ where: { id } });
+        const role = await roleRepo.findOne({ where: { value } });
         if (!role) {
           return false;
         }
@@ -49,6 +47,6 @@ export default function getRolesRepo(db: DataSource| EntityManager): IRolesRepo 
         throw new DBError('Error deleting role', error);
       }
     },
-    __recreateFunction: getRolesRepo
+    __recreateFunction: getRolesRepo,
   };
 }
