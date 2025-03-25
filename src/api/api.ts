@@ -16,6 +16,7 @@ import dotenv from 'dotenv';
 import fastifyOauth2 from 'fastify-oauth2';
 import { OAuth2Namespace } from '@fastify/oauth2';
 import fastifyCookie from '@fastify/cookie';
+import { errorHandler } from './error/errorHandler';
 
 dotenv.config();
 
@@ -75,14 +76,19 @@ async function run() {
     },
   });
 
+  process.on('uncaughtException', (err) => {
+    f.log.error(err);
+    process.exit(1);
+  });
+  process.on('unhandledRejection', (err) => {
+    f.log.error(err);
+    process.exit(1);
+  });
+
   f.register(fastifyJwt, {
     secret: 'your-secret-key',
   });
-
-  console.log(process.env.GOOGLE_REDIRECT_URI);
-
   f.register(fastifyCookie)
-
   f.register(fastifyOauth2, {
     name: 'googleOAuth2',
     scope: ['profile', 'email'],
@@ -96,10 +102,9 @@ async function run() {
     startRedirectPath: '/auth/google',
     callbackUri:process.env.GOOGLE_REDIRECT_URI!,
   });
-
   setupSwagger(f);
 
-
+  f.setErrorHandler(errorHandler)
 
   f.decorate('repos', getRepos(await initDB()));
   f.decorate('crypto', getCryptoService());
