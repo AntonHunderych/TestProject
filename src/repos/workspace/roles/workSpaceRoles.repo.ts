@@ -1,8 +1,8 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceRoles } from '../../../db/entities/WorkSpace/WorkSpaceRolesEntity';
-import { Permissions } from '../../../types/Enum/PermisionsEnum';
-import { WorkSpacePermissions } from '../../../db/entities/WorkSpace/WorkSpacePermissionsEntity';
-import { DBError } from '../../../types/Errors/DBError';
+import { WorkSpaceRoles } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
+import { Permissions } from '../../../types/enum/PermisionsEnum';
+import { WorkSpacePermissions } from '../../../services/typeorm/entities/WorkSpace/WorkSpacePermissionsEntity';
+import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IWorkSpaceRolesRepo extends IRecreateRepo {

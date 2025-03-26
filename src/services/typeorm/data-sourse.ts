@@ -16,7 +16,9 @@ import { WorkSpaceTag, WorkSpaceTagTodo } from './entities/WorkSpace/WorkSpaceTa
 import { Category } from './entities/CategoryEntity';
 import { WorkSpaceCategory, WorkSpaceCategoryConf } from './entities/WorkSpace/WorkSpaceCategoryEntity';
 import { WorkSpaceCommand } from './entities/WorkSpace/WorkSpaceCommandEntity';
-import { TokenEntity } from './entities/tokenEntity';
+import { Token } from './entities/TokenEntity';
+import { UserRole } from './entities/UserRoleEntity';
+import { TodoTag } from './entities/TodoTagEntity';
 
 dotenv.config();
 
@@ -28,7 +30,7 @@ export function getDataSource() {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    synchronize: true,
+    synchronize: false,
     //dropSchema: true,
     logging: true,
     entities: [
@@ -38,7 +40,9 @@ export function getDataSource() {
       Comment,
       Tag,
       Category,
-      TokenEntity,
+      Token,
+      UserRole,
+      TodoTag,
       WorkSpace,
       WorkSpaceTodo,
       WorkSpaceUser,

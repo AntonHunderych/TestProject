@@ -1,15 +1,15 @@
-import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
-import { roleHook } from '../../../hooks/roleHook';
 import { UUIDGetter } from '../../schemas/UUIDGetter';
 import z from 'zod';
 import { getTodoComments } from '../../../../controllers/comments/getTodoComments';
+import { createCommentSchema } from './schemas/createCommentSchema';
+import { getCommentSchema } from './schemas/getCommentSchema';
 import { createComment } from '../../../../controllers/comments/createComment';
 import { deleteComment } from '../../../../controllers/comments/deleteComment';
-import { updateComment } from '../../../../controllers/comments/updateComment';
-import { getCommentSchema } from './schemas/getCommentSchema';
 import { updateCommentSchema } from './schemas/updateCommentSchema';
-import { createCommentSchema } from './schemas/createCommentSchema';
-import { RoleEnum } from '../../../../types/Enum/RoleEnum';
+import { updateComment } from '../../../../controllers/comments/updateComment';
+import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
+import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { roleHook } from '../../../hooks/roleHook';
 import { getAllComments } from '../../../../controllers/comments/getAllComment';
 import { getCommentById } from '../../../../controllers/comments/getCommentById';
 

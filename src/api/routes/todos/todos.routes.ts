@@ -1,17 +1,17 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { roleHook } from '../../hooks/roleHook';
 import z from 'zod';
-import { TodoSchemaResp } from './schemas/getTodoShema';
+import { getAllTodos } from '../../../controllers/todos/getAllTodos';
 import { UUIDGetter } from '../schemas/UUIDGetter';
+import { TodoSchemaResp } from './schemas/getTodoShema';
+import { getTodoById } from '../../../controllers/todos/getTodoById';
+import { getAllUserTodos } from '../../../controllers/todos/getAllUserTodos';
 import { createTodoSchema } from './schemas/createTodoSchema';
 import { createTodo } from '../../../controllers/todos/createTodo';
-import { getAllUserTodos } from '../../../controllers/todos/getAllUserTodos';
 import { updateTodoSchema } from './schemas/updateTodoSchema';
-import { RoleEnum } from '../../../types/Enum/RoleEnum';
-import { getAllTodos } from '../../../controllers/todos/getAllTodos';
-import { getTodoById } from '../../../controllers/todos/getTodoById';
 import { updateTodo } from '../../../controllers/todos/updateTodo';
 import { deleteTodo } from '../../../controllers/todos/deleteTodo';
+import { RoleEnum } from '../../../types/enum/RoleEnum';
 
 export const routes: FastifyPluginAsyncZod = async function (fastify) {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

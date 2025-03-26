@@ -5,7 +5,7 @@ interface EntityWithCommand {
 }
 
 export const filterEntityByUserCommand = <T extends EntityWithCommand>(): preSerializationAsyncHookHandler => {
-  return async function (request: FastifyRequest, reply: FastifyReply, payload): Promise<T[]> {
+  return async function (request: FastifyRequest, _reply: FastifyReply, payload): Promise<T[]> {
     if (!Array.isArray(payload)) {
       throw new Error('Bad payload');
     }

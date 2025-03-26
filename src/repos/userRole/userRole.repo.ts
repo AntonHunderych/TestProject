@@ -1,41 +1,37 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { User } from '../../db/entities/UserEntity';
-import { Role } from '../../db/entities/RoleEntity';
-import { DBError } from '../../types/Errors/DBError';
+import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
+import { UserRole } from '../../services/typeorm/entities/UserRoleEntity';
+import { Role } from '../../services/typeorm/entities/RoleEntity';
 
 export interface IUserRoleRepo extends IRecreateRepo {
-  giveRoleToUser(userId: string, roleValue: string): Promise<boolean>;
-  removeRoleFromUser(userID: string, roleValue: string): Promise<boolean>;
+  getUserRoles(userId: string): Promise<Role[]>;
+  giveRoleToUser(userId: string, roleValue: string): Promise<void>;
+  removeRoleFromUser(userID: string, roleValue: string): Promise<void>;
 }
 
-export function getUserRoleRepo(db: DataSource | EntityManager) {
-  const userRepo = db.getRepository(User);
-  const roleRepo = db.getRepository(Role);
-
-  function checkRoleInUser(user: User, roleValue: string): boolean {
-    return user.roles.some((userRole) => userRole.value === roleValue);
-  }
+export function getUserRoleRepo(db: DataSource | EntityManager): IUserRoleRepo {
+  const userRoleRepo = db.getRepository(UserRole);
 
   return {
-    async giveRoleToUser(userId: string, roleValue: string): Promise<boolean> {
+    async getUserRoles(userId: string): Promise<Role[]> {
       try {
-        const user = await userRepo.findOneOrFail({ where: { id: userId }, relations: ['roles'] });
-        user.roles = [...(user.roles ? user.roles : []), await roleRepo.findOneOrFail({ where: { value: roleValue } })];
-
-        const newUser = await userRepo.save(user);
-        return checkRoleInUser(newUser, roleValue);
+        const userRoles = await userRoleRepo.find({ where: { userId }, relations: { role: true } });
+        return userRoles.map((userRole) => userRole.role);
+      } catch (error) {
+        throw new DBError('Error getting user roles', error);
+      }
+    },
+    async giveRoleToUser(userId: string, roleId: string): Promise<void> {
+      try {
+        await userRoleRepo.save({ userId, roleId });
       } catch (error) {
         throw new DBError('Error giving role to user', error);
       }
     },
-    async removeRoleFromUser(userID: string, roleValue: string): Promise<boolean> {
+    async removeRoleFromUser(userId: string, roleId: string): Promise<void> {
       try {
-        const user = await userRepo.findOneOrFail({ where: { id: userID }, relations: ['roles'] });
-        user.roles = user.roles.filter((roleId) => roleId.value !== roleValue);
-
-        const newUser = await userRepo.save(user);
-        return !checkRoleInUser(newUser, roleValue);
+        await userRoleRepo.delete({ userId, roleId });
       } catch (error) {
         throw new DBError('Error removing role from user', error);
       }

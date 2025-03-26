@@ -1,7 +1,7 @@
 import { EntityManager } from 'typeorm';
-import { IRepos } from '../repos';
+import { IRepos } from '../../repos';
 import { pgDataSource } from './data-sourse';
-import { IRecreateRepo } from '../types/IRecreatebleRepo';
+import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
 export async function withTransaction<T extends { [K in keyof IRepos]?: IRecreateRepo }, R>(
   inputRepos: T,

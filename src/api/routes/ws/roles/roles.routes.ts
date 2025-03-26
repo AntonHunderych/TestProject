@@ -1,16 +1,16 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
-import { FastifyInstance } from 'fastify';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../types/Enum/RoleEnum';
-import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
 import { dataFetchHook } from '../hooks/dataFetchHook';
-import { createRoleHandler } from '../../../../controllers/ws/roles/createRoleHandler';
-import { createWorkSpaceRoleSchema } from './schema/createWorkSpaceRoleSchema';
-import { getWorkSpaceRoleSchema } from './schema/getWorkSpaceRoleSchema';
+import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
 import z from 'zod';
+import { getWorkSpaceRoleSchema } from './schema/getWorkSpaceRoleSchema';
+import { createWorkSpaceRoleSchema } from './schema/createWorkSpaceRoleSchema';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../types/Enum/PermisionsEnum';
+import { createRoleHandler } from '../../../../controllers/ws/roles/createRoleHandler';
 import { deleteWorkSpaceRoleSchema } from './schema/deleteWorkSpaceRoleSchema';
+import { FastifyInstance } from 'fastify';
+import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { Permissions } from '../../../../types/enum/PermisionsEnum';
 
 const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

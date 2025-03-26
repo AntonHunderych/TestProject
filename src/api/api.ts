@@ -2,7 +2,7 @@ import fastify, { FastifyInstance } from 'fastify';
 import fastifyAutoload from '@fastify/autoload';
 import { join } from 'node:path';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
-import { initDB } from '../db/data-sourse';
+import { initDB } from '../services/typeorm/data-sourse';
 import getRepos, { IRepos } from '../repos';
 import getCryptoService from '../services/crypto/myCrypto';
 import ICrypto from '../services/crypto/ICrypto';
@@ -16,6 +16,7 @@ import fastifyOauth2 from 'fastify-oauth2';
 import { OAuth2Namespace } from '@fastify/oauth2';
 import fastifyCookie from '@fastify/cookie';
 import { errorHandler } from './error/errorHandler';
+import cors from '@fastify/cors';
 
 dotenv.config();
 
@@ -84,6 +85,7 @@ async function run() {
     process.exit(1);
   });
 
+  f.register(cors);
   f.register(fastifyJwt, {
     secret: 'your-secret-key',
   });
@@ -98,7 +100,7 @@ async function run() {
       },
       auth: fastifyOauth2.GOOGLE_CONFIGURATION,
     },
-    startRedirectPath: '/auth/google',
+    startRedirectPath: '/api/auth/google',
     callbackUri: process.env.GOOGLE_REDIRECT_URI!,
   });
   setupSwagger(f);
@@ -135,7 +137,10 @@ async function run() {
       port: 3000,
       host: '127.0.0.1',
     },
-    () => {
+    (err) => {
+      if (err) {
+        console.log(err);
+      }
       console.log('Server started on port 3000');
     },
   );

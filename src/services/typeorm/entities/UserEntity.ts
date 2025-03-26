@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany, OneToOne } from 'typeorm';
-import { Role } from './RoleEntity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne } from 'typeorm';
 import { Todo } from './TodoEntity';
 import { Comment } from './CommentEntity';
 import { WorkSpaceUser } from './WorkSpace/WorkSpaceUserEntity';
 import { Tag } from './TagEntity';
 import { Category } from './CategoryEntity';
-import { TokenEntity } from './tokenEntity';
+import { Token } from './TokenEntity';
+import { UserRole } from './UserRoleEntity';
 
 @Entity()
 export class User {
@@ -24,12 +24,11 @@ export class User {
   @Column()
   salt: string;
 
-  @OneToOne(() => TokenEntity, (token) => token.user)
-  token: TokenEntity;
+  @OneToOne(() => Token, (token) => token.user)
+  token: Token;
 
-  @ManyToMany(() => Role, (role) => role.users)
-  @JoinTable()
-  roles: Role[];
+  @OneToMany(() => UserRole, (userRole) => userRole.user)
+  roles: UserRole[];
 
   @OneToMany(() => Todo, (todo) => todo.creator)
   todos: Todo[];

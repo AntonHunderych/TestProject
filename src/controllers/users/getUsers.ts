@@ -1,7 +1,7 @@
-import { IUsersRepos } from '../../repos/users/users.repo';
-import { User } from '../../db/schemas/UserSchema';
+import { IUsersRepo } from '../../repos/users/users.repo';
+import { User } from '../../types/entities/UserSchema';
 
-export default async function getAllUsers(rep: IUsersRepos): Promise<User[]> {
+export default async function getAllUsers(rep: IUsersRepo): Promise<User[]> {
   try {
     return await rep.getAllUsers();
   } catch (e) {

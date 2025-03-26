@@ -1,6 +1,6 @@
 import { DataSource, EntityManager, Repository } from 'typeorm';
-import { WorkSpaceComment } from '../../../db/entities/WorkSpace/WorkSpaceCommentEntity';
-import { DBError } from '../../../types/Errors/DBError';
+import { WorkSpaceComment } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCommentEntity';
+import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IWorkSpaceCommentRepos extends IRecreateRepo {

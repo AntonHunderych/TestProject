@@ -1,16 +1,17 @@
 import { FastifyReply, FastifyRequest, preHandlerAsyncHookHandler } from 'fastify';
+import { HttpError } from '../error/HttpError';
 
 export function roleHook(requiredRoles: string[]) {
-  const hook: preHandlerAsyncHookHandler = async function (req: FastifyRequest, reply: FastifyReply) {
-    const userData = req.user as { id: string; email: string; username: string };
-    if (!userData) {
-      return;
-    }
-    const user = await this.repos.userRepo.getUserById(userData.id);
+  const hook: preHandlerAsyncHookHandler = async function (req: FastifyRequest, _reply: FastifyReply) {
+    const roles = await this.repos.userRoleRepo.getUserRoles(req.userData.id);
 
-    for (const role of requiredRoles) {
-      if (!user.roles.some((r) => r.value === role)) {
-        reply.status(403).send({ message: 'You·dont·have·permission·to·access·this·resource' });
+    if (roles.length === 0) {
+      throw new HttpError(403, 'You·dont·have·permission·to·access·this·resource');
+    }
+
+    for (const requiredRole of requiredRoles) {
+      if (!roles.some((role) => role.value === requiredRole)) {
+        throw new HttpError(403, 'You·dont·have·permission·to·access·this·resource');
       }
     }
   };

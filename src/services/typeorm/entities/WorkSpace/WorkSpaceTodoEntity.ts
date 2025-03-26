@@ -1,4 +1,3 @@
-import { BasicTodo } from '../TodoEntity';
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { WorkSpace } from './WorkSpaceEntity';
 import { WorkSpaceUser } from './WorkSpaceUserEntity';
@@ -6,6 +5,7 @@ import { WorkSpaceComment } from './WorkSpaceCommentEntity';
 import { WorkSpaceTagTodo } from './WorkSpaceTagEntity';
 import { WorkSpaceCategoryConf } from './WorkSpaceCategoryEntity';
 import { WorkSpaceCommand } from './WorkSpaceCommandEntity';
+import { BasicTodo } from '../BasicTodoEntity';
 
 @Entity()
 export class WorkSpaceTodo extends BasicTodo {

@@ -1,5 +1,5 @@
-import { Permissions } from '../../../types/Enum/PermisionsEnum';
-import { WorkSpaceRoles } from '../../../db/entities/WorkSpace/WorkSpaceRolesEntity';
+import { Permissions } from '../../../types/enum/PermisionsEnum';
+import { WorkSpaceRoles } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
 import { IWorkSpaceRolesRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
 import { FastifyReply } from 'fastify';
 

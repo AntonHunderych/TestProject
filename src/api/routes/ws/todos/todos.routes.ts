@@ -2,14 +2,14 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../types/Enum/PermisionsEnum';
+import { Permissions } from '../../../../types/enum/PermisionsEnum';
 import { createTodoSchema } from '../../todos/schemas/createTodoSchema';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../types/Enum/RoleEnum';
+import { RoleEnum } from '../../../../types/enum/RoleEnum';
 import { UUIDGetter } from '../../schemas/UUIDGetter';
 import z from 'zod';
 import { filterEntityByUserCommand } from '../hooks/filterEntityByUserCommand';
-import { WorkSpaceTodo } from '../../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceTodo } from '../../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
 import { getAllTodoInWorkSpaceByCommand } from '../../../../controllers/ws/todos/getAllTodoInWorkSpaceByCommand';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {

@@ -1,25 +1,21 @@
-import { IUsersRepos } from '../../repos/users/users.repo';
+import { IUsersRepo } from '../../repos/users/users.repo';
 import { IUserRoleRepo } from '../../repos/userRole/userRole.repo';
-import { withTransaction } from '../../db/withTransaction';
-import { User } from '../../db/schemas/UserSchema';
+import { withTransaction } from '../../services/typeorm/withTransaction';
 import { giveDefaultRoleToUser } from '../userRole/giveDefaultRoleToUser';
-
-interface ICreateUser {
-  username: string;
-  email: string;
-  password: string;
-  salt: string;
-}
+import { User } from '../../types/entities/UserSchema';
+import { IRolesRepo } from '../../repos/roles/roles.repo';
+import { TCreateUserInput } from '../../types/controllers/TCreateUserInput';
 
 export default async function createUser(
-  userRepo: IUsersRepos,
+  userRepo: IUsersRepo,
+  roleRepo: IRolesRepo,
   userRoleRepo: IUserRoleRepo,
-  date: ICreateUser,
+  date: TCreateUserInput,
 ): Promise<User> {
   try {
-    return await withTransaction({ userRepo, userRoleRepo }, async (repos) => {
+    return await withTransaction({ userRepo, userRoleRepo, roleRepo }, async (repos) => {
       const user = await repos.userRepo.createUser(date);
-      await giveDefaultRoleToUser(repos.userRoleRepo, user.id);
+      await giveDefaultRoleToUser(repos.userRoleRepo, repos.roleRepo, user.id);
       return await repos.userRepo.getUserById(user.id);
     });
   } catch (error) {

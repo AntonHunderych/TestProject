@@ -1,22 +1,14 @@
 import { JWT } from 'fastify-jwt';
 import { ITokenRepo } from '../../repos/token/token.repo';
-
-export interface IInputTokenData {
-  id: string;
-  username: string;
-  email: string;
-}
-
-export interface IOutputTokenData {
-  accessToken: string;
-  refreshToken: string;
-}
+import { ApplicationError } from '../../types/errors/ApplicationError';
+import { TGenerateTokensInputData } from '../../types/controllers/TGenerateTokensInputData';
+import { TGenerateTokensOutputData } from '../../types/controllers/TGenerateTokensOutputData';
 
 export async function generateTokens(
-  data: IInputTokenData,
+  data: TGenerateTokensInputData,
   jwt: JWT,
   tokenRepo: ITokenRepo,
-): Promise<IOutputTokenData> {
+): Promise<TGenerateTokensOutputData> {
   try {
     const accessToken = jwt.sign(data);
     const refreshToken = jwt.sign(data, { expiresIn: '7d' });
@@ -28,7 +20,6 @@ export async function generateTokens(
       refreshToken,
     };
   } catch (e) {
-    console.error('Fail to generate tokens', e);
-    throw e;
+    throw new ApplicationError('Error in generateTokens', e);
   }
 }

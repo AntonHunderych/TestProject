@@ -1,4 +1,4 @@
-import { DataSource, EntityManager } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { getUserRepo } from './users/users.repo';
 import { getUserRoleRepo } from './userRole/userRole.repo';
 import getRoleRepo from './roles/roles.repo';
@@ -18,8 +18,9 @@ import { getWorkSpaceCategoryRepo } from './workspace/categories/workSpaceCatego
 import { getWorkSpaceCommandRepo } from './workspace/commands/workSpaceCommand.repo';
 import { getWorkSpaceCommandTodoRepo } from './workspace/commandsTodo/workSpaceCommandsTodo.repo';
 import { getTokenRepo } from './token/token.repo';
+import { getTodoTagRepo } from './todoTag/todoTag.repo';
 
-export default function getRepos(db: DataSource | EntityManager) {
+export default function getRepos(db: DataSource) {
   return {
     userRepo: getUserRepo(db),
     roleRepo: getRoleRepo(db),
@@ -27,6 +28,7 @@ export default function getRepos(db: DataSource | EntityManager) {
     todoRepo: getTodoRepo(db),
     commentRepo: getCommentRepo(db),
     tagRepo: getTagRepo(db),
+    todoTagRepo: getTodoTagRepo(db),
     tokenRepo: getTokenRepo(db),
     workSpaceRepo: getWorkSpaceRepos(db),
     workSpaceTodoRepo: getWorkSpaceTodoRepo(db),

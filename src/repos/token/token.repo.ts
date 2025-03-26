@@ -1,6 +1,6 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { TokenEntity } from '../../db/entities/tokenEntity';
-import { DBError } from '../../types/Errors/DBError';
+import { Token } from '../../services/typeorm/entities/TokenEntity';
+import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
 export interface ITokenRepo extends IRecreateRepo {
@@ -8,11 +8,11 @@ export interface ITokenRepo extends IRecreateRepo {
 
   deleteRefreshToken(userId: string): Promise<void>;
 
-  findTokenById(value: string): Promise<TokenEntity>;
+  findTokenById(value: string): Promise<Token>;
 }
 
 export function getTokenRepo(db: DataSource | EntityManager): ITokenRepo {
-  const tokenRepo = db.getRepository(TokenEntity);
+  const tokenRepo = db.getRepository(Token);
 
   return {
     async saveRefreshToken(userId: string, value: string): Promise<void> {
@@ -29,7 +29,7 @@ export function getTokenRepo(db: DataSource | EntityManager): ITokenRepo {
         throw new DBError('Failed to delete refresh token', error);
       }
     },
-    async findTokenById(value: string): Promise<TokenEntity> {
+    async findTokenById(value: string): Promise<Token> {
       try {
         return await tokenRepo.findOneOrFail({ where: { value } });
       } catch (error) {

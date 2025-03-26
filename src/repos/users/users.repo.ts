@@ -1,9 +1,9 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { User } from '../../db/entities/UserEntity';
-import { DBError } from '../../types/Errors/DBError';
+import { User } from '../../services/typeorm/entities/UserEntity';
+import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface IUsersRepos extends IRecreateRepo {
+export interface IUsersRepo extends IRecreateRepo {
   getAllUsers(): Promise<User[]>;
   getUserById(id: string): Promise<User>;
   getUserByEmail(email: string): Promise<User | null>;
@@ -12,7 +12,7 @@ export interface IUsersRepos extends IRecreateRepo {
   deleteUser(id: string): Promise<boolean>;
 }
 
-export function getUserRepo(db: DataSource | EntityManager): IUsersRepos {
+export function getUserRepo(db: DataSource | EntityManager): IUsersRepo {
   const _usersRepo = db.getRepository(User);
 
   return {
@@ -29,7 +29,6 @@ export function getUserRepo(db: DataSource | EntityManager): IUsersRepos {
         return await _usersRepo.findOneOrFail({
           where: { id },
           relations: {
-            roles: true,
             todos: true,
           },
         });
@@ -40,7 +39,7 @@ export function getUserRepo(db: DataSource | EntityManager): IUsersRepos {
 
     async getUserByEmail(email: string): Promise<User | null> {
       try {
-        return await _usersRepo.findOne({ where: { email }, relations: ['roles'] });
+        return await _usersRepo.findOne({ where: { email } });
       } catch (error) {
         throw new DBError('Error fetching user by email', error);
       }

@@ -1,8 +1,8 @@
 import { Brackets, DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
-import { ITodo } from '../../../db/schemas/TodoSchema';
-import { DBError } from '../../../types/Errors/DBError';
+import { WorkSpaceTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
+import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
+import { ITodo } from '../../../types/entities/TodoSchema';
 
 export interface IWorkSpaceTodoRepo extends IRecreateRepo {
   create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo>;

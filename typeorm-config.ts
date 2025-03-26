@@ -1,3 +1,3 @@
-import { getDataSource } from './src/db/data-sourse';
+import { getDataSource } from './src/services/typeorm/data-sourse';
 
 export default getDataSource();

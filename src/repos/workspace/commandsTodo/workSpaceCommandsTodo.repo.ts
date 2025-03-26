@@ -1,7 +1,7 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
-import { WorkSpaceCommand } from '../../../db/entities/WorkSpace/WorkSpaceCommandEntity';
-import { DBError } from '../../../types/Errors/DBError';
+import { WorkSpaceTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceCommand } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCommandEntity';
+import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IGetWorkSpaceCommandTodoRepo extends IRecreateRepo {

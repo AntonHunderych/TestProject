@@ -1,6 +1,6 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpacePermissions } from '../../../db/entities/WorkSpace/WorkSpacePermissionsEntity';
-import { DBError } from '../../../types/Errors/DBError';
+import { WorkSpacePermissions } from '../../../services/typeorm/entities/WorkSpace/WorkSpacePermissionsEntity';
+import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IWorkSpacePermissions extends IRecreateRepo {

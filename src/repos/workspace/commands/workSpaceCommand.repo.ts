@@ -1,7 +1,7 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceCommand } from '../../../db/entities/WorkSpace/WorkSpaceCommandEntity';
-import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
-import { DBError } from '../../../types/Errors/DBError';
+import { WorkSpaceCommand } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCommandEntity';
+import { WorkSpaceUser } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
+import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IWorkSpaceCommandsRepo extends IRecreateRepo {

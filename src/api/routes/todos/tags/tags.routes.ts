@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../types/Enum/RoleEnum';
+import { RoleEnum } from '../../../../types/enum/RoleEnum';
 import z from 'zod';
 import { getTagSchema } from './schema/getTagSchema';
 import { createTagSchema } from './schema/createTagSchema';
@@ -16,6 +16,7 @@ import { removeTagFromTodo } from '../../../../controllers/tags/removeTagFromTod
 const routers: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const tagRepo = f.repos.tagRepo;
+  const todoTagRepo = f.repos.todoTagRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
 
@@ -84,7 +85,7 @@ const routers: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      return await addTagToTodo(tagRepo, req.body.tagId, req.body.todoId);
+      return await addTagToTodo(todoTagRepo, req.body.tagId, req.body.todoId);
     },
   );
 
@@ -96,7 +97,7 @@ const routers: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      return await removeTagFromTodo(tagRepo, req.body.tagId, req.body.todoId);
+      return await removeTagFromTodo(todoTagRepo, req.body.tagId, req.body.todoId);
     },
   );
 };

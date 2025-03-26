@@ -1,7 +1,7 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceTag, WorkSpaceTagTodo } from '../../../db/entities/WorkSpace/WorkSpaceTagEntity';
-import { DBError } from '../../../types/Errors/DBError';
-import { WorkSpaceUser } from '../../../db/entities/WorkSpace/WorkSpaceUserEntity';
+import { WorkSpaceTag, WorkSpaceTagTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTagEntity';
+import { DBError } from '../../../types/errors/DBError';
+import { WorkSpaceUser } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IGetWorkSpaceTagRepo extends IRecreateRepo {

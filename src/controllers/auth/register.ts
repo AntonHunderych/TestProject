@@ -1,13 +1,17 @@
-import { IUsersRepos } from '../../repos/users/users.repo';
+import { IUsersRepo } from '../../repos/users/users.repo';
 import ICrypto from '../../services/crypto/ICrypto';
 import createUser from '../users/createUser';
 import { IUserRoleRepo } from '../../repos/userRole/userRole.repo';
 import { ILoginRegisterResp } from './login';
 import { HttpError } from '../../api/error/HttpError';
+import { ApplicationError } from '../../types/errors/ApplicationError';
+import { existUser } from '../users/existUser';
+import { IRolesRepo } from '../../repos/roles/roles.repo';
 
 export async function register(
-  userRepo: IUsersRepos,
+  userRepo: IUsersRepo,
   userRoleRepo: IUserRoleRepo,
+  roleRepo: IRolesRepo,
   crypto: ICrypto,
   userData: {
     username: string;
@@ -15,21 +19,20 @@ export async function register(
     password: string;
   },
 ): Promise<ILoginRegisterResp> {
+  const user = await existUser(userRepo, userData.email);
+  if (user) {
+    throw new HttpError(400, 'User with this email already exists');
+  }
   try {
-    const user = await userRepo.getUserByEmail(userData.email);
-    if (user) {
-      throw new HttpError(400, 'User with this email already exists');
-    }
-
     const { hash, salt } = await crypto.hash(userData.password);
 
-    return await createUser(userRepo, userRoleRepo, {
+    return await createUser(userRepo, roleRepo, userRoleRepo, {
       username: userData.username,
       email: userData.email,
       password: hash,
       salt,
     });
   } catch (error) {
-    throw error;
+    throw new ApplicationError('register error', error);
   }
 }

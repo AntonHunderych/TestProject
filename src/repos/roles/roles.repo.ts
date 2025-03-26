@@ -1,6 +1,6 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { Role } from '../../db/entities/RoleEntity';
-import { DBError } from '../../types/Errors/DBError';
+import { Role } from '../../services/typeorm/entities/RoleEntity';
+import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
 export interface IRolesRepo extends IRecreateRepo {

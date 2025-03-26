@@ -1,5 +1,5 @@
 import { IWorkSpaceRolesRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
-import { Permissions } from '../../../types/Enum/PermisionsEnum';
+import { Permissions } from '../../../types/enum/PermisionsEnum';
 
 const rolePermissions: Record<string, Permissions[]> = {
   Creator: [

@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, Unique } from 'typeorm';
-import { BasicTag } from '../TagEntity';
 import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
 import { WorkSpaceUser } from './WorkSpaceUserEntity';
 import { WorkSpace } from './WorkSpaceEntity';
+import { BasicTag } from '../BasicTagEntity';
 
 @Entity()
 export class WorkSpaceTag extends BasicTag {

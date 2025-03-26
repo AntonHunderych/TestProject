@@ -1,8 +1,8 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpace } from '../../db/entities/WorkSpace/WorkSpaceEntity';
-import { IWorkspace } from '../../db/schemas/WorkSpaceSchema';
-import { DBError } from '../../types/Errors/DBError';
+import { WorkSpace } from '../../services/typeorm/entities/WorkSpace/WorkSpaceEntity';
+import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
+import { IWorkspace } from '../../types/entities/WorkSpaceSchema';
 
 export interface IWorkSpaceRepos extends IRecreateRepo {
   createWorkSpace(workSpace: IWorkSpaceCreate): Promise<IWorkspace>;

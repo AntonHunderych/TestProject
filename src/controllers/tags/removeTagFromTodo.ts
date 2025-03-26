@@ -1,5 +1,5 @@
-import { ITagsRepo } from '../../repos/tags/tags.repo';
+import { ITodoTagRepo } from '../../repos/todoTag/todoTag.repo';
 
-export async function removeTagFromTodo(tagRepo: ITagsRepo, tagId: string, todoId: string): Promise<void> {
-  return await tagRepo.removeTag(todoId, tagId);
+export async function removeTagFromTodo(todoTagRepo: ITodoTagRepo, tagId: string, todoId: string): Promise<void> {
+  return await todoTagRepo.removeTag(todoId, tagId);
 }

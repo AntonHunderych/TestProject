@@ -1,7 +1,6 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from 'zod';
 import { roleHook } from '../../hooks/roleHook';
-import { RoleEnum } from '../../../types/Enum/RoleEnum';
 import { createRoleSchema } from './schemas/createRoleShema';
 import { valueRoleGetter } from './schemas/valueRoleGetter';
 import { getRoleSchema } from './schemas/getRoleSchema';
@@ -9,6 +8,7 @@ import { getAllRoles } from '../../../controllers/roles/getAllRole';
 import { getRoleByValue } from '../../../controllers/roles/getRoleByValue';
 import { createRole } from '../../../controllers/roles/createRole';
 import { deleteRole } from '../../../controllers/roles/deleteRole';
+import { RoleEnum } from '../../../types/enum/RoleEnum';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

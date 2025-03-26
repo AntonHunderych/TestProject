@@ -4,7 +4,7 @@ import { createWorkSpaceSchema } from './schema/createWorkSpaceSchema';
 import { accessToWorkSpaceHookArgWorkSpaceId } from './hooks/accessToWorkSpaceHook';
 import { addStandardRoleToWorkSpace } from '../../../controllers/ws/roles/addStandardRoleToWorkSpace';
 import { roleHook } from '../../hooks/roleHook';
-import { RoleEnum } from '../../../types/Enum/RoleEnum';
+import { RoleEnum } from '../../../types/enum/RoleEnum';
 import { startWorkSpaceSchema } from './schema/startWorkSpaceSchema';
 import z from 'zod';
 import { stopWorkSpaceSchema } from './schema/stopWorkSpaceSchema';

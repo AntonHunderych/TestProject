@@ -1,8 +1,8 @@
-import { IComment } from '../../db/schemas/CommentSchema';
 import { DataSource, EntityManager } from 'typeorm';
-import { Comment } from '../../db/entities/CommentEntity';
-import { DBError } from '../../types/Errors/DBError';
+import { Comment } from '../../services/typeorm/entities/CommentEntity';
+import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
+import { IComment } from '../../types/entities/CommentSchema';
 
 export type ICreateComment = Omit<IComment, 'createdAt' | 'updatedAt' | 'id'>;
 export type IUpdateComment = Pick<IComment, 'text'>;

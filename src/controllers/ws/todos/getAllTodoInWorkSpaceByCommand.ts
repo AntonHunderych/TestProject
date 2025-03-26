@@ -1,6 +1,6 @@
 import { IWorkSpaceTodoRepo } from '../../../repos/workspace/todos/workSpaceTodos.repo';
 import { IWorkSpaceCommandsRepo } from '../../../repos/workspace/commands/workSpaceCommand.repo';
-import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
 
 export async function getAllTodoInWorkSpaceByCommand(
   workSpaceTodoRepo: IWorkSpaceTodoRepo,

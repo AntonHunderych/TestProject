@@ -10,13 +10,14 @@ import getAllUsers from '../../../controllers/users/getUsers';
 import { deleteRespUserSchema } from './schemas/deleteRespUserSchema';
 import { updateUserSchema } from './schemas/updateUserSchema';
 import { roleHook } from '../../hooks/roleHook';
-import { RoleEnum } from '../../../types/Enum/RoleEnum';
+import { RoleEnum } from '../../../types/enum/RoleEnum';
 import { createRespUserSchema } from './schemas/createRespUserSchema';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const userRepo = f.repos.userRepo;
   const userRoleRepo = f.repos.userRoleRepo;
+  const roleRepo = f.repos.roleRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
 
@@ -64,7 +65,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async (req) => {
-      await createUser(userRepo, userRoleRepo, {
+      await createUser(userRepo, roleRepo, userRoleRepo, {
         ...req.body,
         salt: 'adminCreatedUserSalt',
       });

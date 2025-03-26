@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
 import { WorkSpaceUser } from './WorkSpaceUserEntity';
 import { WorkSpace } from './WorkSpaceEntity';
-import { BasicCategory } from '../CategoryEntity';
+import { BasicCategory } from '../BasicCategoryEntity';
 
 @Entity()
 export class WorkSpaceCategory extends BasicCategory {

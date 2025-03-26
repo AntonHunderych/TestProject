@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import util from 'util';
 import { HttpError } from './HttpError';
-import { EErrorCode } from '../../types/Enum/EErrorCode';
+import { EErrorCode } from '../../types/enum/EErrorCode';
 
 const isProduction = process.env.NODE_ENV === 'production';
 

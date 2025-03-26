@@ -1,17 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Todo } from './TodoEntity';
 import { User } from './UserEntity';
-
-export class BasicCategory {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ unique: true })
-  value: string;
-
-  @Column()
-  description: string;
-}
+import { BasicCategory } from './BasicCategoryEntity';
 
 @Entity()
 export class Category extends BasicCategory {

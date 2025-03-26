@@ -1,5 +1,6 @@
 import { ITokenRepo } from '../../repos/token/token.repo';
 import { JWT } from 'fastify-jwt';
+import { ApplicationError } from '../../types/errors/ApplicationError';
 
 export async function refreshToken(refreshToken: string, jwt: JWT, tokenRepo: ITokenRepo): Promise<{ token: string }> {
   try {
@@ -16,6 +17,6 @@ export async function refreshToken(refreshToken: string, jwt: JWT, tokenRepo: IT
       }),
     };
   } catch (error) {
-    throw error;
+    throw new ApplicationError('Error by refreshing token', error);
   }
 }

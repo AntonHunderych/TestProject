@@ -1,11 +1,11 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
-import { FastifyInstance } from 'fastify';
-import { RoleEnum } from '../../../../types/Enum/RoleEnum';
 import { roleHook } from '../../../hooks/roleHook';
 import z from 'zod';
-import { UUIDGetter } from '../../schemas/UUIDGetter';
-import { getPermissionSchema } from './schema/getPermissionSchema';
 import { createPermissionSchema } from './schema/createPermissionSchema';
+import { getPermissionSchema } from './schema/getPermissionSchema';
+import { UUIDGetter } from '../../schemas/UUIDGetter';
+import { FastifyInstance } from 'fastify';
+import { RoleEnum } from '../../../../types/enum/RoleEnum';
 
 const route: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

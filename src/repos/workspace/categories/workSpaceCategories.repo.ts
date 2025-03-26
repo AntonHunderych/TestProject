@@ -1,7 +1,10 @@
-import { WorkSpaceCategory, WorkSpaceCategoryConf } from '../../../db/entities/WorkSpace/WorkSpaceCategoryEntity';
+import {
+  WorkSpaceCategory,
+  WorkSpaceCategoryConf,
+} from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCategoryEntity';
 import { DataSource, EntityManager } from 'typeorm';
-import { DBError } from '../../../types/Errors/DBError';
-import { WorkSpaceTodo } from '../../../db/entities/WorkSpace/WorkSpaceTodoEntity';
+import { DBError } from '../../../types/errors/DBError';
+import { WorkSpaceTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IWorkSpaceCategoriesRepo extends IRecreateRepo {

@@ -3,19 +3,21 @@ import { loginSchema } from './schemas/loginSchema';
 import { login } from '../../../controllers/auth/login';
 import { tokenResponseSchema } from './schemas/tokenResponseSchema';
 import { skipAuthHook } from '../../hooks/skipAuthHook';
-import { generateTokens } from '../../../controllers/auth/generateTokens';
-import { setRefreshTokenCookie } from '../../../controllers/auth/setRefreshTokenCookie';
 import { refreshToken } from '../../../controllers/auth/refreshToken';
 import { ErrorSchema } from '../schemas/ErrorSchema';
 import { registerSchema } from './schemas/registerSchema';
-import { register } from '../../../controllers/auth/register';
 import { HttpError } from '../../error/HttpError';
+import { registrationProcess } from '../../../controllers/auth/registrationProcess';
+import { randomBytes } from 'node:crypto';
+import { existUser } from '../../../controllers/users/existUser';
+import { generateTokensThenGetAccessToken } from '../../../controllers/auth/generateTokensThenGetAccessToken';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const userRepo = f.repos.userRepo;
   const userRoleRepo = f.repos.userRoleRepo;
   const tokenRepo = f.repos.tokenRepo;
+  const roleRepo = f.repos.roleRepo;
   const crypto = f.crypto;
 
   f.addHook('preValidation', skipAuthHook);
@@ -31,14 +33,17 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req, reply) => {
-      try {
-        const user = await register(userRepo, userRoleRepo, crypto, req.body);
-        const { accessToken, refreshToken } = await generateTokens(user, f.jwt, tokenRepo);
-        setRefreshTokenCookie(reply, refreshToken);
-        return { token: accessToken };
-      } catch (e) {
-        throw e;
-      }
+      const accessToken = await registrationProcess(
+        userRepo,
+        userRoleRepo,
+        tokenRepo,
+        roleRepo,
+        crypto,
+        f.jwt,
+        req.body,
+        reply,
+      );
+      return { token: accessToken };
     },
   );
 
@@ -75,8 +80,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     async (req, reply) => {
       try {
         const user = await login(userRepo, crypto, req.body.password, req.body.email);
-        const { accessToken, refreshToken } = await generateTokens(user, f.jwt, tokenRepo);
-        setRefreshTokenCookie(reply, refreshToken);
+        const accessToken = await generateTokensThenGetAccessToken(user, f.jwt, tokenRepo, reply);
         return { token: accessToken };
       } catch (e: any) {
         throw new HttpError(400, 'Bad data');
@@ -84,9 +88,43 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     },
   );
 
-  f.get('/google/callback', {}, async (req) => {
-    const token = await f.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
-    return { token };
+  f.get('/google/callback', {}, async (req, reply) => {
+    const token: any = await f.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
+    const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${token.access_token}` },
+    });
+    const userInfo = await response.json();
+    const user = await existUser(userRepo, userInfo.email);
+    let accessToken: string;
+    if (!user) {
+      accessToken = await registrationProcess(
+        userRepo,
+        userRoleRepo,
+        tokenRepo,
+        roleRepo,
+        crypto,
+        f.jwt,
+        {
+          username: userInfo.name,
+          email: userInfo.email,
+          password: randomBytes(16).toString('hex'),
+        },
+        reply,
+      );
+    } else {
+      accessToken = await generateTokensThenGetAccessToken(
+        {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
+        f.jwt,
+        tokenRepo,
+        reply,
+      );
+    }
+
+    return { accessToken };
   });
 };
 

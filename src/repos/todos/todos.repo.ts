@@ -1,10 +1,10 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { Todo } from '../../db/entities/TodoEntity';
-import { ITodo } from '../../db/schemas/TodoSchema';
-import { DBError } from '../../types/Errors/DBError';
+import { Todo } from '../../services/typeorm/entities/TodoEntity';
+import { DBError } from '../../types/errors/DBError';
 import { util } from 'zod';
 import Omit = util.Omit;
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
+import { ITodo } from '../../types/entities/TodoSchema';
 
 export interface ITodosRepo extends IRecreateRepo {
   create(todo: Omit<ITodo, 'id'>): Promise<ITodo>;
@@ -42,7 +42,10 @@ export function getTodoRepo(db: DataSource | EntityManager): ITodosRepo {
 
     async findByCreatorId(creatorId: string): Promise<ITodo[]> {
       try {
-        return await todoRepo.find({ where: { creatorId }, relations: ['tags', 'comments'] });
+        return await todoRepo.find({
+          where: { creatorId },
+          relations: { comments: true, creator: true, tags: { tag: true } },
+        });
       } catch (error) {
         throw new DBError('Error fetching createdTodos by creator id', error);
       }
@@ -50,7 +53,7 @@ export function getTodoRepo(db: DataSource | EntityManager): ITodosRepo {
 
     async findAll(): Promise<ITodo[]> {
       try {
-        return await todoRepo.find({ relations: { creator: true, comments: true, tags: true } });
+        return await todoRepo.find({ relations: { creator: true, comments: true, tags: { tag: true } } });
       } catch (error) {
         throw new DBError('Error fetching all createdTodos', error);
       }

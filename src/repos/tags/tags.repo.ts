@@ -1,7 +1,6 @@
-import { Tag } from '../../db/entities/TagEntity';
+import { Tag } from '../../services/typeorm/entities/TagEntity';
 import { DataSource, EntityManager } from 'typeorm';
-import { Todo } from '../../db/entities/TodoEntity';
-import { DBError } from '../../types/Errors/DBError';
+import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
 export interface ITagsRepo extends IRecreateRepo {
@@ -12,10 +11,6 @@ export interface ITagsRepo extends IRecreateRepo {
   updateTag(tagId: string, value: string): Promise<Tag>;
 
   deleteTag(tagId: string): Promise<void>;
-
-  addTag(todoId: string, tagId: string): Promise<void>;
-
-  removeTag(todoId: string, tagId: string): Promise<void>;
 }
 
 export function getTagRepo(db: DataSource | EntityManager): ITagsRepo {
@@ -58,32 +53,6 @@ export function getTagRepo(db: DataSource | EntityManager): ITagsRepo {
         await tagRepo.remove(tag);
       } catch (error) {
         throw new DBError('Failed to delete tag', error);
-      }
-    },
-    async addTag(todoId: string, tagId: string): Promise<void> {
-      try {
-        const tag = await tagRepo.findOneOrFail({
-          where: { id: tagId },
-          relations: { todos: true },
-        });
-        const todo = new Todo();
-        todo.id = todoId;
-        tag.todos = [...(tag.todos ?? []), todo];
-        await tagRepo.save(tag);
-      } catch (error) {
-        throw new DBError('Failed to add tag', error);
-      }
-    },
-    async removeTag(todoId: string, tagId: string): Promise<void> {
-      try {
-        const tags = await tagRepo.find({ where: { id: todoId } });
-        for (const tag of tags) {
-          if (tag.id === tagId) {
-            await tagRepo.remove(tag);
-          }
-        }
-      } catch (error) {
-        throw new DBError('Failed to remove tag', error);
       }
     },
     __recreateFunction: getTagRepo,

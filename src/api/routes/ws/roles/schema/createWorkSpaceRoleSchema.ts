@@ -1,5 +1,5 @@
 import z from 'zod';
-import { PermissionsEnumSchema } from '../../../../../types/Enum/PermisionsEnum';
+import { PermissionsEnumSchema } from '../../../../../types/enum/PermisionsEnum';
 
 export const createWorkSpaceRoleSchema = z.object({
   name: z.string(),
