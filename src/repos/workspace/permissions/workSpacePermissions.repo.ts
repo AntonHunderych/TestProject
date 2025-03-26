@@ -9,7 +9,7 @@ export interface IWorkSpacePermissions extends IRecreateRepo {
   delete(id: string): Promise<boolean>;
 }
 
-export function getWorkSpacePermissionsRepo(db: DataSource | EntityManager): IWorkSpacePermissions {
+export function getWorkSpacePermissionRepo(db: DataSource | EntityManager): IWorkSpacePermissions {
   const workSpacePermissions = db.getRepository(WorkSpacePermissions);
 
   return {
@@ -34,6 +34,6 @@ export function getWorkSpacePermissionsRepo(db: DataSource | EntityManager): IWo
         throw new DBError('Error fetching all workspace permissions', error);
       }
     },
-    __recreateFunction: getWorkSpacePermissionsRepo,
+    __recreateFunction: getWorkSpacePermissionRepo,
   };
 }

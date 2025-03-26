@@ -14,7 +14,7 @@ import { addWorkSpaceRoleToUser } from '../../../controllers/ws/roles/giveWorkSp
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceRepo = f.repos.workSpaceRepo;
-  const workSpaceRoleRepo = f.repos.workSpaceRolesRepo;
+  const workSpaceRoleRepo = f.repos.workSpaceRoleRepo;
   const workSpaceUser = f.repos.workSpaceUserRepo;
   const workSpaceUserRoleRepo = f.repos.workSpaceUserRoleRepo;
 

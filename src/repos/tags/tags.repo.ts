@@ -18,7 +18,7 @@ export interface ITagsRepo extends IRecreateRepo {
   removeTag(todoId: string, tagId: string): Promise<void>;
 }
 
-export function getTagsRepo(db: DataSource | EntityManager): ITagsRepo {
+export function getTagRepo(db: DataSource | EntityManager): ITagsRepo {
   const tagRepo = db.getRepository<Tag>(Tag);
 
   return {
@@ -86,6 +86,6 @@ export function getTagsRepo(db: DataSource | EntityManager): ITagsRepo {
         throw new DBError('Failed to remove tag', error);
       }
     },
-    __recreateFunction: getTagsRepo,
+    __recreateFunction: getTagRepo,
   };
 }

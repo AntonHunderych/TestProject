@@ -18,7 +18,7 @@ export interface IWorkSpaceCommandsRepo extends IRecreateRepo {
   getUserCommands(userId: string, workSpaceId: string): Promise<WorkSpaceCommand[]>;
 }
 
-export function getWorkSpaceCommands(db: DataSource | EntityManager): IWorkSpaceCommandsRepo {
+export function getWorkSpaceCommandRepo(db: DataSource | EntityManager): IWorkSpaceCommandsRepo {
   const workSpaceCommandRepo = db.getRepository<WorkSpaceCommand>(WorkSpaceCommand);
 
   return {
@@ -85,6 +85,6 @@ export function getWorkSpaceCommands(db: DataSource | EntityManager): IWorkSpace
         throw new DBError('Error fetching user commands', error);
       }
     },
-    __recreateFunction: getWorkSpaceCommands,
+    __recreateFunction: getWorkSpaceCommandRepo,
   };
 }

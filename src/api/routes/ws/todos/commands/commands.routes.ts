@@ -8,7 +8,7 @@ import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
-  const workSpaceCommandsTodoRepo = f.repos.workSpaceCommandsTodoRepo;
+  const workSpaceCommandsTodoRepo = f.repos.workSpaceCommandTodoRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);

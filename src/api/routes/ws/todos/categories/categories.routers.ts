@@ -9,7 +9,7 @@ import { UUIDGetter } from '../../../schemas/UUIDGetter';
 
 const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
-  const workSpaceCategoriesRepo = f.repos.workSpaceCategoriesRepo;
+  const workSpaceCategoriesRepo = f.repos.workSpaceCategoryRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);

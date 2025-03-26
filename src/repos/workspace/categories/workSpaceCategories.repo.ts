@@ -17,7 +17,7 @@ export interface IWorkSpaceCategoriesRepo extends IRecreateRepo {
   removeTodo(todoId: string): Promise<void>;
 }
 
-export function getWorkSpaceCategoriesRepo(db: DataSource | EntityManager): IWorkSpaceCategoriesRepo {
+export function getWorkSpaceCategoryRepo(db: DataSource | EntityManager): IWorkSpaceCategoriesRepo {
   const workSpaceCategoryRepo = db.getRepository(WorkSpaceCategory);
   const workSpaceCategoryTodoRepo = db.getRepository(WorkSpaceCategoryConf);
   const workSpaceTodoRepo = db.getRepository(WorkSpaceTodo);
@@ -94,6 +94,6 @@ export function getWorkSpaceCategoriesRepo(db: DataSource | EntityManager): IWor
         throw new DBError('Failed to detach categories', error);
       }
     },
-    __recreateFunction: getWorkSpaceCategoriesRepo,
+    __recreateFunction: getWorkSpaceCategoryRepo,
   };
 }

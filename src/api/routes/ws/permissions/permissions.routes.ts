@@ -9,7 +9,7 @@ import { createPermissionSchema } from './schema/createPermissionSchema';
 
 const route: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
-  const workSpacePermissionsRepo = f.repos.workSpacePermissionsRepo;
+  const workSpacePermissionsRepo = f.repos.workSpacePermissionRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.ADMIN]));
 

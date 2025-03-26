@@ -13,7 +13,7 @@ export interface IWorkSpaceRolesRepo extends IRecreateRepo {
   updatePermissionOnRole(workSpaceId: string, name: string, permissionsValue: Permissions[]): Promise<WorkSpaceRoles>;
 }
 
-export function getWorkSpaceRolesRepo(db: DataSource | EntityManager): IWorkSpaceRolesRepo {
+export function getWorkSpaceRoleRepo(db: DataSource | EntityManager): IWorkSpaceRolesRepo {
   const workSpaceRolesRepo = db.getRepository(WorkSpaceRoles);
   const workSpacePermissions = db.getRepository(WorkSpacePermissions);
 
@@ -67,6 +67,6 @@ export function getWorkSpaceRolesRepo(db: DataSource | EntityManager): IWorkSpac
         throw new DBError('Error updating permissions on workspace role', error);
       }
     },
-    __recreateFunction: getWorkSpaceRolesRepo,
+    __recreateFunction: getWorkSpaceRoleRepo,
   };
 }

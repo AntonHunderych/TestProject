@@ -15,7 +15,7 @@ import { deleteWorkSpaceRoleSchema } from './schema/deleteWorkSpaceRoleSchema';
 const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
 
-  const workSpaceRolesRepo = f.repos.workSpaceRolesRepo;
+  const workSpaceRolesRepo = f.repos.workSpaceRoleRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);

@@ -10,7 +10,7 @@ export interface IGetWorkSpaceCommandTodoRepo extends IRecreateRepo {
   removeCommandFromTodo(todoId: string): Promise<void>;
 }
 
-export function getWorkSpaceCommandsTodoRepo(db: DataSource | EntityManager): IGetWorkSpaceCommandTodoRepo {
+export function getWorkSpaceCommandTodoRepo(db: DataSource | EntityManager): IGetWorkSpaceCommandTodoRepo {
   const workSpaceTodoRepo = db.getRepository<WorkSpaceTodo>(WorkSpaceTodo);
 
   return {
@@ -35,6 +35,6 @@ export function getWorkSpaceCommandsTodoRepo(db: DataSource | EntityManager): IG
         throw new DBError('Failed to remove command from todo', error);
       }
     },
-    __recreateFunction: getWorkSpaceCommandsTodoRepo,
+    __recreateFunction: getWorkSpaceCommandTodoRepo,
   };
 }
