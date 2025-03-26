@@ -11,6 +11,7 @@ import { registrationProcess } from '../../../controllers/auth/registrationProce
 import { randomBytes } from 'node:crypto';
 import { existUser } from '../../../controllers/users/existUser';
 import { generateTokensThenGetAccessToken } from '../../../controllers/auth/generateTokensThenGetAccessToken';
+import { getUserDataFromGoogle } from '../../../controllers/auth/getUserDataFromGoogle';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -89,15 +90,10 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   );
 
   f.get('/google/callback', {}, async (req, reply) => {
-    const token: any = await f.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
-    const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: { Authorization: `Bearer ${token.access_token}` },
-    });
-    const userInfo = await response.json();
-    const user = await existUser(userRepo, userInfo.email);
-    let accessToken: string;
+    const googleUser = await getUserDataFromGoogle(req, f.googleOAuth2);
+    const user = await existUser(userRepo, googleUser.email);
     if (!user) {
-      accessToken = await registrationProcess(
+      const accessToken = await registrationProcess(
         userRepo,
         userRoleRepo,
         tokenRepo,
@@ -105,14 +101,14 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
         crypto,
         f.jwt,
         {
-          username: userInfo.name,
-          email: userInfo.email,
+          ...googleUser,
           password: randomBytes(16).toString('hex'),
         },
         reply,
       );
+      return { accessToken };
     } else {
-      accessToken = await generateTokensThenGetAccessToken(
+      const accessToken = await generateTokensThenGetAccessToken(
         {
           id: user.id,
           username: user.username,
@@ -122,9 +118,8 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
         tokenRepo,
         reply,
       );
+      return { accessToken };
     }
-
-    return { accessToken };
   });
 };
 
