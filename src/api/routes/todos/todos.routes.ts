@@ -1,10 +1,8 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { roleHook } from '../../hooks/roleHook';
 import z from 'zod';
-import { getAllTodos } from '../../../controllers/todos/getAllTodos';
 import { UUIDGetter } from '../../common/schemas/UUIDGetter';
-import { TodoSchemaResp } from './schemas/getTodoShema';
-import { getTodoById } from '../../../controllers/todos/getTodoById';
+import { getTodoSchema } from './schemas/getTodoShema';
 import { getAllUserTodos } from '../../../controllers/todos/getAllUserTodos';
 import { createTodoSchema } from './schemas/createTodoSchema';
 import { createTodo } from '../../../controllers/todos/createTodo';
@@ -20,57 +18,11 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
 
   f.get(
-    '/admin/',
-    {
-      schema: {
-        response: {
-          200: z.array(TodoSchemaResp),
-        },
-      },
-      preHandler: roleHook([RoleEnum.ADMIN]),
-    },
-    async () => {
-      return await getAllTodos(todoRepo);
-    },
-  );
-  f.get(
-    '/admin/:id',
-    {
-      schema: {
-        params: UUIDGetter,
-        response: {
-          200: TodoSchemaResp,
-        },
-      },
-      preHandler: roleHook([RoleEnum.ADMIN]),
-    },
-    async (req) => {
-      return await getTodoById(todoRepo, req.params.id);
-    },
-  );
-
-  f.get(
-    '/user/admin/:id',
-    {
-      schema: {
-        params: UUIDGetter,
-        response: {
-          200: z.array(TodoSchemaResp),
-        },
-      },
-      preHandler: roleHook([RoleEnum.ADMIN]),
-    },
-    async (req) => {
-      return await getAllUserTodos(todoRepo, req.params.id);
-    },
-  );
-
-  f.get(
     '/user/',
     {
       schema: {
         response: {
-          200: z.array(TodoSchemaResp),
+          200: z.array(getTodoSchema),
         },
       },
     },
@@ -85,7 +37,7 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
       schema: {
         body: createTodoSchema,
         response: {
-          200: TodoSchemaResp,
+          200: getTodoSchema,
         },
       },
     },
@@ -104,7 +56,7 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
         params: UUIDGetter,
         body: updateTodoSchema,
         response: {
-          200: TodoSchemaResp,
+          200: getTodoSchema,
         },
       },
     },

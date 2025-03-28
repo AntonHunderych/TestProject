@@ -21,19 +21,6 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
 
   f.get(
-    '/admin/:id',
-    {
-      schema: {
-        params: UUIDGetter,
-      },
-      preHandler: roleHook([RoleEnum.USER]),
-    },
-    async (req) => {
-      return await workSpaceRepo.getWorkSpaceById(req.params.id);
-    },
-  );
-
-  f.get(
     '/start/:id',
     {
       schema: {
@@ -84,6 +71,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     },
     async (req) => {
       return await createWorkSpaceProcess(
+        f.withTransaction,
         workSpaceRepo,
         workSpaceUserRepo,
         workSpaceRoleRepo,

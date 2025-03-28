@@ -1,5 +1,5 @@
-import { TodoSchemaResp } from '../../../todos/schemas/getTodoShema';
+import { getTodoSchema } from '../../../todos/schemas/getTodoShema';
 
-export const getWorkSpaceTodoSchema = TodoSchemaResp.omit({
+export const getWorkSpaceTodoSchema = getTodoSchema.omit({
   comments: true,
 });

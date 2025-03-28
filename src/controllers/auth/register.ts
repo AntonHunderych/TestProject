@@ -7,8 +7,10 @@ import { HttpError } from '../../api/error/HttpError';
 import { ApplicationError } from '../../types/errors/ApplicationError';
 import { existUser } from '../users/existUser';
 import { IRolesRepo } from '../../repos/roles/roles.repo';
+import { IWithTransaction } from '../../services/withTransaction/IWithTransaction';
 
 export async function register(
+  withTransaction: IWithTransaction,
   userRepo: IUsersRepo,
   userRoleRepo: IUserRoleRepo,
   roleRepo: IRolesRepo,
@@ -26,7 +28,7 @@ export async function register(
   try {
     const { hash, salt } = await crypto.hash(userData.password);
 
-    return await createUser(userRepo, roleRepo, userRoleRepo, {
+    return await createUser(withTransaction, userRepo, roleRepo, userRoleRepo, {
       username: userData.username,
       email: userData.email,
       password: hash,

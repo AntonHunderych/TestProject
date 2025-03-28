@@ -23,17 +23,6 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   f.addHook('preHandler', accessToWorkSpaceHook);
 
   f.get(
-    '/admin/',
-    {
-      schema: {},
-      preHandler: roleHook([RoleEnum.ADMIN]),
-    },
-    async () => {
-      return await workSpaceRolesRepo.getAll();
-    },
-  );
-
-  f.get(
     '/',
     {
       schema: {
@@ -52,7 +41,14 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       },
       preHandler: permissionsAccessHook(Permissions.createRole),
     },
-    async (req) => await createRoleHandler(workSpaceRolesRepo, req.workSpace.id, req.body.name, req.body.permissions),
+    async (req) =>
+      await createRoleHandler(
+        f.withTransaction,
+        workSpaceRolesRepo,
+        req.workSpace.id,
+        req.body.name,
+        req.body.permissions,
+      ),
   );
   f.put(
     '/',

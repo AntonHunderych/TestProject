@@ -3,7 +3,7 @@ import { getCommentSchema } from '../comments/schemas/getCommentSchema';
 import { getTagSchema } from '../tags/schema/getTagSchema';
 import { createRespUserSchema } from '../../users/schemas/createRespUserSchema';
 
-export const TodoSchemaResp = z.object({
+export const getTodoSchema = z.object({
   id: z.string().uuid().min(1),
   title: z.string().min(1),
   description: z.string().optional().nullable(),

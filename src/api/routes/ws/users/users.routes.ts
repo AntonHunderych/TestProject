@@ -15,24 +15,10 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
 
   const workSpaceUserRepo = f.repos.workSpaceUserRepo;
-  const workSpaceUserRoleRepo = f.repos.workSpaceUserRoleRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
-
-  f.get(
-    '/admin/roles/:id',
-    {
-      schema: {
-        params: UUIDGetter,
-      },
-      preHandler: [dataFetchHook, roleHook([RoleEnum.ADMIN])],
-    },
-    async (req) => {
-      return await workSpaceUserRoleRepo.getAllUserRoles(req.params.id, req.workSpace.id);
-    },
-  );
 
   f.get(
     '/workSpaces/',

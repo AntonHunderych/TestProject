@@ -7,8 +7,10 @@ import { ITokenRepo } from '../../repos/token/token.repo';
 import { FastifyReply } from 'fastify';
 import { generateTokensThenGetAccessToken } from './generateTokensThenGetAccessToken';
 import { IRolesRepo } from '../../repos/roles/roles.repo';
+import { IWithTransaction } from '../../services/withTransaction/IWithTransaction';
 
 export async function registrationProcess(
+  withTransaction: IWithTransaction,
   userRepo: IUsersRepo,
   userRoleRepo: IUserRoleRepo,
   tokenRepo: ITokenRepo,
@@ -22,7 +24,7 @@ export async function registrationProcess(
   },
   reply: FastifyReply,
 ): Promise<string> {
-  const user = await register(userRepo, userRoleRepo, roleRepo, crypto, registrationData);
+  const user = await register(withTransaction, userRepo, userRoleRepo, roleRepo, crypto, registrationData);
   return await generateTokensThenGetAccessToken(
     { id: user.id, username: user.username, email: user.email },
     jwt,

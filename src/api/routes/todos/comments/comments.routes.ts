@@ -10,45 +10,12 @@ import { updateComment } from '../../../../controllers/comments/updateComment';
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { RoleEnum } from '../../../../types/enum/RoleEnum';
 import { roleHook } from '../../../hooks/roleHook';
-import { getAllComments } from '../../../../controllers/comments/getAllComment';
-import { getCommentById } from '../../../../controllers/comments/getCommentById';
 
 export const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const commentsRepo = fastify.repos.commentRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
-
-  f.get(
-    '/admin/',
-    {
-      schema: {
-        response: {
-          200: z.array(getCommentSchema),
-        },
-      },
-      preHandler: roleHook([RoleEnum.ADMIN]),
-    },
-    async () => {
-      return await getAllComments(commentsRepo);
-    },
-  );
-
-  f.get(
-    '/admin/:id',
-    {
-      schema: {
-        params: UUIDGetter,
-        response: {
-          200: getCommentSchema,
-        },
-        preHandler: roleHook([RoleEnum.ADMIN]),
-      },
-    },
-    async (req) => {
-      return await getCommentById(commentsRepo, req.params.id);
-    },
-  );
 
   f.get(
     '/:todoID',

@@ -2,7 +2,7 @@ import fastify, { FastifyInstance } from 'fastify';
 import fastifyAutoload from '@fastify/autoload';
 import { join } from 'node:path';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
-import { initDB } from '../services/typeorm/data-sourse';
+import { initDB, pgDataSource } from '../services/typeorm/data-sourse';
 import getRepos, { IRepos } from '../repos';
 import getCryptoService from '../services/crypto/myCrypto';
 import ICrypto from '../services/crypto/ICrypto';
@@ -17,6 +17,8 @@ import { OAuth2Namespace } from '@fastify/oauth2';
 import fastifyCookie from '@fastify/cookie';
 import { errorHandler } from './error/errorHandler';
 import cors from '@fastify/cors';
+import { getWithTransaction } from '../services/withTransaction/withTransaction';
+import { IWithTransaction } from '../services/withTransaction/IWithTransaction';
 
 dotenv.config();
 
@@ -25,6 +27,7 @@ declare module 'fastify' {
     googleOAuth2: OAuth2Namespace;
     repos: IRepos;
     crypto: ICrypto;
+    withTransaction: IWithTransaction;
     getUserDataFromJWT: (req: FastifyRequest) => { id: string; username: string; email: string };
   }
 
@@ -121,6 +124,7 @@ async function run() {
   f.decorate('repos', getRepos(await initDB()));
   f.decorate('crypto', getCryptoService());
   f.decorate('getUserDataFromJWT', getUserDataFromJWT);
+  f.decorate('withTransaction', getWithTransaction(pgDataSource));
 
   f.setValidatorCompiler(validatorCompiler);
   f.setSerializerCompiler(serializerCompiler);

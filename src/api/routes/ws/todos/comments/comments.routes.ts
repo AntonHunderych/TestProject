@@ -20,22 +20,6 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   f.addHook('preHandler', accessToWorkSpaceHook);
 
   f.get(
-    '/admin/:id',
-    {
-      schema: {
-        params: UUIDGetter,
-        response: {
-          200: getWorkSpaceCommentSchema,
-        },
-      },
-      preHandler: roleHook([RoleEnum.ADMIN]),
-    },
-    async (req) => {
-      return await workSpaceCommentRepos.getCommentById(req.params.id);
-    },
-  );
-
-  f.get(
     '/:id',
     {
       schema: {

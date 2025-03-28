@@ -29,7 +29,9 @@ export function getUserRepo(db: DataSource | EntityManager): IUsersRepo {
         return await _usersRepo.findOneOrFail({
           where: { id },
           relations: {
-            todos: true,
+            todos: { tags: { tag: true } },
+            tags: true,
+            wsUsers: { workSpace: true },
           },
         });
       } catch (error) {

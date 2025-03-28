@@ -35,6 +35,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     },
     async (req, reply) => {
       const accessToken = await registrationProcess(
+        f.withTransaction,
         userRepo,
         userRoleRepo,
         tokenRepo,
@@ -94,6 +95,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     const user = await existUser(userRepo, googleUser.email);
     if (!user) {
       const accessToken = await registrationProcess(
+        f.withTransaction,
         userRepo,
         userRoleRepo,
         tokenRepo,

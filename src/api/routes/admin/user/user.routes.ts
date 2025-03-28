@@ -1,18 +1,16 @@
-import { createUserSchema } from './schemas/createUserSchema';
-import { getUsersRespSchema } from './schemas/getUsersSchema';
-import { UUIDGetter } from '../../common/schemas/UUIDGetter';
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
-import createUser from '../../../controllers/users/createUser';
-import getUserById from '../../../controllers/users/getUser';
-import deleteUser from '../../../controllers/users/deleteUser';
-import updateUser from '../../../controllers/users/updateUser';
-import getAllUsers from '../../../controllers/users/getUsers';
-import { deleteRespUserSchema } from './schemas/deleteRespUserSchema';
-import { updateUserSchema } from './schemas/updateUserSchema';
-import { roleHook } from '../../hooks/roleHook';
-import { RoleEnum } from '../../../types/enum/RoleEnum';
-import { createRespUserSchema } from './schemas/createRespUserSchema';
-import { getUserDataSchema } from './schemas/getUserDataSchema';
+import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { roleHook } from '../../../hooks/roleHook';
+import { getUsersRespSchema } from '../../users/schemas/getUsersSchema';
+import getAllUsers from '../../../../controllers/users/getUsers';
+import { createUserSchema } from '../../users/schemas/createUserSchema';
+import { createRespUserSchema } from '../../users/schemas/createRespUserSchema';
+import createUser from '../../../../controllers/users/createUser';
+import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
+import { deleteRespUserSchema } from '../../users/schemas/deleteRespUserSchema';
+import deleteUser from '../../../../controllers/users/deleteUser';
+import { updateUserSchema } from '../../users/schemas/updateUserSchema';
+import updateUser from '../../../../controllers/users/updateUser';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -20,17 +18,16 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const userRoleRepo = f.repos.userRoleRepo;
   const roleRepo = f.repos.roleRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([RoleEnum.ADMIN]));
 
   f.get(
-    '/admin/',
+    '/',
     {
       schema: {
         response: {
           200: getUsersRespSchema,
         },
       },
-      preHandler: roleHook([RoleEnum.ADMIN]),
     },
     async () => {
       const users = await getAllUsers(userRepo);
@@ -41,20 +38,8 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     },
   );
 
-  f.get(
-    '/me',
-    {
-      schema: {
-        response: {
-          200: getUserDataSchema,
-        },
-      },
-    },
-    async (req) => await getUserById(userRepo, req.userData.id),
-  );
-
   f.post(
-    '/admin/',
+    '/',
     {
       schema: {
         body: createUserSchema,
@@ -73,7 +58,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   );
 
   f.delete(
-    '/admin/:id',
+    '/:id',
     {
       schema: {
         params: UUIDGetter,
@@ -87,7 +72,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   );
 
   f.put(
-    '/admin/:id',
+    '/:id',
     {
       schema: {
         params: UUIDGetter,

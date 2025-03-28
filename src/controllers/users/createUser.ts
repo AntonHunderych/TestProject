@@ -1,12 +1,13 @@
 import { IUsersRepo } from '../../repos/users/users.repo';
 import { IUserRoleRepo } from '../../repos/userRole/userRole.repo';
-import { withTransaction } from '../../services/typeorm/withTransaction';
 import { giveDefaultRoleToUser } from '../userRole/giveDefaultRoleToUser';
 import { User } from '../../types/entities/UserSchema';
 import { IRolesRepo } from '../../repos/roles/roles.repo';
 import { TCreateUserInput } from '../../types/controllers/TCreateUserInput';
+import { IWithTransaction } from '../../services/withTransaction/IWithTransaction';
 
 export default async function createUser(
+  withTransaction: IWithTransaction,
   userRepo: IUsersRepo,
   roleRepo: IRolesRepo,
   userRoleRepo: IUserRoleRepo,

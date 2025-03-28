@@ -5,12 +5,13 @@ import { addStandardRoleToWorkSpace } from './roles/addStandardRoleToWorkSpace';
 import { addWorkSpaceRoleToUser } from './roles/giveWorkSpaceRoleToUser';
 import { IWorkSpaceRolesRepo } from '../../repos/workspace/roles/workSpaceRoles.repo';
 import { IWorkSpaceUserRoleRepo } from '../../repos/workspace/userRole/workSpaceUserRole.repo';
-import { withTransaction } from '../../services/typeorm/withTransaction';
 import { createWorkSpace } from './createWorkSpace';
 import { addUserToWorkSpace } from './users/addUserToWorkSpace';
+import { IWithTransaction } from '../../services/withTransaction/IWithTransaction';
 import { EDefaultRolesInWorkSpace } from '../../types/enum/EDefaultRolesInWorkSpace';
 
 export async function createWorkSpaceProcess(
+  withTransaction: IWithTransaction,
   workSpaceRepo: IWorkSpaceRepos,
   workSpaceUserRepo: IWorkSpaceUserRepo,
   workSpaceRoleRepo: IWorkSpaceRolesRepo,
