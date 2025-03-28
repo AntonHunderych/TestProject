@@ -2,7 +2,7 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import { roleHook } from '../../hooks/roleHook';
 import z from 'zod';
 import { getAllTodos } from '../../../controllers/todos/getAllTodos';
-import { UUIDGetter } from '../schemas/UUIDGetter';
+import { UUIDGetter } from '../../common/schemas/UUIDGetter';
 import { TodoSchemaResp } from './schemas/getTodoShema';
 import { getTodoById } from '../../../controllers/todos/getTodoById';
 import { getAllUserTodos } from '../../../controllers/todos/getAllUserTodos';

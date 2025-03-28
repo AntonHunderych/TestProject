@@ -1,5 +1,7 @@
 import { IWorkSpaceRolesRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
 import { Permissions } from '../../../types/enum/PermisionsEnum';
+import { createRole } from './createRole';
+import { updatePermissionOnRole } from './updatePermissionOnRole';
 
 const rolePermissions: Record<string, Permissions[]> = {
   Creator: [
@@ -58,11 +60,11 @@ export async function addStandardRoleToWorkSpace(
   workSpaceRoleRepo: IWorkSpaceRolesRepo,
   workSpaceId: string,
 ): Promise<void> {
-  await workSpaceRoleRepo.create(workSpaceId, 'Creator');
-  await workSpaceRoleRepo.create(workSpaceId, 'User');
-  await workSpaceRoleRepo.create(workSpaceId, 'Visitor');
+  await createRole(workSpaceRoleRepo, workSpaceId, 'Creator');
+  await createRole(workSpaceRoleRepo, workSpaceId, 'User');
+  await createRole(workSpaceRoleRepo, workSpaceId, 'Visitor');
 
   for (const [role, permissions] of Object.entries(rolePermissions)) {
-    await workSpaceRoleRepo.updatePermissionOnRole(workSpaceId, role, permissions);
+    await updatePermissionOnRole(workSpaceRoleRepo, workSpaceId, role, permissions);
   }
 }

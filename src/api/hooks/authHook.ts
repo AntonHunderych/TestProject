@@ -6,7 +6,7 @@ export const authHook: preHandlerAsyncHookHandler = async function (request: Fas
       return;
     }
 
-    const token = request.headers.authorization?.split(' ')[1]; // Bearer <token>
+    const token = request.headers.authorization?.split(' ')[1];
 
     if (!token) {
       reply.status(401).send({ message: 'Token is required' });

@@ -42,6 +42,6 @@ export class User {
   @OneToMany(() => Category, (category) => category.user)
   categories: Category[];
 
-  @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.user, { cascade: ['remove'] })
+  @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.user)
   wsUsers: WorkSpaceUser[];
 }

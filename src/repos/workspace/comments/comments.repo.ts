@@ -17,7 +17,6 @@ export function getWorkSpaceCommentRepos(db: DataSource | EntityManager): IWorkS
   return {
     async createComment(commentData: Partial<WorkSpaceComment>): Promise<WorkSpaceComment> {
       try {
-        console.log(commentData);
         return await commentRepo.save(commentData);
       } catch (error) {
         throw new DBError('Error creating comment', error);

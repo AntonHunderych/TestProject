@@ -5,7 +5,7 @@ import z from 'zod';
 import { getTagSchema } from './schema/getTagSchema';
 import { createTagSchema } from './schema/createTagSchema';
 import { addRemoveTagSchema } from './schema/addRemoveTagSchema';
-import { UUIDGetter } from '../../schemas/UUIDGetter';
+import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 import { getTags } from '../../../../controllers/tags/getTags';
 import { createTag } from '../../../../controllers/tags/createTag';
 import { deleteTag } from '../../../../controllers/tags/deleteTag';

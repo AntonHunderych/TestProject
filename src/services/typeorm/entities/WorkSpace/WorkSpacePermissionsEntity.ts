@@ -1,7 +1,7 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { WorkSpaceRoles } from './WorkSpaceRolesEntity';
 
-@Entity()
+@Entity({ name: 'workSpacePermissions' })
 export class WorkSpacePermissions {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -10,6 +10,8 @@ export class WorkSpacePermissions {
   value: string;
 
   @ManyToMany(() => WorkSpaceRoles, (workSpaceRoles) => workSpaceRoles.permissions)
-  @JoinTable()
+  @JoinTable({
+    name: 'workSpaceRolePermission',
+  })
   roles: WorkSpaceRoles[];
 }

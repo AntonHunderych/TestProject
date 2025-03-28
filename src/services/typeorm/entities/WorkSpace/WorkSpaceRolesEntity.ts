@@ -3,7 +3,7 @@ import { WorkSpace } from './WorkSpaceEntity';
 import { WorkSpaceUser } from './WorkSpaceUserEntity';
 import { WorkSpacePermissions } from './WorkSpacePermissionsEntity';
 
-@Entity()
+@Entity({ name: 'workSpaceRoles' })
 @Unique(['workSpaceId', 'name'])
 export class WorkSpaceRoles {
   @PrimaryGeneratedColumn('uuid')
@@ -19,10 +19,11 @@ export class WorkSpaceRoles {
   workSpace: WorkSpace;
 
   @ManyToMany(() => WorkSpaceUser, (workSpace) => workSpace.roles)
-  @JoinTable()
+  @JoinTable({
+    name: 'workSpaceUserRole',
+  })
   workSpaceUsers: WorkSpaceUser[];
 
   @ManyToMany(() => WorkSpacePermissions, (workSpacePermissions) => workSpacePermissions.roles)
-  @JoinTable()
   permissions: WorkSpacePermissions[];
 }

@@ -1,20 +1,21 @@
 import { Permissions } from '../../../types/enum/PermisionsEnum';
 import { WorkSpaceRoles } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
 import { IWorkSpaceRolesRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
-import { FastifyReply } from 'fastify';
+import { withTransaction } from '../../../services/typeorm/withTransaction';
 
 export async function createRoleHandler(
   workSpaceRoleRepo: IWorkSpaceRolesRepo,
   workSpaceId: string,
   roleName: string,
   permissions: Permissions[],
-  reply: FastifyReply,
 ): Promise<WorkSpaceRoles> {
-  try {
-    await workSpaceRoleRepo.create(workSpaceId, roleName);
-    return await workSpaceRoleRepo.updatePermissionOnRole(workSpaceId, roleName, permissions);
-  } catch (e) {
-    reply.status(400).send({ error: e });
-    throw e;
-  }
+  return await withTransaction(
+    {
+      workSpaceRoleRepo,
+    },
+    async (repos) => {
+      await repos.workSpaceRoleRepo.create(workSpaceId, roleName);
+      return await repos.workSpaceRoleRepo.updatePermissionOnRole(workSpaceId, roleName, permissions);
+    },
+  );
 }

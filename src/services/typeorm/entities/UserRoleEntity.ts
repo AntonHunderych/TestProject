@@ -2,7 +2,7 @@ import { Entity, ManyToOne, PrimaryColumn, Unique } from 'typeorm';
 import { Role } from './RoleEntity';
 import { User } from './UserEntity';
 
-@Entity({ name: 'UserRole' })
+@Entity({ name: 'userRole' })
 @Unique(['userId', 'roleId'])
 export class UserRole {
   @PrimaryColumn()
@@ -11,9 +11,9 @@ export class UserRole {
   @PrimaryColumn()
   roleId: string;
 
-  @ManyToOne(() => Role, (role) => role.users)
+  @ManyToOne(() => Role, (role) => role.users, { onDelete: 'CASCADE' })
   role: Role;
 
-  @ManyToOne(() => User, (user) => user.roles)
+  @ManyToOne(() => User, (user) => user.roles, { onDelete: 'CASCADE' })
   user: User;
 }

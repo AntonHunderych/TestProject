@@ -4,7 +4,7 @@ import { WorkSpaceUser } from './WorkSpaceUserEntity';
 import { WorkSpace } from './WorkSpaceEntity';
 import { BasicTag } from '../BasicTagEntity';
 
-@Entity()
+@Entity({ name: 'workSpaceTag' })
 export class WorkSpaceTag extends BasicTag {
   @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.workSpaceTodo)
   @JoinColumn({ name: 'todoId' })
@@ -28,7 +28,7 @@ export class WorkSpaceTag extends BasicTag {
   workSpace: WorkSpace;
 }
 
-@Entity()
+@Entity({ name: 'workSpaceTagTodo' })
 @Unique(['todoId', 'tagId'])
 export class WorkSpaceTagTodo {
   @PrimaryColumn()

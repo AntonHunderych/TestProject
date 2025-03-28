@@ -3,7 +3,7 @@ import { roleHook } from '../../../../hooks/roleHook';
 import { RoleEnum } from '../../../../../types/enum/RoleEnum';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
-import { UUIDGetter } from '../../../schemas/UUIDGetter';
+import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
 import { addDeleteContributorSchema } from './schema/addDeleteContributorSchema';
 import { permissionsAccessHook } from '../../hooks/permissionsAccessHook';
 import { Permissions } from '../../../../../types/enum/PermisionsEnum';

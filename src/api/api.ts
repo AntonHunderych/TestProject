@@ -34,11 +34,11 @@ declare module 'fastify' {
       id: string;
       username: string;
       email: string;
-      isAdmin: boolean;
     };
     workSpace: {
       id: string;
     };
+    isAdmin: boolean;
   }
 }
 
@@ -50,7 +50,18 @@ function setupSwagger(f: FastifyInstance) {
         description: 'Sample backend service',
         version: '1.0.0',
       },
-      servers: [{ url: 'http://127.0.0.1:3000', description: 'Local server' }],
+      servers: [],
+      security: [{ auth: [] }],
+      components: {
+        securitySchemes: {
+          auth: {
+            description: 'Authorization header token, sample: "Bearer {TOKEN}"',
+            type: 'apiKey',
+            name: 'authorization',
+            in: 'header',
+          },
+        },
+      },
     },
     transform: jsonSchemaTransform,
   });
@@ -139,9 +150,9 @@ async function run() {
     },
     (err) => {
       if (err) {
-        console.log(err);
+        f.log.error(err);
       }
-      console.log('Server started on port 3000');
+      f.log.info('Server started on port 3000');
     },
   );
 

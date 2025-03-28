@@ -1,4 +1,4 @@
-import { UUIDGetter } from '../../schemas/UUIDGetter';
+import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 import z from 'zod';
 import { getTodoComments } from '../../../../controllers/comments/getTodoComments';
 import { createCommentSchema } from './schemas/createCommentSchema';

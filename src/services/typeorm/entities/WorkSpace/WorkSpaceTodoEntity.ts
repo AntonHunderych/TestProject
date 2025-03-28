@@ -7,7 +7,7 @@ import { WorkSpaceCategoryConf } from './WorkSpaceCategoryEntity';
 import { WorkSpaceCommand } from './WorkSpaceCommandEntity';
 import { BasicTodo } from '../BasicTodoEntity';
 
-@Entity()
+@Entity({ name: 'workSpaceTodo' })
 export class WorkSpaceTodo extends BasicTodo {
   @Column({ name: 'workSpaceId' })
   workSpaceId: string;
@@ -24,7 +24,9 @@ export class WorkSpaceTodo extends BasicTodo {
   creator: WorkSpaceUser;
 
   @ManyToMany(() => WorkSpaceUser, (workSpaceUser) => workSpaceUser.contributedTodos)
-  @JoinTable()
+  @JoinTable({
+    name: 'workSpaceUserTodo',
+  })
   contributors: WorkSpaceUser[];
 
   @OneToMany(() => WorkSpaceComment, (workSpaceComment) => workSpaceComment.todo, { cascade: ['remove'] })

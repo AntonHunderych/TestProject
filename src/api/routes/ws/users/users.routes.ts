@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from 'zod';
-import { UUIDGetter } from '../../schemas/UUIDGetter';
+import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { roleHook } from '../../../hooks/roleHook';
 import { RoleEnum } from '../../../../types/enum/RoleEnum';

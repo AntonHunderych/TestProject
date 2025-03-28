@@ -7,7 +7,7 @@ import { TodoTag } from './TodoTagEntity';
 
 @Entity()
 export class Todo extends BasicTodo {
-  @ManyToOne(() => User, (user) => user.todos)
+  @ManyToOne(() => User, (user) => user.todos, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
@@ -17,6 +17,6 @@ export class Todo extends BasicTodo {
   @OneToMany(() => TodoTag, (tag) => tag.todo)
   tags: TodoTag[];
 
-  @ManyToOne(() => Category, (category) => category.todos)
+  @ManyToOne(() => Category, (category) => category.todos, { onDelete: 'SET NULL' })
   category: Category;
 }

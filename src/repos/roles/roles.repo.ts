@@ -37,12 +37,8 @@ export default function getRolesRepo(db: DataSource | EntityManager): IRolesRepo
     },
     deleteRole: async (value: string): Promise<boolean> => {
       try {
-        const role = await roleRepo.findOne({ where: { value } });
-        if (!role) {
-          return false;
-        }
-        await roleRepo.remove(role);
-        return true;
+        const role = await roleRepo.findOneOrFail({ where: { value } });
+        return !!(await roleRepo.remove(role));
       } catch (error) {
         throw new DBError('Error deleting role', error);
       }

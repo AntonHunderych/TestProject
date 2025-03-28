@@ -1,6 +1,6 @@
 import { createUserSchema } from './schemas/createUserSchema';
 import { getUsersRespSchema } from './schemas/getUsersSchema';
-import { UUIDGetter } from '../schemas/UUIDGetter';
+import { UUIDGetter } from '../../common/schemas/UUIDGetter';
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import createUser from '../../../controllers/users/createUser';
 import getUserById from '../../../controllers/users/getUser';

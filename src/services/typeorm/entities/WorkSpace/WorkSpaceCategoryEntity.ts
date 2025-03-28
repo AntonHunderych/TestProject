@@ -4,7 +4,7 @@ import { WorkSpaceUser } from './WorkSpaceUserEntity';
 import { WorkSpace } from './WorkSpaceEntity';
 import { BasicCategory } from '../BasicCategoryEntity';
 
-@Entity()
+@Entity({ name: 'workSpaceCategory' })
 export class WorkSpaceCategory extends BasicCategory {
   @OneToMany(() => WorkSpaceCategoryConf, (workSpaceCategoryTodo) => workSpaceCategoryTodo.todos)
   todos: WorkSpaceTodo[];
@@ -30,7 +30,7 @@ export class WorkSpaceCategory extends BasicCategory {
   workSpace: WorkSpace;
 }
 
-@Entity()
+@Entity({ name: 'workSpaceTodoCategory' })
 export class WorkSpaceCategoryConf {
   @PrimaryColumn({ unique: true })
   todoId: string;

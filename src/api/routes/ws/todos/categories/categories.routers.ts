@@ -4,7 +4,7 @@ import z from 'zod';
 import { roleHook } from '../../../../hooks/roleHook';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
-import { UUIDGetter } from '../../../schemas/UUIDGetter';
+import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
 import { RoleEnum } from '../../../../../types/enum/RoleEnum';
 
 const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {

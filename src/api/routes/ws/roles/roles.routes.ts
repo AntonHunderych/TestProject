@@ -11,6 +11,7 @@ import { deleteWorkSpaceRoleSchema } from './schema/deleteWorkSpaceRoleSchema';
 import { FastifyInstance } from 'fastify';
 import { RoleEnum } from '../../../../types/enum/RoleEnum';
 import { Permissions } from '../../../../types/enum/PermisionsEnum';
+import { updatePermissionOnRole } from '../../../../controllers/ws/roles/updatePermissionOnRole';
 
 const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -51,8 +52,7 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       },
       preHandler: permissionsAccessHook(Permissions.createRole),
     },
-    async (req, res) =>
-      await createRoleHandler(workSpaceRolesRepo, req.workSpace.id, req.body.name, req.body.permissions, res),
+    async (req) => await createRoleHandler(workSpaceRolesRepo, req.workSpace.id, req.body.name, req.body.permissions),
   );
   f.put(
     '/',
@@ -64,7 +64,7 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       preHandler: permissionsAccessHook(Permissions.updateRole),
     },
     async (req) =>
-      await workSpaceRolesRepo.updatePermissionOnRole(req.workSpace.id, req.body.name, req.body.permissions),
+      await updatePermissionOnRole(workSpaceRolesRepo, req.workSpace.id, req.body.name, req.body.permissions),
   );
   f.delete(
     '/',

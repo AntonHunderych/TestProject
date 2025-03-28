@@ -3,7 +3,7 @@ import { preHandlerAsyncHookHandler } from 'fastify';
 
 export function permissionsAccessHook(requiredPermissions: Permissions): preHandlerAsyncHookHandler {
   return async function (req, res) {
-    if (req.userData.isAdmin) {
+    if (req.isAdmin) {
       return;
     }
 
@@ -13,8 +13,6 @@ export function permissionsAccessHook(requiredPermissions: Permissions): preHand
     const userPermissions: string[] = userRoleInWorkSpace.flatMap((role) =>
       role.permissions.map((permission) => permission.value),
     );
-
-    console.log(userPermissions);
 
     if (!userPermissions.includes(requiredPermissions)) {
       return res.status(400).send({ message: 'You dont have requiredPermissions!' });

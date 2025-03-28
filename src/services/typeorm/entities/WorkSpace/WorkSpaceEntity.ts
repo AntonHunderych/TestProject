@@ -5,7 +5,7 @@ import { WorkSpaceRoles } from './WorkSpaceRolesEntity';
 import { WorkSpaceTag } from './WorkSpaceTagEntity';
 import { WorkSpaceCommand } from './WorkSpaceCommandEntity';
 
-@Entity()
+@Entity({ name: 'workSpace' })
 @Unique(['name', 'creatorId'])
 export class WorkSpace {
   @PrimaryGeneratedColumn('uuid')

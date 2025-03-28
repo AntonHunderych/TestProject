@@ -41,7 +41,7 @@
     "object-curly-spacing": ["error", "always"],
     "curly": "error",
     "no-async-promise-executor": ["error"],
-    //"no-console": "error",
+    "no-console": "error",
     //"semi": "error",
     //"comma-dangle": "error",
     "object-shorthand": ["error", "always"],

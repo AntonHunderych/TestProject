@@ -6,7 +6,7 @@ import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { getTagSchema } from '../../../todos/tags/schema/getTagSchema';
 import { createTagSchema } from '../../../todos/tags/schema/createTagSchema';
-import { UUIDGetter } from '../../../schemas/UUIDGetter';
+import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
 import { addRemoveTagSchema } from '../../../todos/tags/schema/addRemoveTagSchema';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {

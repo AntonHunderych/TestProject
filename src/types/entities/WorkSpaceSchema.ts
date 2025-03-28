@@ -7,4 +7,4 @@ export const WorkSpaceSchema = z.object({
   creatorId: z.string().min(1),
 });
 
-export type IWorkspace = z.infer<typeof WorkSpaceSchema>;
+export type IWorkSpace = z.infer<typeof WorkSpaceSchema>;

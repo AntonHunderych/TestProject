@@ -3,7 +3,7 @@ import { WorkSpaceUser } from './WorkSpaceUserEntity';
 import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
 import { WorkSpace } from './WorkSpaceEntity';
 
-@Entity()
+@Entity({ name: 'workSpaceCommand' })
 export class WorkSpaceCommand {
   @PrimaryColumn()
   workSpaceId: string;
@@ -12,7 +12,9 @@ export class WorkSpaceCommand {
   value: string;
 
   @ManyToMany(() => WorkSpaceUser, (workSpaceUser) => workSpaceUser.commands)
-  @JoinTable()
+  @JoinTable({
+    name: 'workSpaceUserCommand',
+  })
   users: WorkSpaceUser[];
 
   @OneToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.command)

@@ -14,7 +14,7 @@ const plugin: FastifyPluginAsync = async function (fastify) {
 
   fastify.addHook('onSend', async (request) => {
     const responseTime = Date.now() - request.starTimeMS;
-    console.log(`[${request.method}] ${request.url} - ${responseTime}ms`);
+    fastify.log.info(`[${request.method}] ${request.url} - ${responseTime}ms`);
   });
 };
 

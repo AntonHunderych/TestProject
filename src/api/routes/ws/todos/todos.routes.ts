@@ -6,7 +6,7 @@ import { Permissions } from '../../../../types/enum/PermisionsEnum';
 import { createTodoSchema } from '../../todos/schemas/createTodoSchema';
 import { roleHook } from '../../../hooks/roleHook';
 import { RoleEnum } from '../../../../types/enum/RoleEnum';
-import { UUIDGetter } from '../../schemas/UUIDGetter';
+import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 import z from 'zod';
 import { filterEntityByUserCommand } from '../hooks/filterEntityByUserCommand';
 import { WorkSpaceTodo } from '../../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';

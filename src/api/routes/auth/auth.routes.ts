@@ -4,7 +4,7 @@ import { login } from '../../../controllers/auth/login';
 import { tokenResponseSchema } from './schemas/tokenResponseSchema';
 import { skipAuthHook } from '../../hooks/skipAuthHook';
 import { refreshToken } from '../../../controllers/auth/refreshToken';
-import { ErrorSchema } from '../schemas/ErrorSchema';
+import { ErrorSchema } from '../../common/schemas/ErrorSchema';
 import { registerSchema } from './schemas/registerSchema';
 import { HttpError } from '../../error/HttpError';
 import { registrationProcess } from '../../../controllers/auth/registrationProcess';

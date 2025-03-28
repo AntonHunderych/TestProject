@@ -5,11 +5,11 @@ import { BasicComment } from './BasicCommentEntity';
 
 @Entity()
 export class Comment extends BasicComment {
-  @ManyToOne(() => User, (user) => user.comments)
+  @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'authorId' })
   author: User;
 
-  @ManyToOne(() => Todo, (todo) => todo.comments)
+  @ManyToOne(() => Todo, (todo) => todo.comments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'todoId' })
   todo: Todo;
 }

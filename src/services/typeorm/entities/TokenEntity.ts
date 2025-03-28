@@ -9,9 +9,9 @@ export class Token {
   @Column()
   value: string;
 
-  @Column()
+  @Column({ unique: true })
   userId: string;
 
-  @OneToOne(() => User, (user) => user.token)
+  @OneToOne(() => User, (user) => user.token, { onDelete: 'CASCADE' })
   user: User;
 }

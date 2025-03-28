@@ -3,7 +3,7 @@ import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
 import { WorkSpaceUser } from './WorkSpaceUserEntity';
 import { BasicComment } from '../BasicCommentEntity';
 
-@Entity()
+@Entity({ name: 'workSpaceComment' })
 export class WorkSpaceComment extends BasicComment {
   @Column()
   workSpaceId: string;

@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest, preHandlerAsyncHookHandler } from 'fastif
 
 export function accessToWorkSpaceHookArgWorkSpaceId(workSpaceId: string): preHandlerAsyncHookHandler {
   return async function (request: FastifyRequest, reply: FastifyReply) {
-    if (request.userData.isAdmin) {
+    if (request.isAdmin) {
       return;
     }
 

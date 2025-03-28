@@ -11,7 +11,7 @@ export class Category extends BasicCategory {
   @Column()
   userId: string;
 
-  @ManyToOne(() => User, (user) => user.tags)
+  @ManyToOne(() => User, (user) => user.tags, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
 }

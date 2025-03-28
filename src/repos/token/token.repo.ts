@@ -8,7 +8,7 @@ export interface ITokenRepo extends IRecreateRepo {
 
   deleteRefreshToken(userId: string): Promise<void>;
 
-  findTokenById(value: string): Promise<Token>;
+  findTokenByValue(value: string): Promise<Token>;
 }
 
 export function getTokenRepo(db: DataSource | EntityManager): ITokenRepo {
@@ -17,7 +17,7 @@ export function getTokenRepo(db: DataSource | EntityManager): ITokenRepo {
   return {
     async saveRefreshToken(userId: string, value: string): Promise<void> {
       try {
-        await tokenRepo.save({ userId, value });
+        await tokenRepo.upsert({ userId, value }, { conflictPaths: ['userId'] });
       } catch (error) {
         throw new DBError('Failed to create refresh token', error);
       }
@@ -29,7 +29,7 @@ export function getTokenRepo(db: DataSource | EntityManager): ITokenRepo {
         throw new DBError('Failed to delete refresh token', error);
       }
     },
-    async findTokenById(value: string): Promise<Token> {
+    async findTokenByValue(value: string): Promise<Token> {
       try {
         return await tokenRepo.findOneOrFail({ where: { value } });
       } catch (error) {

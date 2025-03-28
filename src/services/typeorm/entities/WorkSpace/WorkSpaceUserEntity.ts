@@ -7,7 +7,7 @@ import { WorkSpaceComment } from './WorkSpaceCommentEntity';
 import { WorkSpaceTag, WorkSpaceTagTodo } from './WorkSpaceTagEntity';
 import { WorkSpaceCommand } from './WorkSpaceCommandEntity';
 
-@Entity()
+@Entity({ name: 'workSpaceUser' })
 @Unique(['userId', 'workSpaceId'])
 export class WorkSpaceUser {
   @PrimaryColumn('uuid')

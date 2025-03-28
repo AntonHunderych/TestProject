@@ -4,17 +4,13 @@ import { ApplicationError } from '../../types/errors/ApplicationError';
 
 export async function refreshToken(refreshToken: string, jwt: JWT, tokenRepo: ITokenRepo): Promise<{ token: string }> {
   try {
-    const refreshTokenDB = await tokenRepo.findTokenById(refreshToken);
-    const userData = jwt.verify(refreshTokenDB.value) as { id: string; email: string; username: string };
-    if (refreshTokenDB.id !== userData.id) {
+    const refreshTokenDB = await tokenRepo.findTokenByValue(refreshToken);
+    const userData = jwt.verify(refreshToken) as { id: string; email: string; username: string };
+    if (refreshTokenDB.userId !== userData.id) {
       throw new Error('Invalid refresh token');
     }
     return {
-      token: jwt.sign({
-        id: userData.id,
-        email: userData.email,
-        username: userData.username,
-      }),
+      token: jwt.sign(userData),
     };
   } catch (error) {
     throw new ApplicationError('Error by refreshing token', error);
