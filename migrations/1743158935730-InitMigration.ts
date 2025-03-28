@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitMigration1743071291391 implements MigrationInterface {
-  name = 'InitMigration1743071291391';
+export class InitMigration1743158935730 implements MigrationInterface {
+  name = 'InitMigration1743158935730';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       'CREATE TABLE "comment" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "text" character varying NOT NULL, "authorId" uuid NOT NULL, "todoId" uuid NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_0b0e4bbc8415ec426f87f3a88e2" PRIMARY KEY ("id"))',
@@ -52,7 +52,7 @@ export class InitMigration1743071291391 implements MigrationInterface {
       'CREATE TABLE "workSpaceUser" ("userId" uuid NOT NULL, "workSpaceId" uuid NOT NULL, CONSTRAINT "UQ_8d906516e9e3c54ed5a535f64c4" UNIQUE ("userId", "workSpaceId"), CONSTRAINT "PK_8d906516e9e3c54ed5a535f64c4" PRIMARY KEY ("userId", "workSpaceId"))',
     );
     await queryRunner.query(
-      'CREATE TABLE "token" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "value" character varying NOT NULL, "userId" character varying NOT NULL, CONSTRAINT "PK_82fae97f905930df5d62a702fc9" PRIMARY KEY ("id"))',
+      'CREATE TABLE "token" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "value" character varying NOT NULL, "userId" character varying NOT NULL, CONSTRAINT "UQ_94f168faad896c0786646fa3d4a" UNIQUE ("userId"), CONSTRAINT "PK_82fae97f905930df5d62a702fc9" PRIMARY KEY ("id"))',
     );
     await queryRunner.query(
       'CREATE TABLE "role" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "value" character varying NOT NULL, "description" character varying, CONSTRAINT "UQ_98082dbb08817c9801e32dd0155" UNIQUE ("value"), CONSTRAINT "PK_b36bcfe02fc8de3c57a8b2391c2" PRIMARY KEY ("id"))',
@@ -100,28 +100,28 @@ export class InitMigration1743071291391 implements MigrationInterface {
       'CREATE INDEX "IDX_9a113945ec17323790a2d896f8" ON "workSpaceUserRole" ("workSpaceUserUserId", "workSpaceUserWorkSpaceId") ',
     );
     await queryRunner.query(
-      'ALTER TABLE "comment" ADD CONSTRAINT "FK_276779da446413a0d79598d4fbd" FOREIGN KEY ("authorId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "comment" ADD CONSTRAINT "FK_276779da446413a0d79598d4fbd" FOREIGN KEY ("authorId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
-      'ALTER TABLE "comment" ADD CONSTRAINT "FK_f28138baab6c22e4b27f489d8be" FOREIGN KEY ("todoId") REFERENCES "todo"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "comment" ADD CONSTRAINT "FK_f28138baab6c22e4b27f489d8be" FOREIGN KEY ("todoId") REFERENCES "todo"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
-      'ALTER TABLE "category" ADD CONSTRAINT "FK_32b856438dffdc269fa84434d9f" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "category" ADD CONSTRAINT "FK_32b856438dffdc269fa84434d9f" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
-      'ALTER TABLE "tag" ADD CONSTRAINT "FK_d0dc39ff83e384b4a097f47d3f5" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "tag" ADD CONSTRAINT "FK_d0dc39ff83e384b4a097f47d3f5" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
-      'ALTER TABLE "todoTag" ADD CONSTRAINT "FK_331f2b44ef4b6b997c5edc5ad32" FOREIGN KEY ("tagId") REFERENCES "tag"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "todoTag" ADD CONSTRAINT "FK_331f2b44ef4b6b997c5edc5ad32" FOREIGN KEY ("tagId") REFERENCES "tag"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
-      'ALTER TABLE "todoTag" ADD CONSTRAINT "FK_76ae043c5760ac0b42ad4782b75" FOREIGN KEY ("todoId") REFERENCES "todo"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "todoTag" ADD CONSTRAINT "FK_76ae043c5760ac0b42ad4782b75" FOREIGN KEY ("todoId") REFERENCES "todo"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
-      'ALTER TABLE "todo" ADD CONSTRAINT "FK_a4bb15f5b622b108dd0bc9d248d" FOREIGN KEY ("creatorId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "todo" ADD CONSTRAINT "FK_a4bb15f5b622b108dd0bc9d248d" FOREIGN KEY ("creatorId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
-      'ALTER TABLE "todo" ADD CONSTRAINT "FK_e383b628056351072a5f483f6bb" FOREIGN KEY ("categoryId") REFERENCES "category"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "todo" ADD CONSTRAINT "FK_e383b628056351072a5f483f6bb" FOREIGN KEY ("categoryId") REFERENCES "category"("id") ON DELETE SET NULL ON UPDATE NO ACTION',
     );
     await queryRunner.query(
       'ALTER TABLE "workSpaceComment" ADD CONSTRAINT "FK_9f80e4f89d858b9b309d71c4809" FOREIGN KEY ("workSpaceId", "authorId") REFERENCES "workSpaceUser"("workSpaceId","userId") ON DELETE NO ACTION ON UPDATE NO ACTION',
@@ -181,10 +181,10 @@ export class InitMigration1743071291391 implements MigrationInterface {
       'ALTER TABLE "workSpaceUser" ADD CONSTRAINT "FK_c42ae8e4f2125ffe63c4e225b3f" FOREIGN KEY ("workSpaceId") REFERENCES "workSpace"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
-      'ALTER TABLE "userRole" ADD CONSTRAINT "FK_aa72ae0c32996d476c28f12eb78" FOREIGN KEY ("roleId") REFERENCES "role"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "userRole" ADD CONSTRAINT "FK_aa72ae0c32996d476c28f12eb78" FOREIGN KEY ("roleId") REFERENCES "role"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
-      'ALTER TABLE "userRole" ADD CONSTRAINT "FK_bc794a2ac3d2f53fc2bc04c3cf4" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION',
+      'ALTER TABLE "userRole" ADD CONSTRAINT "FK_bc794a2ac3d2f53fc2bc04c3cf4" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION',
     );
     await queryRunner.query(
       'ALTER TABLE "workSpaceUserCommand" ADD CONSTRAINT "FK_b3469968081cf6c14052bafe6ab" FOREIGN KEY ("workSpaceCommandWorkSpaceId", "workSpaceCommandValue") REFERENCES "workSpaceCommand"("workSpaceId","value") ON DELETE CASCADE ON UPDATE CASCADE',
@@ -250,17 +250,17 @@ export class InitMigration1743071291391 implements MigrationInterface {
     await queryRunner.query('ALTER TABLE "category" DROP CONSTRAINT "FK_32b856438dffdc269fa84434d9f"');
     await queryRunner.query('ALTER TABLE "comment" DROP CONSTRAINT "FK_f28138baab6c22e4b27f489d8be"');
     await queryRunner.query('ALTER TABLE "comment" DROP CONSTRAINT "FK_276779da446413a0d79598d4fbd"');
-    await queryRunner.query('DROP INDEX "public"."IDX_9a113945ec17323790a2d896f8"');
-    await queryRunner.query('DROP INDEX "public"."IDX_ea3f31c83045225ad33990f8bf"');
+    await queryRunner.query('DROP INDEX "IDX_9a113945ec17323790a2d896f8"');
+    await queryRunner.query('DROP INDEX "IDX_ea3f31c83045225ad33990f8bf"');
     await queryRunner.query('DROP TABLE "workSpaceUserRole"');
-    await queryRunner.query('DROP INDEX "public"."IDX_368fbd21402b5d094fa3ddfcc3"');
-    await queryRunner.query('DROP INDEX "public"."IDX_9c26fcb84c92512be85640780f"');
+    await queryRunner.query('DROP INDEX "IDX_368fbd21402b5d094fa3ddfcc3"');
+    await queryRunner.query('DROP INDEX "IDX_9c26fcb84c92512be85640780f"');
     await queryRunner.query('DROP TABLE "workSpaceRolePermission"');
-    await queryRunner.query('DROP INDEX "public"."IDX_34438883be9d0157b8f1797ed4"');
-    await queryRunner.query('DROP INDEX "public"."IDX_ddefd0f29025846956005c3a70"');
+    await queryRunner.query('DROP INDEX "IDX_34438883be9d0157b8f1797ed4"');
+    await queryRunner.query('DROP INDEX "IDX_ddefd0f29025846956005c3a70"');
     await queryRunner.query('DROP TABLE "workSpaceUserTodo"');
-    await queryRunner.query('DROP INDEX "public"."IDX_ea0a938be9e6b09f1edd88c2e4"');
-    await queryRunner.query('DROP INDEX "public"."IDX_b3469968081cf6c14052bafe6a"');
+    await queryRunner.query('DROP INDEX "IDX_ea0a938be9e6b09f1edd88c2e4"');
+    await queryRunner.query('DROP INDEX "IDX_b3469968081cf6c14052bafe6a"');
     await queryRunner.query('DROP TABLE "workSpaceUserCommand"');
     await queryRunner.query('DROP TABLE "user"');
     await queryRunner.query('DROP TABLE "userRole"');
