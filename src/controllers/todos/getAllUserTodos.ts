@@ -1,6 +1,6 @@
 import { ITodosRepo } from '../../repos/todos/todos.repo';
-import { ITodo } from '../../types/entities/TodoSchema';
+import { Todo } from '../../types/entities/TodoSchema';
 
-export async function getAllUserTodos(todosRepo: ITodosRepo, userID: string): Promise<ITodo[]> {
+export async function getAllUserTodos(todosRepo: ITodosRepo, userID: string): Promise<Todo[]> {
   return todosRepo.findByCreatorId(userID);
 }

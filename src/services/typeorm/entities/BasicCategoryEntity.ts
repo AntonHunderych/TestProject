@@ -7,6 +7,6 @@ export class BasicCategoryEntity {
   @Column({ unique: true })
   value: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 }

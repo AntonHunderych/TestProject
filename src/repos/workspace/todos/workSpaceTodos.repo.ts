@@ -2,8 +2,8 @@ import { Brackets, DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
-import { ITodo } from '../../../types/entities/TodoSchema';
-import { WorkSpaceTodo1 } from '../../../types/entities/WorkSpaceTodo';
+import { Todo } from '../../../types/entities/TodoSchema';
+import { WorkSpaceTodo1 } from '../../../types/entities/WorkSpace/WorkSpaceTodoSchema';
 
 export interface IWorkSpaceTodoRepo extends IRecreateRepo {
   create(todo: Partial<WorkSpaceTodo1>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo1>;
@@ -98,7 +98,7 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
       }
     },
 
-    async update(id: string, todo: Partial<Omit<ITodo, 'id'>>): Promise<WorkSpaceTodoEntity> {
+    async update(id: string, todo: Partial<Omit<Todo, 'id'>>): Promise<WorkSpaceTodoEntity> {
       try {
         const result = await wsTodoRepo
           .createQueryBuilder()

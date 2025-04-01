@@ -1,12 +1,13 @@
 import z from 'zod';
+import { BasicTodoSchema } from './BasicTodoSchema';
+import { CommentSchema } from './CommentSchema';
+import { CategorySchema } from './CategorySchema';
+import { TodoTagSchema } from './TodoTagSchema';
 
-export const TodoSchema = z.object({
-  id: z.string().min(1),
-  title: z.string().min(1),
-  description: z.string().optional(),
-  importance: z.number().optional(),
-  eliminatedDate: z.date().optional(),
-  creatorId: z.string(),
+export const TodoSchema: any = BasicTodoSchema.extend({
+  comments: z.array(CommentSchema),
+  tags: z.array(TodoTagSchema),
+  category: CategorySchema,
 });
 
-export type ITodo = z.infer<typeof TodoSchema>;
+export type Todo = z.infer<typeof TodoSchema>;

@@ -1,6 +1,6 @@
 import { ITodosRepo } from '../../repos/todos/todos.repo';
-import { ITodo } from '../../types/entities/TodoSchema';
+import { Todo } from '../../types/entities/TodoSchema';
 
-export async function updateTodo(todoRepo: ITodosRepo, todoId: string, data: Partial<ITodo>): Promise<ITodo> {
+export async function updateTodo(todoRepo: ITodosRepo, todoId: string, data: Partial<Todo>): Promise<Todo> {
   return await todoRepo.update(todoId, data);
 }

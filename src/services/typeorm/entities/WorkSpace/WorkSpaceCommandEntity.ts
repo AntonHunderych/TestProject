@@ -1,7 +1,7 @@
-import { Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
-import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
+import { Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
 import { WorkSpaceEntity } from './WorkSpaceEntity';
+import { WorkSpaceUserCommandEntity } from './WorkSpaceUserCommandEntity';
 
 @Entity({ name: 'workSpaceCommand' })
 export class WorkSpaceCommandEntity {
@@ -11,11 +11,8 @@ export class WorkSpaceCommandEntity {
   @PrimaryColumn()
   value: string;
 
-  @ManyToMany(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.commands)
-  @JoinTable({
-    name: 'workSpaceUserCommand',
-  })
-  users: WorkSpaceUserEntity[];
+  @OneToMany(() => WorkSpaceUserCommandEntity, (workSpaceUserCommandEntity) => workSpaceUserCommandEntity.command)
+  users: WorkSpaceUserCommandEntity[];
 
   @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.command)
   todos: WorkSpaceTodoEntity[];

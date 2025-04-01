@@ -1,8 +1,9 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceTagEntity, WorkSpaceTagTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTagEntity';
+import { WorkSpaceTagEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTagEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { WorkSpaceUserEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
+import { WorkSpaceTagTodoEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTagTodoEntity';
 
 export interface IGetWorkSpaceTagRepo extends IRecreateRepo {
   getTags(userId: string): Promise<WorkSpaceTagEntity[]>;
@@ -20,7 +21,7 @@ export interface IGetWorkSpaceTagRepo extends IRecreateRepo {
 
 export function getWorkSpaceTagRepo(db: DataSource | EntityManager): IGetWorkSpaceTagRepo {
   const workSpaceTagRepo = db.getRepository<WorkSpaceTagEntity>(WorkSpaceTagEntity);
-  const workSpaceTagTodoRepo = db.getRepository<WorkSpaceTagTodo>(WorkSpaceTagTodo);
+  const workSpaceTagTodoRepo = db.getRepository<WorkSpaceTagTodoEntity>(WorkSpaceTagTodoEntity);
 
   return {
     async getTags(workSpaceId: string): Promise<WorkSpaceTagEntity[]> {

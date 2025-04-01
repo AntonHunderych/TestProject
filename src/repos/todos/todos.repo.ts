@@ -4,27 +4,27 @@ import { DBError } from '../../types/errors/DBError';
 import { util } from 'zod';
 import Omit = util.Omit;
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
-import { ITodo } from '../../types/entities/TodoSchema';
+import { Todo } from '../../types/entities/TodoSchema';
 
 export interface ITodosRepo extends IRecreateRepo {
-  create(todo: Omit<ITodo, 'id'>): Promise<ITodo>;
+  create(todo: Omit<Todo, 'id'>): Promise<Todo>;
 
-  findById(id: string): Promise<ITodo>;
+  findById(id: string): Promise<Todo>;
 
-  findAll(): Promise<ITodo[]>;
+  findAll(): Promise<Todo[]>;
 
-  update(id: string, todo: Partial<Omit<ITodo, 'id'>>): Promise<ITodo>;
+  update(id: string, todo: Partial<Omit<Todo, 'id'>>): Promise<Todo>;
 
   delete(id: string): Promise<boolean>;
 
-  findByCreatorId(creatorId: string): Promise<ITodo[]>;
+  findByCreatorId(creatorId: string): Promise<Todo[]>;
 }
 
 export function getTodoRepo(db: DataSource | EntityManager): ITodosRepo {
   const todoRepo = db.getRepository(TodoEntity);
 
   return {
-    async create(todo: Omit<ITodo, 'id'>): Promise<ITodo> {
+    async create(todo: Omit<Todo, 'id'>): Promise<Todo> {
       try {
         return await todoRepo.save(todo);
       } catch (error) {
@@ -32,7 +32,7 @@ export function getTodoRepo(db: DataSource | EntityManager): ITodosRepo {
       }
     },
 
-    async findById(id: string): Promise<ITodo> {
+    async findById(id: string): Promise<Todo> {
       try {
         return await todoRepo.findOneOrFail({ where: { id } });
       } catch (error) {
@@ -40,7 +40,7 @@ export function getTodoRepo(db: DataSource | EntityManager): ITodosRepo {
       }
     },
 
-    async findByCreatorId(creatorId: string): Promise<ITodo[]> {
+    async findByCreatorId(creatorId: string): Promise<Todo[]> {
       try {
         return await todoRepo.find({
           where: { creatorId },
@@ -51,7 +51,7 @@ export function getTodoRepo(db: DataSource | EntityManager): ITodosRepo {
       }
     },
 
-    async findAll(): Promise<ITodo[]> {
+    async findAll(): Promise<Todo[]> {
       try {
         return await todoRepo.find({ relations: { creator: true, comments: true, tags: { tag: true } } });
       } catch (error) {
@@ -59,7 +59,7 @@ export function getTodoRepo(db: DataSource | EntityManager): ITodosRepo {
       }
     },
 
-    async update(id: string, todo: Partial<Omit<ITodo, 'id'>>): Promise<ITodo> {
+    async update(id: string, todo: Partial<Omit<Todo, 'id'>>): Promise<Todo> {
       try {
         const existingTodo = await todoRepo.findOneBy({ id });
         if (!existingTodo) {

@@ -1,16 +1,16 @@
 import { IUsersRepo } from '../../repos/users/users.repo';
 import { HttpError } from '../../api/error/HttpError';
 import { TagEntity } from '../../services/typeorm/entities/TagEntity';
-import { IWorkSpace } from '../../types/entities/WorkSpaceSchema';
-import { ITodo } from '../../types/entities/TodoSchema';
+import { WorkSpace } from '../../types/entities/WorkSpace/WorkSpaceSchema';
+import { Todo } from '../../types/entities/TodoSchema';
 
 export interface GetUserByIdResp {
   id: string;
   username: string;
   email: string;
-  todos: ITodo[];
+  todos: Todo[];
   tags: TagEntity[];
-  workSpaces: IWorkSpace[];
+  workSpaces: WorkSpace[];
 }
 
 export default async function getUserById(rep: IUsersRepo, id: string): Promise<GetUserByIdResp> {

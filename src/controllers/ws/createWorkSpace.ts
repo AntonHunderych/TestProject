@@ -1,9 +1,6 @@
 import { IWorkSpaceRepos } from '../../repos/workspace/workspace.repo';
-import { IWorkSpace } from '../../types/entities/WorkSpaceSchema';
+import { WorkSpace } from '../../types/entities/WorkSpace/WorkSpaceSchema';
 
-export async function createWorkSpace(
-  workSpaceRepo: IWorkSpaceRepos,
-  data: Omit<IWorkSpace, 'id'>,
-): Promise<IWorkSpace> {
+export async function createWorkSpace(workSpaceRepo: IWorkSpaceRepos, data: Omit<WorkSpace, 'id'>): Promise<WorkSpace> {
   return await workSpaceRepo.createWorkSpace(data);
 }

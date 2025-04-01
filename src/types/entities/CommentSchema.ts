@@ -1,12 +1,6 @@
 import z from 'zod';
+import { BasicCommentSchema } from './BasicCommentSchema';
 
-export const CommentSchema = z.object({
-  id: z.string().min(1),
-  text: z.string().min(1),
-  authorId: z.string().min(1),
-  todoId: z.string().min(1),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
+export const CommentSchema = BasicCommentSchema;
 
-export type IComment = z.infer<typeof CommentSchema>;
+export type Comment = z.infer<typeof CommentSchema>;

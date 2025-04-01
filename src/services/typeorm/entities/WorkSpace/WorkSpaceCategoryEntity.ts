@@ -1,13 +1,13 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
-import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
 import { WorkSpaceEntity } from './WorkSpaceEntity';
 import { BasicCategoryEntity } from '../BasicCategoryEntity';
+import { WorkSpaceTodoCategoryEntity } from './WorkSpaceTodoCategoryEntity';
 
 @Entity({ name: 'workSpaceCategory' })
 export class WorkSpaceCategoryEntity extends BasicCategoryEntity {
-  @OneToMany(() => WorkSpaceCategoryConf, (workSpaceCategoryTodo) => workSpaceCategoryTodo.todos)
-  todos: WorkSpaceTodoEntity[];
+  @OneToMany(() => WorkSpaceTodoCategoryEntity, (workSpaceCategoryTodo) => workSpaceCategoryTodo.todos)
+  todos: WorkSpaceTodoCategoryEntity[];
 
   @Column()
   creatorId: string;
@@ -28,27 +28,4 @@ export class WorkSpaceCategoryEntity extends BasicCategoryEntity {
   @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.tags)
   @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpaceEntity;
-}
-
-@Entity({ name: 'workSpaceTodoCategory' })
-export class WorkSpaceCategoryConf {
-  @PrimaryColumn({ unique: true })
-  todoId: string;
-
-  @ManyToOne(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.category)
-  @JoinColumn({ name: 'todoId' })
-  todos: WorkSpaceTodoEntity;
-
-  @PrimaryColumn()
-  categoryId: string;
-
-  @ManyToOne(() => WorkSpaceCategoryEntity, (workSpaceCategory) => workSpaceCategory.todos)
-  @JoinColumn({ name: 'categoryId' })
-  category: WorkSpaceCategoryEntity;
-
-  @Column()
-  attachedByUserId: string;
-
-  @CreateDateColumn()
-  attachedData: Date;
 }

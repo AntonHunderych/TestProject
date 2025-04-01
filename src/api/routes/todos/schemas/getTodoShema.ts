@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { getCommentSchema } from '../comments/schemas/getCommentSchema';
-import { getTagSchema } from '../tags/schema/getTagSchema';
 import { createRespUserSchema } from '../../users/schemas/createRespUserSchema';
+import { TodoTagSchema } from '../../../../types/entities/TodoTagSchema';
 
 export const getTodoSchema = z.object({
   id: z.string().uuid().min(1),
@@ -11,8 +11,5 @@ export const getTodoSchema = z.object({
   importance: z.number().int().optional().nullable(),
   comments: z.array(getCommentSchema).optional().nullable(),
   creator: createRespUserSchema.optional().nullable(),
-  tags: z
-    .array(z.object({ todoId: z.string(), tagId: z.string(), tag: getTagSchema }))
-    .optional()
-    .nullable(),
+  tags: z.array(TodoTagSchema).default([]),
 });

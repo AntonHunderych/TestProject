@@ -1,11 +1,13 @@
-import { Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, Unique } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, Unique } from 'typeorm';
 import { UserEntity } from '../UserEntity';
 import { WorkSpaceEntity } from './WorkSpaceEntity';
 import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
-import { WorkSpaceRolesEntity } from './WorkSpaceRolesEntity';
 import { WorkSpaceCommentEntity } from './WorkSpaceCommentEntity';
-import { WorkSpaceTagEntity, WorkSpaceTagTodo } from './WorkSpaceTagEntity';
-import { WorkSpaceCommandEntity } from './WorkSpaceCommandEntity';
+import { WorkSpaceTagEntity } from './WorkSpaceTagEntity';
+import { WorkSpaceTagTodoEntity } from './WorkSpaceTagTodoEntity';
+import { WorkSpaceContributorEntity } from './WorkSpaceContributorEntity';
+import { WorkSpaceUserRoleEntity } from './WorkSpaceUserRoleEntity';
+import { WorkSpaceUserCommandEntity } from './WorkSpaceUserCommandEntity';
 
 @Entity({ name: 'workSpaceUser' })
 @Unique(['userId', 'workSpaceId'])
@@ -20,28 +22,28 @@ export class WorkSpaceUserEntity {
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
-  @ManyToOne(() => WorkSpaceEntity, (workspace) => workspace.workSpaceUsers, { onDelete: 'CASCADE' })
+  @ManyToOne(() => WorkSpaceEntity, (workspace) => workspace.users, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpaceEntity;
 
-  @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.creator, { cascade: ['remove'] })
+  @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.creator)
   createdTodos: WorkSpaceTodoEntity[];
 
-  @ManyToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.contributors, { cascade: ['remove'] })
-  contributedTodos: WorkSpaceTodoEntity[];
+  @OneToMany(() => WorkSpaceContributorEntity, (workSpaceContributorEntity) => workSpaceContributorEntity.user)
+  contributedTodos: WorkSpaceContributorEntity[];
 
-  @OneToMany(() => WorkSpaceCommentEntity, (comment) => comment.creator, { cascade: ['remove'] })
+  @OneToMany(() => WorkSpaceCommentEntity, (comment) => comment.creator)
   comments: WorkSpaceCommentEntity[];
 
-  @ManyToMany(() => WorkSpaceRolesEntity, (workSpace) => workSpace.workSpaceUsers, { cascade: ['remove'] })
-  roles: WorkSpaceRolesEntity[];
+  @OneToMany(() => WorkSpaceUserRoleEntity, (workSpaceUserRoleEntity) => workSpaceUserRoleEntity.role)
+  roles: WorkSpaceUserRoleEntity[];
 
-  @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.assignedBy)
-  assignedTags: WorkSpaceTagTodo[];
+  @OneToMany(() => WorkSpaceTagTodoEntity, (workSpaceTagTodo) => workSpaceTagTodo.assignedBy)
+  assignedTags: WorkSpaceTagTodoEntity[];
 
   @OneToMany(() => WorkSpaceTagEntity, (workSpaceTag) => workSpaceTag.creator)
   createdTags: WorkSpaceTagEntity[];
 
-  @ManyToMany(() => WorkSpaceCommandEntity, (workSpaceCommand) => workSpaceCommand.users)
-  commands: WorkSpaceCommandEntity[];
+  @OneToMany(() => WorkSpaceUserCommandEntity, (workSpaceUserCommandEntity) => workSpaceUserCommandEntity.user)
+  commands: WorkSpaceUserCommandEntity[];
 }

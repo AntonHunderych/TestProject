@@ -1,6 +1,6 @@
 import { IWorkSpaceRepos } from '../../repos/workspace/workspace.repo';
 import { IWorkSpaceUserRepo } from '../../repos/workspace/user/workSpaceUser.repo';
-import { IWorkSpace } from '../../types/entities/WorkSpaceSchema';
+import { WorkSpace } from '../../types/entities/WorkSpace/WorkSpaceSchema';
 import { addStandardRoleToWorkSpace } from './roles/addStandardRoleToWorkSpace';
 import { addWorkSpaceRoleToUser } from './roles/addWorkSpaceRoleToUser';
 import { IWorkSpaceRolesRepo } from '../../repos/workspace/roles/workSpaceRoles.repo';
@@ -18,7 +18,7 @@ export async function createWorkSpaceProcess(
   workSpaceUserRoleRepo: IWorkSpaceUserRoleRepo,
   workSpaceCreateData: { name: string; description: string },
   userId: string,
-): Promise<IWorkSpace> {
+): Promise<WorkSpace> {
   return await withTransaction(
     {
       workSpaceRepo,

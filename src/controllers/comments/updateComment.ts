@@ -1,6 +1,6 @@
 import { ICommentsRepo, IUpdateComment } from '../../repos/comments/comments.repo';
-import { IComment } from '../../types/entities/CommentSchema';
+import { Comment } from '../../types/entities/CommentSchema';
 
-export async function updateComment(commentRepo: ICommentsRepo, id: string, data: IUpdateComment): Promise<IComment> {
+export async function updateComment(commentRepo: ICommentsRepo, id: string, data: IUpdateComment): Promise<Comment> {
   return await commentRepo.updateComment(id, data);
 }

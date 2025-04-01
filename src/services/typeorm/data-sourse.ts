@@ -12,13 +12,15 @@ import { WorkSpacePermissionsEntity } from './entities/WorkSpace/WorkSpacePermis
 import { WorkSpaceCommentEntity } from './entities/WorkSpace/WorkSpaceCommentEntity';
 import dotenv from 'dotenv';
 import { TagEntity } from './entities/TagEntity';
-import { WorkSpaceTagEntity, WorkSpaceTagTodo } from './entities/WorkSpace/WorkSpaceTagEntity';
+import { WorkSpaceTagEntity } from './entities/WorkSpace/WorkSpaceTagEntity';
 import { CategoryEntity } from './entities/CategoryEntity';
-import { WorkSpaceCategoryEntity, WorkSpaceCategoryConf } from './entities/WorkSpace/WorkSpaceCategoryEntity';
+import { WorkSpaceCategoryEntity } from './entities/WorkSpace/WorkSpaceCategoryEntity';
 import { WorkSpaceCommandEntity } from './entities/WorkSpace/WorkSpaceCommandEntity';
 import { TokenEntity } from './entities/TokenEntity';
 import { UserRoleEntity } from './entities/UserRoleEntity';
 import { TodoTagEntity } from './entities/TodoTagEntity';
+import { WorkSpaceTagTodoEntity } from './entities/WorkSpace/WorkSpaceTagTodoEntity';
+import { WorkSpaceTodoCategoryEntity } from './entities/WorkSpace/WorkSpaceTodoCategoryEntity';
 
 dotenv.config();
 
@@ -30,8 +32,7 @@ export function getDataSource() {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    synchronize: false,
-    //dropSchema: true,
+    synchronize: true,
     logging: true,
     entities: [
       UserEntity,
@@ -50,9 +51,9 @@ export function getDataSource() {
       WorkSpacePermissionsEntity,
       WorkSpaceCommentEntity,
       WorkSpaceTagEntity,
-      WorkSpaceTagTodo,
+      WorkSpaceTagTodoEntity,
       WorkSpaceCategoryEntity,
-      WorkSpaceCategoryConf,
+      WorkSpaceTodoCategoryEntity,
       WorkSpaceCommandEntity,
     ],
     migrations: ['./migrations/*.ts'],

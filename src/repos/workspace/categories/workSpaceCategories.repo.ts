@@ -1,11 +1,9 @@
-import {
-  WorkSpaceCategoryEntity,
-  WorkSpaceCategoryConf,
-} from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCategoryEntity';
+import { WorkSpaceCategoryEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCategoryEntity';
 import { DataSource, EntityManager } from 'typeorm';
 import { DBError } from '../../../types/errors/DBError';
 import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
+import { WorkSpaceTodoCategoryEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoCategoryEntity';
 
 export interface IWorkSpaceCategoriesRepo extends IRecreateRepo {
   create(
@@ -22,7 +20,7 @@ export interface IWorkSpaceCategoriesRepo extends IRecreateRepo {
 
 export function getWorkSpaceCategoryRepo(db: DataSource | EntityManager): IWorkSpaceCategoriesRepo {
   const workSpaceCategoryRepo = db.getRepository(WorkSpaceCategoryEntity);
-  const workSpaceCategoryTodoRepo = db.getRepository(WorkSpaceCategoryConf);
+  const workSpaceCategoryTodoRepo = db.getRepository(WorkSpaceTodoCategoryEntity);
   const workSpaceTodoRepo = db.getRepository(WorkSpaceTodoEntity);
 
   return {

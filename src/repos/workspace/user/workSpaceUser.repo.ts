@@ -2,12 +2,12 @@ import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceUserEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
-import { IWorkSpace } from '../../../types/entities/WorkSpaceSchema';
+import { WorkSpace } from '../../../types/entities/WorkSpace/WorkSpaceSchema';
 
 export interface IWorkSpaceUserRepo extends IRecreateRepo {
   addUserToWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUserEntity>;
-  getUserAllWorkSpaces(id: string): Promise<IWorkSpace[]>;
-  getAllCreatedWorkSpaces(id: string): Promise<IWorkSpace[]>;
+  getUserAllWorkSpaces(id: string): Promise<WorkSpace[]>;
+  getAllCreatedWorkSpaces(id: string): Promise<WorkSpace[]>;
   existUserInWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUserEntity | undefined>;
   deleteUserFromWorkSpace(workSpaceId: string, userId: string): Promise<boolean>;
   getUserInWorkSpace(workSpaceId: string): Promise<WorkSpaceUserEntity[]>;
@@ -54,7 +54,7 @@ export function getWorkSpaceUserRepo(db: DataSource | EntityManager): IWorkSpace
         throw new DBError('Error fetching users in workspace', error);
       }
     },
-    async getUserAllWorkSpaces(id: string): Promise<IWorkSpace[]> {
+    async getUserAllWorkSpaces(id: string): Promise<WorkSpace[]> {
       try {
         const user = await workSpaceUserRepo.find({
           where: { userId: id },
@@ -65,7 +65,7 @@ export function getWorkSpaceUserRepo(db: DataSource | EntityManager): IWorkSpace
         throw new DBError('Error fetching all workspaces for user', error);
       }
     },
-    async getAllCreatedWorkSpaces(id: string): Promise<IWorkSpace[]> {
+    async getAllCreatedWorkSpaces(id: string): Promise<WorkSpace[]> {
       try {
         const user = await workSpaceUserRepo.find({
           where: { userId: id },

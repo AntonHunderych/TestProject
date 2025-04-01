@@ -1,14 +1,14 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, Unique } from 'typeorm';
-import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
 import { WorkSpaceEntity } from './WorkSpaceEntity';
 import { BasicTagEntity } from '../BasicTagEntity';
+import { WorkSpaceTagTodoEntity } from './WorkSpaceTagTodoEntity';
 
 @Entity({ name: 'workSpaceTag' })
 export class WorkSpaceTagEntity extends BasicTagEntity {
-  @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.workSpaceTodo)
+  @OneToMany(() => WorkSpaceTagTodoEntity, (workSpaceTagTodo) => workSpaceTagTodo.workSpaceTodo)
   @JoinColumn({ name: 'todoId' })
-  todos: WorkSpaceTodoEntity[];
+  todos: WorkSpaceTagTodoEntity[];
 
   @Column()
   creatorId: string;
@@ -26,25 +26,4 @@ export class WorkSpaceTagEntity extends BasicTagEntity {
   @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.tags)
   @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpaceEntity;
-}
-
-@Entity({ name: 'workSpaceTagTodo' })
-@Unique(['todoId', 'tagId'])
-export class WorkSpaceTagTodo {
-  @PrimaryColumn()
-  todoId: string;
-
-  @PrimaryColumn()
-  tagId: string;
-
-  @ManyToOne(() => WorkSpaceTagEntity, (workSpaceTag) => workSpaceTag.todos)
-  @JoinColumn({ name: 'tagId' })
-  workSpaceTag: WorkSpaceTagEntity;
-
-  @ManyToOne(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.tags)
-  @JoinColumn({ name: 'todoId' })
-  workSpaceTodo: WorkSpaceTodoEntity;
-
-  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.assignedTags)
-  assignedBy: WorkSpaceUserEntity;
 }
