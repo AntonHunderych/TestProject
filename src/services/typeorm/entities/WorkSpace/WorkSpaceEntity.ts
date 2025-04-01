@@ -1,13 +1,13 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { WorkSpaceUser } from './WorkSpaceUserEntity';
-import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
-import { WorkSpaceRoles } from './WorkSpaceRolesEntity';
-import { WorkSpaceTag } from './WorkSpaceTagEntity';
-import { WorkSpaceCommand } from './WorkSpaceCommandEntity';
+import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
+import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
+import { WorkSpaceRolesEntity } from './WorkSpaceRolesEntity';
+import { WorkSpaceTagEntity } from './WorkSpaceTagEntity';
+import { WorkSpaceCommandEntity } from './WorkSpaceCommandEntity';
 
 @Entity({ name: 'workSpace' })
 @Unique(['name', 'creatorId'])
-export class WorkSpace {
+export class WorkSpaceEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -20,18 +20,18 @@ export class WorkSpace {
   @Column()
   creatorId: string;
 
-  @OneToMany(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.workSpace, { cascade: ['remove'] })
-  workSpaceTodos: WorkSpaceTodo[];
+  @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.workSpace, { cascade: ['remove'] })
+  workSpaceTodos: WorkSpaceTodoEntity[];
 
-  @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.workSpace, { cascade: ['remove'] })
-  workSpaceUsers: WorkSpaceUser[];
+  @OneToMany(() => WorkSpaceUserEntity, (wsUser) => wsUser.workSpace, { cascade: ['remove'] })
+  workSpaceUsers: WorkSpaceUserEntity[];
 
-  @OneToMany(() => WorkSpaceRoles, (workSpaceRoles) => workSpaceRoles.workSpace, { cascade: ['remove'] })
-  workSpaceRoles: WorkSpaceRoles[];
+  @OneToMany(() => WorkSpaceRolesEntity, (workSpaceRoles) => workSpaceRoles.workSpace, { cascade: ['remove'] })
+  workSpaceRoles: WorkSpaceRolesEntity[];
 
-  @OneToMany(() => WorkSpaceTag, (workSpaceTag) => workSpaceTag.workSpace)
-  tags: WorkSpaceTag[];
+  @OneToMany(() => WorkSpaceTagEntity, (workSpaceTag) => workSpaceTag.workSpace)
+  tags: WorkSpaceTagEntity[];
 
-  @OneToMany(() => WorkSpaceCommand, (workSpaceCommand) => workSpaceCommand.workSpace)
-  commands: WorkSpaceCommand[];
+  @OneToMany(() => WorkSpaceCommandEntity, (workSpaceCommand) => workSpaceCommand.workSpace)
+  commands: WorkSpaceCommandEntity[];
 }

@@ -1,31 +1,31 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, Unique } from 'typeorm';
-import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
-import { WorkSpaceUser } from './WorkSpaceUserEntity';
-import { WorkSpace } from './WorkSpaceEntity';
-import { BasicTag } from '../BasicTagEntity';
+import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
+import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
+import { WorkSpaceEntity } from './WorkSpaceEntity';
+import { BasicTagEntity } from '../BasicTagEntity';
 
 @Entity({ name: 'workSpaceTag' })
-export class WorkSpaceTag extends BasicTag {
+export class WorkSpaceTagEntity extends BasicTagEntity {
   @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.workSpaceTodo)
   @JoinColumn({ name: 'todoId' })
-  todos: WorkSpaceTodo[];
+  todos: WorkSpaceTodoEntity[];
 
   @Column()
   creatorId: string;
 
-  @ManyToOne(() => WorkSpaceUser, (workSpaceUser) => workSpaceUser.createdTags)
+  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.createdTags)
   @JoinColumn([
     { name: 'creatorId', referencedColumnName: 'userId' },
     { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
   ])
-  creator: WorkSpaceUser;
+  creator: WorkSpaceUserEntity;
 
   @Column()
   workSpaceId: string;
 
-  @ManyToOne(() => WorkSpace, (workSpace) => workSpace.tags)
+  @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.tags)
   @JoinColumn({ name: 'workSpaceId' })
-  workSpace: WorkSpace;
+  workSpace: WorkSpaceEntity;
 }
 
 @Entity({ name: 'workSpaceTagTodo' })
@@ -37,14 +37,14 @@ export class WorkSpaceTagTodo {
   @PrimaryColumn()
   tagId: string;
 
-  @ManyToOne(() => WorkSpaceTag, (workSpaceTag) => workSpaceTag.todos)
+  @ManyToOne(() => WorkSpaceTagEntity, (workSpaceTag) => workSpaceTag.todos)
   @JoinColumn({ name: 'tagId' })
-  workSpaceTag: WorkSpaceTag;
+  workSpaceTag: WorkSpaceTagEntity;
 
-  @ManyToOne(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.tags)
+  @ManyToOne(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.tags)
   @JoinColumn({ name: 'todoId' })
-  workSpaceTodo: WorkSpaceTodo;
+  workSpaceTodo: WorkSpaceTodoEntity;
 
-  @ManyToOne(() => WorkSpaceUser, (workSpaceUser) => workSpaceUser.assignedTags)
-  assignedBy: WorkSpaceUser;
+  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.assignedTags)
+  assignedBy: WorkSpaceUserEntity;
 }

@@ -1,21 +1,21 @@
 import { DataSource, EntityManager, Repository } from 'typeorm';
-import { WorkSpaceComment } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCommentEntity';
+import { WorkSpaceCommentEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCommentEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IWorkSpaceCommentRepos extends IRecreateRepo {
-  createComment(commentData: Partial<WorkSpaceComment>): Promise<WorkSpaceComment>;
-  getCommentById(id: string): Promise<WorkSpaceComment>;
-  updateComment(id: string, updateData: Partial<WorkSpaceComment>): Promise<WorkSpaceComment>;
+  createComment(commentData: Partial<WorkSpaceCommentEntity>): Promise<WorkSpaceCommentEntity>;
+  getCommentById(id: string): Promise<WorkSpaceCommentEntity>;
+  updateComment(id: string, updateData: Partial<WorkSpaceCommentEntity>): Promise<WorkSpaceCommentEntity>;
   deleteComment(id: string): Promise<void>;
-  getCommentsByTodoId(todoId: string): Promise<WorkSpaceComment[]>;
+  getCommentsByTodoId(todoId: string): Promise<WorkSpaceCommentEntity[]>;
 }
 
 export function getWorkSpaceCommentRepos(db: DataSource | EntityManager): IWorkSpaceCommentRepos {
-  const commentRepo: Repository<WorkSpaceComment> = db.getRepository(WorkSpaceComment);
+  const commentRepo: Repository<WorkSpaceCommentEntity> = db.getRepository(WorkSpaceCommentEntity);
 
   return {
-    async createComment(commentData: Partial<WorkSpaceComment>): Promise<WorkSpaceComment> {
+    async createComment(commentData: Partial<WorkSpaceCommentEntity>): Promise<WorkSpaceCommentEntity> {
       try {
         return await commentRepo.save(commentData);
       } catch (error) {
@@ -23,7 +23,7 @@ export function getWorkSpaceCommentRepos(db: DataSource | EntityManager): IWorkS
       }
     },
 
-    async getCommentById(id: string): Promise<WorkSpaceComment> {
+    async getCommentById(id: string): Promise<WorkSpaceCommentEntity> {
       try {
         return await commentRepo.findOneOrFail({ where: { id } });
       } catch (error) {
@@ -31,7 +31,7 @@ export function getWorkSpaceCommentRepos(db: DataSource | EntityManager): IWorkS
       }
     },
 
-    async updateComment(id: string, updateData: Partial<WorkSpaceComment>): Promise<WorkSpaceComment> {
+    async updateComment(id: string, updateData: Partial<WorkSpaceCommentEntity>): Promise<WorkSpaceCommentEntity> {
       try {
         const comment = await commentRepo.findOneOrFail({ where: { id } });
         Object.assign(comment, updateData);
@@ -49,7 +49,7 @@ export function getWorkSpaceCommentRepos(db: DataSource | EntityManager): IWorkS
       }
     },
 
-    async getCommentsByTodoId(todoId: string): Promise<WorkSpaceComment[]> {
+    async getCommentsByTodoId(todoId: string): Promise<WorkSpaceCommentEntity[]> {
       try {
         return await commentRepo.find({ where: { todo: { id: todoId } } });
       } catch (error) {

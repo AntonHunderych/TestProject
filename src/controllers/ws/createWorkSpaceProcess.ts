@@ -2,7 +2,7 @@ import { IWorkSpaceRepos } from '../../repos/workspace/workspace.repo';
 import { IWorkSpaceUserRepo } from '../../repos/workspace/user/workSpaceUser.repo';
 import { IWorkSpace } from '../../types/entities/WorkSpaceSchema';
 import { addStandardRoleToWorkSpace } from './roles/addStandardRoleToWorkSpace';
-import { addWorkSpaceRoleToUser } from './roles/giveWorkSpaceRoleToUser';
+import { addWorkSpaceRoleToUser } from './roles/addWorkSpaceRoleToUser';
 import { IWorkSpaceRolesRepo } from '../../repos/workspace/roles/workSpaceRoles.repo';
 import { IWorkSpaceUserRoleRepo } from '../../repos/workspace/userRole/workSpaceUserRole.repo';
 import { createWorkSpace } from './createWorkSpace';

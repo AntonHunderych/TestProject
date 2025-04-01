@@ -1,17 +1,17 @@
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
-import { User } from './UserEntity';
-import { BasicTag } from './BasicTagEntity';
-import { TodoTag } from './TodoTagEntity';
+import { UserEntity } from './UserEntity';
+import { BasicTagEntity } from './BasicTagEntity';
+import { TodoTagEntity } from './TodoTagEntity';
 
-@Entity()
-export class Tag extends BasicTag {
-  @ManyToMany(() => TodoTag, (todo) => todo.tag)
-  todos: TodoTag[];
+@Entity({ name: 'tag' })
+export class TagEntity extends BasicTagEntity {
+  @ManyToMany(() => TodoTagEntity, (todo) => todo.tag)
+  todos: TodoTagEntity[];
 
   @Column()
   userId: string;
 
-  @ManyToOne(() => User, (user) => user.tags, { onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntity, (user) => user.tags, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  user: User;
+  user: UserEntity;
 }

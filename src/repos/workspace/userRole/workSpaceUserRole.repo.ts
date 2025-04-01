@@ -1,21 +1,21 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceRoles } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
-import { WorkSpaceUser } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
+import { WorkSpaceRolesEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
+import { WorkSpaceUserEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IWorkSpaceUserRoleRepo extends IRecreateRepo {
-  giveRoleToUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUser>;
-  removeRoleFromUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUser>;
-  getAllUserRoles(userId: string, workSpaceId: string): Promise<WorkSpaceRoles[]>;
+  giveRoleToUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUserEntity>;
+  removeRoleFromUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUserEntity>;
+  getAllUserRoles(userId: string, workSpaceId: string): Promise<WorkSpaceRolesEntity[]>;
 }
 
 export function getWorkSpaceUserRoleRepo(db: DataSource | EntityManager): IWorkSpaceUserRoleRepo {
-  const workSpaceRolesRepository = db.getRepository(WorkSpaceRoles);
-  const workSpaceUserRepository = db.getRepository(WorkSpaceUser);
+  const workSpaceRolesRepository = db.getRepository(WorkSpaceRolesEntity);
+  const workSpaceUserRepository = db.getRepository(WorkSpaceUserEntity);
 
   return {
-    async giveRoleToUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUser> {
+    async giveRoleToUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUserEntity> {
       try {
         const user = await workSpaceUserRepository.findOneOrFail({
           where: { userId, workSpaceId },
@@ -30,7 +30,7 @@ export function getWorkSpaceUserRoleRepo(db: DataSource | EntityManager): IWorkS
         throw new DBError('Error giving role to user', error);
       }
     },
-    async removeRoleFromUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUser> {
+    async removeRoleFromUser(userId: string, workSpaceId: string, roleValue: string): Promise<WorkSpaceUserEntity> {
       try {
         const user = await workSpaceUserRepository.findOneOrFail({
           where: { userId, workSpaceId },
@@ -42,7 +42,7 @@ export function getWorkSpaceUserRoleRepo(db: DataSource | EntityManager): IWorkS
         throw new DBError('Error removing role from user', error);
       }
     },
-    async getAllUserRoles(userId: string, workSpaceId: string): Promise<WorkSpaceRoles[]> {
+    async getAllUserRoles(userId: string, workSpaceId: string): Promise<WorkSpaceRolesEntity[]> {
       try {
         const user = await workSpaceUserRepository.findOneOrFail({
           where: { userId, workSpaceId },

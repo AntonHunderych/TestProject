@@ -1,12 +1,12 @@
 import { IWorkSpaceUserRepo } from '../../../repos/workspace/user/workSpaceUser.repo';
-import { WorkSpaceTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
-import { WorkSpaceRoles } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
+import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceRolesEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
 
 export interface IGetUsersInWorkSpaceHandler {
   id: string;
   username: string;
-  todos: WorkSpaceTodo[];
-  roles: WorkSpaceRoles[];
+  todos: WorkSpaceTodoEntity[];
+  roles: WorkSpaceRolesEntity[];
 }
 
 export async function getUsersInWorkSpaceHandler(

@@ -1,5 +1,5 @@
 import { Permissions } from '../../../types/enum/PermisionsEnum';
-import { WorkSpaceRoles } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
+import { WorkSpaceRolesEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
 import { IWorkSpaceRolesRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
 import { IWithTransaction } from '../../../services/withTransaction/IWithTransaction';
 
@@ -9,7 +9,7 @@ export async function createRoleHandler(
   workSpaceId: string,
   roleName: string,
   permissions: Permissions[],
-): Promise<WorkSpaceRoles> {
+): Promise<WorkSpaceRolesEntity> {
   return await withTransaction(
     {
       workSpaceRoleRepo,

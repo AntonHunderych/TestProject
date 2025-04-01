@@ -1,8 +1,8 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './UserEntity';
+import { UserEntity } from './UserEntity';
 
-@Entity()
-export class Token {
+@Entity({ name: 'token' })
+export class TokenEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -12,6 +12,6 @@ export class Token {
   @Column({ unique: true })
   userId: string;
 
-  @OneToOne(() => User, (user) => user.token, { onDelete: 'CASCADE' })
-  user: User;
+  @OneToOne(() => UserEntity, (user) => user.token, { onDelete: 'CASCADE' })
+  user: UserEntity;
 }

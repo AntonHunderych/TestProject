@@ -1,6 +1,6 @@
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
-export class BasicTodo {
+export class BasicTodoEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -1,17 +1,17 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { WorkSpaceRoles } from './WorkSpaceRolesEntity';
+import { WorkSpaceRolesEntity } from './WorkSpaceRolesEntity';
 
 @Entity({ name: 'workSpacePermissions' })
-export class WorkSpacePermissions {
+export class WorkSpacePermissionsEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ unique: true })
   value: string;
 
-  @ManyToMany(() => WorkSpaceRoles, (workSpaceRoles) => workSpaceRoles.permissions)
+  @ManyToMany(() => WorkSpaceRolesEntity, (workSpaceRoles) => workSpaceRoles.permissions)
   @JoinTable({
     name: 'workSpaceRolePermission',
   })
-  roles: WorkSpaceRoles[];
+  roles: WorkSpaceRolesEntity[];
 }

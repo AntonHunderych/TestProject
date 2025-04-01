@@ -1,24 +1,24 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { User } from './entities/UserEntity';
-import { Role } from './entities/RoleEntity';
-import { Todo } from './entities/TodoEntity';
-import { Comment } from './entities/CommentEntity';
-import { WorkSpace } from './entities/WorkSpace/WorkSpaceEntity';
-import { WorkSpaceTodo } from './entities/WorkSpace/WorkSpaceTodoEntity';
-import { WorkSpaceUser } from './entities/WorkSpace/WorkSpaceUserEntity';
-import { WorkSpaceRoles } from './entities/WorkSpace/WorkSpaceRolesEntity';
-import { WorkSpacePermissions } from './entities/WorkSpace/WorkSpacePermissionsEntity';
-import { WorkSpaceComment } from './entities/WorkSpace/WorkSpaceCommentEntity';
+import { UserEntity } from './entities/UserEntity';
+import { RoleEntity } from './entities/RoleEntity';
+import { TodoEntity } from './entities/TodoEntity';
+import { CommentEntity } from './entities/CommentEntity';
+import { WorkSpaceEntity } from './entities/WorkSpace/WorkSpaceEntity';
+import { WorkSpaceTodoEntity } from './entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceUserEntity } from './entities/WorkSpace/WorkSpaceUserEntity';
+import { WorkSpaceRolesEntity } from './entities/WorkSpace/WorkSpaceRolesEntity';
+import { WorkSpacePermissionsEntity } from './entities/WorkSpace/WorkSpacePermissionsEntity';
+import { WorkSpaceCommentEntity } from './entities/WorkSpace/WorkSpaceCommentEntity';
 import dotenv from 'dotenv';
-import { Tag } from './entities/TagEntity';
-import { WorkSpaceTag, WorkSpaceTagTodo } from './entities/WorkSpace/WorkSpaceTagEntity';
-import { Category } from './entities/CategoryEntity';
-import { WorkSpaceCategory, WorkSpaceCategoryConf } from './entities/WorkSpace/WorkSpaceCategoryEntity';
-import { WorkSpaceCommand } from './entities/WorkSpace/WorkSpaceCommandEntity';
-import { Token } from './entities/TokenEntity';
-import { UserRole } from './entities/UserRoleEntity';
-import { TodoTag } from './entities/TodoTagEntity';
+import { TagEntity } from './entities/TagEntity';
+import { WorkSpaceTagEntity, WorkSpaceTagTodo } from './entities/WorkSpace/WorkSpaceTagEntity';
+import { CategoryEntity } from './entities/CategoryEntity';
+import { WorkSpaceCategoryEntity, WorkSpaceCategoryConf } from './entities/WorkSpace/WorkSpaceCategoryEntity';
+import { WorkSpaceCommandEntity } from './entities/WorkSpace/WorkSpaceCommandEntity';
+import { TokenEntity } from './entities/TokenEntity';
+import { UserRoleEntity } from './entities/UserRoleEntity';
+import { TodoTagEntity } from './entities/TodoTagEntity';
 
 dotenv.config();
 
@@ -34,26 +34,26 @@ export function getDataSource() {
     //dropSchema: true,
     logging: true,
     entities: [
-      User,
-      Role,
-      Todo,
-      Comment,
-      Tag,
-      Category,
-      Token,
-      UserRole,
-      TodoTag,
-      WorkSpace,
-      WorkSpaceTodo,
-      WorkSpaceUser,
-      WorkSpaceRoles,
-      WorkSpacePermissions,
-      WorkSpaceComment,
-      WorkSpaceTag,
+      UserEntity,
+      RoleEntity,
+      TodoEntity,
+      CommentEntity,
+      TagEntity,
+      CategoryEntity,
+      TokenEntity,
+      UserRoleEntity,
+      TodoTagEntity,
+      WorkSpaceEntity,
+      WorkSpaceTodoEntity,
+      WorkSpaceUserEntity,
+      WorkSpaceRolesEntity,
+      WorkSpacePermissionsEntity,
+      WorkSpaceCommentEntity,
+      WorkSpaceTagEntity,
       WorkSpaceTagTodo,
-      WorkSpaceCategory,
+      WorkSpaceCategoryEntity,
       WorkSpaceCategoryConf,
-      WorkSpaceCommand,
+      WorkSpaceCommandEntity,
     ],
     migrations: ['./migrations/*.ts'],
   });

@@ -1,22 +1,22 @@
 import { Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { User } from './UserEntity';
-import { Comment } from './CommentEntity';
-import { Category } from './CategoryEntity';
-import { BasicTodo } from './BasicTodoEntity';
-import { TodoTag } from './TodoTagEntity';
+import { UserEntity } from './UserEntity';
+import { CommentEntity } from './CommentEntity';
+import { CategoryEntity } from './CategoryEntity';
+import { BasicTodoEntity } from './BasicTodoEntity';
+import { TodoTagEntity } from './TodoTagEntity';
 
-@Entity()
-export class Todo extends BasicTodo {
-  @ManyToOne(() => User, (user) => user.todos, { onDelete: 'CASCADE' })
+@Entity({ name: 'todo' })
+export class TodoEntity extends BasicTodoEntity {
+  @ManyToOne(() => UserEntity, (user) => user.todos, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'creatorId' })
-  creator: User;
+  creator: UserEntity;
 
-  @OneToMany(() => Comment, (comment) => comment.todo)
-  comments: Comment[];
+  @OneToMany(() => CommentEntity, (comment) => comment.todo)
+  comments: CommentEntity[];
 
-  @OneToMany(() => TodoTag, (tag) => tag.todo)
-  tags: TodoTag[];
+  @OneToMany(() => TodoTagEntity, (tag) => tag.todo)
+  tags: TodoTagEntity[];
 
-  @ManyToOne(() => Category, (category) => category.todos, { onDelete: 'SET NULL' })
-  category: Category;
+  @ManyToOne(() => CategoryEntity, (category) => category.todos, { onDelete: 'SET NULL' })
+  category: CategoryEntity;
 }

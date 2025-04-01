@@ -1,14 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne } from 'typeorm';
-import { Todo } from './TodoEntity';
-import { Comment } from './CommentEntity';
-import { WorkSpaceUser } from './WorkSpace/WorkSpaceUserEntity';
-import { Tag } from './TagEntity';
-import { Category } from './CategoryEntity';
-import { Token } from './TokenEntity';
-import { UserRole } from './UserRoleEntity';
+import { TodoEntity } from './TodoEntity';
+import { CommentEntity } from './CommentEntity';
+import { WorkSpaceUserEntity } from './WorkSpace/WorkSpaceUserEntity';
+import { TagEntity } from './TagEntity';
+import { CategoryEntity } from './CategoryEntity';
+import { TokenEntity } from './TokenEntity';
+import { UserRoleEntity } from './UserRoleEntity';
 
-@Entity()
-export class User {
+@Entity({ name: 'user' })
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -24,24 +24,24 @@ export class User {
   @Column()
   salt: string;
 
-  @OneToOne(() => Token, (token) => token.user)
-  token: Token;
+  @OneToOne(() => TokenEntity, (token) => token.user)
+  token: TokenEntity;
 
-  @OneToMany(() => UserRole, (userRole) => userRole.user)
-  roles: UserRole[];
+  @OneToMany(() => UserRoleEntity, (userRole) => userRole.user)
+  roles: UserRoleEntity[];
 
-  @OneToMany(() => Todo, (todo) => todo.creator)
-  todos: Todo[];
+  @OneToMany(() => TodoEntity, (todo) => todo.creator)
+  todos: TodoEntity[];
 
-  @OneToMany(() => Comment, (comments) => comments.author)
-  comments: Comment[];
+  @OneToMany(() => CommentEntity, (comments) => comments.author)
+  comments: CommentEntity[];
 
-  @OneToMany(() => Tag, (tag) => tag.user)
-  tags: Tag[];
+  @OneToMany(() => TagEntity, (tag) => tag.user)
+  tags: TagEntity[];
 
-  @OneToMany(() => Category, (category) => category.user)
-  categories: Category[];
+  @OneToMany(() => CategoryEntity, (category) => category.user)
+  categories: CategoryEntity[];
 
-  @OneToMany(() => WorkSpaceUser, (wsUser) => wsUser.user)
-  wsUsers: WorkSpaceUser[];
+  @OneToMany(() => WorkSpaceUserEntity, (wsUser) => wsUser.user)
+  wsUsers: WorkSpaceUserEntity[];
 }

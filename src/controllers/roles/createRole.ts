@@ -1,6 +1,6 @@
 import { IRolesRepo } from '../../repos/roles/roles.repo';
-import { Role } from '../../services/typeorm/entities/RoleEntity';
+import { RoleEntity } from '../../services/typeorm/entities/RoleEntity';
 
-export async function createRole(roleRepo: IRolesRepo, data: Partial<Role>): Promise<Role> {
+export async function createRole(roleRepo: IRolesRepo, data: Partial<RoleEntity>): Promise<RoleEntity> {
   return await roleRepo.addRole(data);
 }

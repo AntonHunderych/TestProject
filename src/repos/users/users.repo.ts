@@ -1,19 +1,19 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { User } from '../../services/typeorm/entities/UserEntity';
+import { UserEntity } from '../../services/typeorm/entities/UserEntity';
 import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
 export interface IUsersRepo extends IRecreateRepo {
-  getAllUsers(): Promise<User[]>;
-  getUserById(id: string): Promise<User>;
-  getUserByEmail(email: string): Promise<User | null>;
-  createUser(userData: Partial<User>): Promise<User>;
-  updateUser(id: string, userData: Partial<User>): Promise<User>;
+  getAllUsers(): Promise<UserEntity[]>;
+  getUserById(id: string): Promise<UserEntity>;
+  getUserByEmail(email: string): Promise<UserEntity | null>;
+  createUser(userData: Partial<UserEntity>): Promise<UserEntity>;
+  updateUser(id: string, userData: Partial<UserEntity>): Promise<UserEntity>;
   deleteUser(id: string): Promise<boolean>;
 }
 
 export function getUserRepo(db: DataSource | EntityManager): IUsersRepo {
-  const _usersRepo = db.getRepository(User);
+  const _usersRepo = db.getRepository(UserEntity);
 
   return {
     getAllUsers: async () => {
@@ -24,7 +24,7 @@ export function getUserRepo(db: DataSource | EntityManager): IUsersRepo {
       }
     },
 
-    getUserById: async (id: string): Promise<User> => {
+    getUserById: async (id: string): Promise<UserEntity> => {
       try {
         return await _usersRepo.findOneOrFail({
           where: { id },
@@ -39,7 +39,7 @@ export function getUserRepo(db: DataSource | EntityManager): IUsersRepo {
       }
     },
 
-    async getUserByEmail(email: string): Promise<User | null> {
+    async getUserByEmail(email: string): Promise<UserEntity | null> {
       try {
         return await _usersRepo.findOne({ where: { email } });
       } catch (error) {
@@ -47,7 +47,7 @@ export function getUserRepo(db: DataSource | EntityManager): IUsersRepo {
       }
     },
 
-    createUser: async (userData: Partial<User>) => {
+    createUser: async (userData: Partial<UserEntity>) => {
       try {
         const newUser = _usersRepo.create(userData);
         return await _usersRepo.save(newUser);
@@ -56,7 +56,7 @@ export function getUserRepo(db: DataSource | EntityManager): IUsersRepo {
       }
     },
 
-    updateUser: async (id: string, userData: Partial<User>) => {
+    updateUser: async (id: string, userData: Partial<UserEntity>) => {
       try {
         const user = await _usersRepo.findOneOrFail({ where: { id } });
         Object.assign(user, userData);

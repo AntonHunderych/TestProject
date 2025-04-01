@@ -6,7 +6,7 @@ import { RoleEnum } from '../../../../../types/enum/RoleEnum';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { addDeleteRoleUserSchema } from './schema/addDeleteRoleUserSchema';
-import { addWorkSpaceRoleToUser } from '../../../../../controllers/ws/roles/giveWorkSpaceRoleToUser';
+import { addWorkSpaceRoleToUser } from '../../../../../controllers/ws/roles/addWorkSpaceRoleToUser';
 
 const routers: FastifyPluginAsyncZod = async function (fastify) {
   const f = fastify.withTypeProvider<ZodTypeProvider>();

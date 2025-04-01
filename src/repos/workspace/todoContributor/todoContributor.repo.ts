@@ -1,21 +1,21 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
 import { DBError } from '../../../types/errors/DBError';
-import { WorkSpaceUser } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
+import { WorkSpaceUserEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IGetTodoContributorRepo extends IRecreateRepo {
   addContributor(workSpaceId: string, userId: string, todoId: string): Promise<void>;
   deleteContributor(workSpaceId: string, userId: string, todoId: string): Promise<void>;
-  getTodoContributor(workSpaceId: string, todoId: string): Promise<WorkSpaceUser[]>;
+  getTodoContributor(workSpaceId: string, todoId: string): Promise<WorkSpaceUserEntity[]>;
 }
 
 export function getTodoContributorRepo(db: DataSource | EntityManager): IGetTodoContributorRepo {
-  const workSpaceTodo = db.getRepository(WorkSpaceTodo);
-  const workSpaceUser = db.getRepository(WorkSpaceUser);
+  const workSpaceTodo = db.getRepository(WorkSpaceTodoEntity);
+  const workSpaceUser = db.getRepository(WorkSpaceUserEntity);
 
   return {
-    async getTodoContributor(workSpaceId: string, todoId: string): Promise<WorkSpaceUser[]> {
+    async getTodoContributor(workSpaceId: string, todoId: string): Promise<WorkSpaceUserEntity[]> {
       try {
         const todo = await workSpaceTodo.findOneOrFail({
           where: { workSpaceId, id: todoId },

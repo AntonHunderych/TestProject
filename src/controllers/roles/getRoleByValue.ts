@@ -1,6 +1,6 @@
 import { IRolesRepo } from '../../repos/roles/roles.repo';
-import { Role } from '../../services/typeorm/entities/RoleEntity';
+import { RoleEntity } from '../../services/typeorm/entities/RoleEntity';
 
-export async function getRoleByValue(rolesRepo: IRolesRepo, value: string): Promise<Role> {
+export async function getRoleByValue(rolesRepo: IRolesRepo, value: string): Promise<RoleEntity> {
   return await rolesRepo.getRoleByValue(value);
 }

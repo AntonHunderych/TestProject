@@ -1,5 +1,5 @@
 import { IWorkSpaceUserRoleRepo } from '../../../repos/workspace/userRole/workSpaceUserRole.repo';
-import { WorkSpaceUser } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
+import { WorkSpaceUserEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
 import { TDefaultRolesInWorkSpaceOrCustom } from '../../../types/TDefaultRolesInWorkSpace';
 
 export async function addWorkSpaceRoleToUser(
@@ -7,6 +7,6 @@ export async function addWorkSpaceRoleToUser(
   userId: string,
   workSpaceId: string,
   roleValue: TDefaultRolesInWorkSpaceOrCustom,
-): Promise<WorkSpaceUser> {
+): Promise<WorkSpaceUserEntity> {
   return await workSpaceUserRoleRepo.giveRoleToUser(userId, workSpaceId, roleValue);
 }

@@ -1,35 +1,35 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
-import { WorkSpace } from './WorkSpaceEntity';
-import { WorkSpaceUser } from './WorkSpaceUserEntity';
-import { WorkSpaceComment } from './WorkSpaceCommentEntity';
+import { WorkSpaceEntity } from './WorkSpaceEntity';
+import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
+import { WorkSpaceCommentEntity } from './WorkSpaceCommentEntity';
 import { WorkSpaceTagTodo } from './WorkSpaceTagEntity';
 import { WorkSpaceCategoryConf } from './WorkSpaceCategoryEntity';
-import { WorkSpaceCommand } from './WorkSpaceCommandEntity';
-import { BasicTodo } from '../BasicTodoEntity';
+import { WorkSpaceCommandEntity } from './WorkSpaceCommandEntity';
+import { BasicTodoEntity } from '../BasicTodoEntity';
 
 @Entity({ name: 'workSpaceTodo' })
-export class WorkSpaceTodo extends BasicTodo {
+export class WorkSpaceTodoEntity extends BasicTodoEntity {
   @Column({ name: 'workSpaceId' })
   workSpaceId: string;
 
-  @ManyToOne(() => WorkSpace, (ws) => ws.workSpaceTodos)
+  @ManyToOne(() => WorkSpaceEntity, (ws) => ws.workSpaceTodos)
   @JoinColumn({ name: 'workSpaceId' })
-  workSpace: WorkSpace;
+  workSpace: WorkSpaceEntity;
 
-  @ManyToOne(() => WorkSpaceUser, (worksSpaceUser) => worksSpaceUser.createdTodos)
+  @ManyToOne(() => WorkSpaceUserEntity, (worksSpaceUser) => worksSpaceUser.createdTodos)
   @JoinColumn([
     { name: 'creatorId', referencedColumnName: 'userId' },
     { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
   ])
-  creator: WorkSpaceUser;
+  creator: WorkSpaceUserEntity;
 
-  @ManyToMany(() => WorkSpaceUser, (workSpaceUser) => workSpaceUser.contributedTodos)
+  @ManyToMany(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.contributedTodos)
   @JoinTable({
     name: 'workSpaceUserTodo',
   })
-  contributors: WorkSpaceUser[];
+  contributors: WorkSpaceUserEntity[];
 
-  @OneToMany(() => WorkSpaceComment, (workSpaceComment) => workSpaceComment.todo, { cascade: ['remove'] })
+  @OneToMany(() => WorkSpaceCommentEntity, (workSpaceComment) => workSpaceComment.todo, { cascade: ['remove'] })
   comments: Comment[];
 
   @OneToMany(() => WorkSpaceTagTodo, (workSpaceTagTodo) => workSpaceTagTodo.workSpaceTodo)
@@ -45,10 +45,10 @@ export class WorkSpaceTodo extends BasicTodo {
   ])
   category: WorkSpaceCategoryConf;
 
-  @ManyToOne(() => WorkSpaceCommand, (workSpaceCommand) => workSpaceCommand)
+  @ManyToOne(() => WorkSpaceCommandEntity, (workSpaceCommand) => workSpaceCommand)
   @JoinColumn([
     { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
     { name: 'commandValue', referencedColumnName: 'value' },
   ])
-  command: WorkSpaceCommand | null;
+  command: WorkSpaceCommandEntity | null;
 }

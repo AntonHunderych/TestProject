@@ -1,15 +1,15 @@
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { User } from './UserEntity';
-import { Todo } from './TodoEntity';
-import { BasicComment } from './BasicCommentEntity';
+import { UserEntity } from './UserEntity';
+import { TodoEntity } from './TodoEntity';
+import { BasicCommentEntity } from './BasicCommentEntity';
 
-@Entity()
-export class Comment extends BasicComment {
-  @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
+@Entity({ name: 'comment' })
+export class CommentEntity extends BasicCommentEntity {
+  @ManyToOne(() => UserEntity, (user) => user.comments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'authorId' })
-  author: User;
+  author: UserEntity;
 
-  @ManyToOne(() => Todo, (todo) => todo.comments, { onDelete: 'CASCADE' })
+  @ManyToOne(() => TodoEntity, (todo) => todo.comments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'todoId' })
-  todo: Todo;
+  todo: TodoEntity;
 }

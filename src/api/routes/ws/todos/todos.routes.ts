@@ -9,7 +9,7 @@ import { RoleEnum } from '../../../../types/enum/RoleEnum';
 import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 import z from 'zod';
 import { filterEntityByUserCommand } from '../hooks/filterEntityByUserCommand';
-import { WorkSpaceTodo } from '../../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceTodoEntity } from '../../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
 import { getAllTodoInWorkSpaceByCommand } from '../../../../controllers/ws/todos/getAllTodoInWorkSpaceByCommand';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
@@ -30,7 +30,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
         },*/
       },
       preHandler: roleHook([RoleEnum.ADMIN]),
-      preSerialization: filterEntityByUserCommand<WorkSpaceTodo>(),
+      preSerialization: filterEntityByUserCommand<WorkSpaceTodoEntity>(),
     },
     async (req) => {
       return await workSpaceTodoRepo.findAllTodoInWorkSpace(req.workSpace.id);

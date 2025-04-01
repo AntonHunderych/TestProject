@@ -1,6 +1,6 @@
 import { DBError } from '../../types/errors/DBError';
 import { DataSource } from 'typeorm';
-import { TodoTag } from '../../services/typeorm/entities/TodoTagEntity';
+import { TodoTagEntity } from '../../services/typeorm/entities/TodoTagEntity';
 
 export interface ITodoTagRepo {
   addTag(todoId: string, tagId: string): Promise<void>;
@@ -8,7 +8,7 @@ export interface ITodoTagRepo {
 }
 
 export function getTodoTagRepo(db: DataSource): ITodoTagRepo {
-  const todoTagRepo = db.getRepository(TodoTag);
+  const todoTagRepo = db.getRepository(TodoTagEntity);
 
   return {
     async addTag(todoId: string, tagId: string): Promise<void> {

@@ -1,5 +1,5 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpace } from '../../services/typeorm/entities/WorkSpace/WorkSpaceEntity';
+import { WorkSpaceEntity } from '../../services/typeorm/entities/WorkSpace/WorkSpaceEntity';
 import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 import { IWorkSpace } from '../../types/entities/WorkSpaceSchema';
@@ -16,7 +16,7 @@ export type IWorkSpaceCreate = Omit<IWorkSpace, 'id'>;
 export type IWorkSpaceUpdate = Partial<Omit<IWorkSpace, 'id' | 'creatorId'>>;
 
 export function getWorkSpaceRepos(db: DataSource | EntityManager): IWorkSpaceRepos {
-  const WorkSpaceRepos = db.getRepository(WorkSpace);
+  const WorkSpaceRepos = db.getRepository(WorkSpaceEntity);
 
   return {
     async createWorkSpace(workSpace: IWorkSpaceCreate): Promise<IWorkSpace> {

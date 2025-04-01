@@ -1,42 +1,41 @@
 import { Brackets, DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 import { ITodo } from '../../../types/entities/TodoSchema';
+import { WorkSpaceTodo1 } from '../../../types/entities/WorkSpaceTodo';
 
 export interface IWorkSpaceTodoRepo extends IRecreateRepo {
-  create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo>;
+  create(todo: Partial<WorkSpaceTodo1>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo1>;
 
-  findById(id: string): Promise<WorkSpaceTodo>;
+  findById(id: string): Promise<WorkSpaceTodoEntity>;
 
-  findAll(): Promise<WorkSpaceTodo[]>;
+  findAll(): Promise<WorkSpaceTodoEntity[]>;
 
-  findAllTodoInWorkSpace(workSpaceId: string): Promise<WorkSpaceTodo[]>;
+  findAllTodoInWorkSpace(workSpaceId: string): Promise<WorkSpaceTodoEntity[]>;
 
-  findAllTodoInWorkSpaceByCommand(workSpaceId: string, commandValue: string[]): Promise<WorkSpaceTodo[]>;
+  findAllTodoInWorkSpaceByCommand(workSpaceId: string, commandValue: string[]): Promise<WorkSpaceTodoEntity[]>;
 
-  update(id: string, todo: Partial<WorkSpaceTodo>): Promise<WorkSpaceTodo>;
+  update(id: string, todo: Partial<WorkSpaceTodoEntity>): Promise<WorkSpaceTodoEntity>;
 
   delete(id: string): Promise<boolean>;
 }
 
 export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpaceTodoRepo {
-  const wsTodoRepo = db.getRepository(WorkSpaceTodo);
+  const wsTodoRepo = db.getRepository(WorkSpaceTodoEntity);
 
   return {
-    async create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo> {
+    async create(todo: Partial<WorkSpaceTodo1>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodoEntity> {
       try {
-        return await wsTodoRepo.save({
-          workSpaceId,
-          creatorId,
-          ...todo,
-        });
+        const data = { ...todo, workSpaceId, creatorId };
+        const result = await wsTodoRepo.createQueryBuilder().insert().values(data).returning('*').execute();
+        return result.raw[0];
       } catch (error) {
         throw new DBError('Error creating workspace todo', error);
       }
     },
 
-    async findById(id: string): Promise<WorkSpaceTodo> {
+    async findById(id: string): Promise<WorkSpaceTodoEntity> {
       try {
         return await wsTodoRepo.findOneOrFail({ where: { id }, relations: { creator: true } });
       } catch (error) {
@@ -44,7 +43,7 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
       }
     },
 
-    async findAllTodoInWorkSpace(workSpaceId: string): Promise<WorkSpaceTodo[]> {
+    async findAllTodoInWorkSpace(workSpaceId: string): Promise<WorkSpaceTodoEntity[]> {
       try {
         return await wsTodoRepo.find({
           where: { workSpaceId },
@@ -62,7 +61,7 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
       }
     },
 
-    async findAllTodoInWorkSpaceByCommand(workSpaceId: string, commandValue: string[]): Promise<WorkSpaceTodo[]> {
+    async findAllTodoInWorkSpaceByCommand(workSpaceId: string, commandValue: string[]): Promise<WorkSpaceTodoEntity[]> {
       try {
         const query = wsTodoRepo
           .createQueryBuilder('wsTodo')
@@ -91,7 +90,7 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
       }
     },
 
-    async findAll(): Promise<WorkSpaceTodo[]> {
+    async findAll(): Promise<WorkSpaceTodoEntity[]> {
       try {
         return await wsTodoRepo.find();
       } catch (error) {
@@ -99,10 +98,16 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
       }
     },
 
-    async update(id: string, todo: Partial<Omit<ITodo, 'id'>>): Promise<WorkSpaceTodo> {
+    async update(id: string, todo: Partial<Omit<ITodo, 'id'>>): Promise<WorkSpaceTodoEntity> {
       try {
-        await wsTodoRepo.update(id, todo);
-        return await wsTodoRepo.findOneByOrFail({ id });
+        const result = await wsTodoRepo
+          .createQueryBuilder()
+          .update()
+          .set(todo)
+          .where('id = :id', { id })
+          .returning('*')
+          .execute();
+        return result.raw[0];
       } catch (error) {
         throw new DBError('Error updating workspace todo', error);
       }
@@ -110,7 +115,8 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
 
     async delete(id: string): Promise<boolean> {
       try {
-        return !!(await wsTodoRepo.delete(id));
+        const result = await wsTodoRepo.createQueryBuilder().delete().where('id=:id', { id }).returning('*').execute();
+        return !!result.raw[0];
       } catch (error) {
         throw new DBError('Error deleting workspace todo', error);
       }

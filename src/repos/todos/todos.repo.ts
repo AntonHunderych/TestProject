@@ -1,5 +1,5 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { Todo } from '../../services/typeorm/entities/TodoEntity';
+import { TodoEntity } from '../../services/typeorm/entities/TodoEntity';
 import { DBError } from '../../types/errors/DBError';
 import { util } from 'zod';
 import Omit = util.Omit;
@@ -21,7 +21,7 @@ export interface ITodosRepo extends IRecreateRepo {
 }
 
 export function getTodoRepo(db: DataSource | EntityManager): ITodosRepo {
-  const todoRepo = db.getRepository(Todo);
+  const todoRepo = db.getRepository(TodoEntity);
 
   return {
     async create(todo: Omit<ITodo, 'id'>): Promise<ITodo> {

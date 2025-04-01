@@ -1,14 +1,14 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { WorkSpaceTodo } from './WorkSpaceTodoEntity';
-import { WorkSpaceUser } from './WorkSpaceUserEntity';
-import { BasicComment } from '../BasicCommentEntity';
+import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
+import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
+import { BasicCommentEntity } from '../BasicCommentEntity';
 
 @Entity({ name: 'workSpaceComment' })
-export class WorkSpaceComment extends BasicComment {
+export class WorkSpaceCommentEntity extends BasicCommentEntity {
   @Column()
   workSpaceId: string;
 
-  @ManyToOne(() => WorkSpaceUser, (workSpaceUser) => workSpaceUser.comments)
+  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.comments)
   @JoinColumn([
     {
       name: 'workSpaceId',
@@ -19,8 +19,8 @@ export class WorkSpaceComment extends BasicComment {
       referencedColumnName: 'userId',
     },
   ])
-  creator: WorkSpaceUser;
+  creator: WorkSpaceUserEntity;
 
-  @ManyToOne(() => WorkSpaceTodo, (workSpaceTodo) => workSpaceTodo.comments)
-  todo: WorkSpaceTodo;
+  @ManyToOne(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.comments)
+  todo: WorkSpaceTodoEntity;
 }

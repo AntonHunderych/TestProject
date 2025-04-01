@@ -1,19 +1,19 @@
 import { Entity, ManyToOne, PrimaryColumn, Unique } from 'typeorm';
-import { Tag } from './TagEntity';
-import { Todo } from './TodoEntity';
+import { TagEntity } from './TagEntity';
+import { TodoEntity } from './TodoEntity';
 
 @Entity({ name: 'todoTag' })
 @Unique(['tagId', 'todoId'])
-export class TodoTag {
+export class TodoTagEntity {
   @PrimaryColumn()
   tagId: string;
 
   @PrimaryColumn()
   todoId: string;
 
-  @ManyToOne(() => Tag, (tag) => tag.todos, { onDelete: 'CASCADE' })
-  tag: Tag;
+  @ManyToOne(() => TagEntity, (tag) => tag.todos, { onDelete: 'CASCADE' })
+  tag: TagEntity;
 
-  @ManyToOne(() => Todo, (todo) => todo.tags, { onDelete: 'CASCADE' })
-  todo: Todo;
+  @ManyToOne(() => TodoEntity, (todo) => todo.tags, { onDelete: 'CASCADE' })
+  todo: TodoEntity;
 }

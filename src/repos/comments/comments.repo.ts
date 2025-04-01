@@ -1,5 +1,5 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { Comment } from '../../services/typeorm/entities/CommentEntity';
+import { CommentEntity } from '../../services/typeorm/entities/CommentEntity';
 import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 import { IComment } from '../../types/entities/CommentSchema';
@@ -17,7 +17,7 @@ export interface ICommentsRepo extends IRecreateRepo {
 }
 
 export const getCommentRepo = (db: DataSource | EntityManager): ICommentsRepo => {
-  const commentRepo = db.getRepository(Comment);
+  const commentRepo = db.getRepository(CommentEntity);
 
   return {
     async getAllTodoComments(id: string): Promise<IComment[]> {

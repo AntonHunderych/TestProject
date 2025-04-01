@@ -1,6 +1,6 @@
 import { DataSource, EntityManager } from 'typeorm';
-import { WorkSpaceTodo } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
-import { WorkSpaceCommand } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCommandEntity';
+import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
+import { WorkSpaceCommandEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCommandEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
@@ -11,13 +11,13 @@ export interface IGetWorkSpaceCommandTodoRepo extends IRecreateRepo {
 }
 
 export function getWorkSpaceCommandTodoRepo(db: DataSource | EntityManager): IGetWorkSpaceCommandTodoRepo {
-  const workSpaceTodoRepo = db.getRepository<WorkSpaceTodo>(WorkSpaceTodo);
+  const workSpaceTodoRepo = db.getRepository<WorkSpaceTodoEntity>(WorkSpaceTodoEntity);
 
   return {
     async addCommandToTodo(todoId: string, workSpaceId: string, value: string) {
       try {
         const todo = await workSpaceTodoRepo.findOneOrFail({ where: { id: todoId }, relations: { command: true } });
-        const command = new WorkSpaceCommand();
+        const command = new WorkSpaceCommandEntity();
         command.value = value;
         command.workSpaceId = workSpaceId;
         todo.command = command;

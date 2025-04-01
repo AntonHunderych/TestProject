@@ -1,20 +1,20 @@
 import { DataSource, EntityManager } from 'typeorm';
 import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
-import { UserRole } from '../../services/typeorm/entities/UserRoleEntity';
-import { Role } from '../../services/typeorm/entities/RoleEntity';
+import { UserRoleEntity } from '../../services/typeorm/entities/UserRoleEntity';
+import { RoleEntity } from '../../services/typeorm/entities/RoleEntity';
 
 export interface IUserRoleRepo extends IRecreateRepo {
-  getUserRoles(userId: string): Promise<Role[]>;
+  getUserRoles(userId: string): Promise<RoleEntity[]>;
   giveRoleToUser(userId: string, roleValue: string): Promise<void>;
   removeRoleFromUser(userID: string, roleValue: string): Promise<void>;
 }
 
 export function getUserRoleRepo(db: DataSource | EntityManager): IUserRoleRepo {
-  const userRoleRepo = db.getRepository(UserRole);
+  const userRoleRepo = db.getRepository(UserRoleEntity);
 
   return {
-    async getUserRoles(userId: string): Promise<Role[]> {
+    async getUserRoles(userId: string): Promise<RoleEntity[]> {
       try {
         const userRoles = await userRoleRepo.find({ where: { userId }, relations: { role: true } });
         return userRoles.map((userRole) => userRole.role);

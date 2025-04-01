@@ -1,11 +1,11 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { WorkSpace } from './WorkSpaceEntity';
-import { WorkSpaceUser } from './WorkSpaceUserEntity';
-import { WorkSpacePermissions } from './WorkSpacePermissionsEntity';
+import { WorkSpaceEntity } from './WorkSpaceEntity';
+import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
+import { WorkSpacePermissionsEntity } from './WorkSpacePermissionsEntity';
 
 @Entity({ name: 'workSpaceRoles' })
 @Unique(['workSpaceId', 'name'])
-export class WorkSpaceRoles {
+export class WorkSpaceRolesEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -15,15 +15,15 @@ export class WorkSpaceRoles {
   @Column()
   workSpaceId: string;
 
-  @ManyToOne(() => WorkSpace, (workSpace) => workSpace.workSpaceRoles)
-  workSpace: WorkSpace;
+  @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.workSpaceRoles)
+  workSpace: WorkSpaceEntity;
 
-  @ManyToMany(() => WorkSpaceUser, (workSpace) => workSpace.roles)
+  @ManyToMany(() => WorkSpaceUserEntity, (workSpace) => workSpace.roles)
   @JoinTable({
     name: 'workSpaceUserRole',
   })
-  workSpaceUsers: WorkSpaceUser[];
+  workSpaceUsers: WorkSpaceUserEntity[];
 
-  @ManyToMany(() => WorkSpacePermissions, (workSpacePermissions) => workSpacePermissions.roles)
-  permissions: WorkSpacePermissions[];
+  @ManyToMany(() => WorkSpacePermissionsEntity, (workSpacePermissions) => workSpacePermissions.roles)
+  permissions: WorkSpacePermissionsEntity[];
 }

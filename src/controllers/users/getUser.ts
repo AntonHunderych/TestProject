@@ -1,6 +1,6 @@
 import { IUsersRepo } from '../../repos/users/users.repo';
 import { HttpError } from '../../api/error/HttpError';
-import { Tag } from '../../services/typeorm/entities/TagEntity';
+import { TagEntity } from '../../services/typeorm/entities/TagEntity';
 import { IWorkSpace } from '../../types/entities/WorkSpaceSchema';
 import { ITodo } from '../../types/entities/TodoSchema';
 
@@ -9,7 +9,7 @@ export interface GetUserByIdResp {
   username: string;
   email: string;
   todos: ITodo[];
-  tags: Tag[];
+  tags: TagEntity[];
   workSpaces: IWorkSpace[];
 }
 
