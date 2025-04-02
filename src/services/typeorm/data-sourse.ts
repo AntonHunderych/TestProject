@@ -20,7 +20,10 @@ import { TokenEntity } from './entities/TokenEntity';
 import { UserRoleEntity } from './entities/UserRoleEntity';
 import { TodoTagEntity } from './entities/TodoTagEntity';
 import { WorkSpaceTagTodoEntity } from './entities/WorkSpace/WorkSpaceTagTodoEntity';
-import { WorkSpaceTodoCategoryEntity } from './entities/WorkSpace/WorkSpaceTodoCategoryEntity';
+import { WorkSpaceContributorEntity } from './entities/WorkSpace/WorkSpaceContributorEntity';
+import { WorkSpaceRolePermissionEntity } from './entities/WorkSpace/WorkSpaceRolePermissionEntity';
+import { WorkSpaceUserRoleEntity } from './entities/WorkSpace/WorkSpaceUserRoleEntity';
+import { WorkSpaceUserCommandEntity } from './entities/WorkSpace/WorkSpaceUserCommandEntity';
 
 dotenv.config();
 
@@ -53,8 +56,11 @@ export function getDataSource() {
       WorkSpaceTagEntity,
       WorkSpaceTagTodoEntity,
       WorkSpaceCategoryEntity,
-      WorkSpaceTodoCategoryEntity,
       WorkSpaceCommandEntity,
+      WorkSpaceContributorEntity,
+      WorkSpaceRolePermissionEntity,
+      WorkSpaceUserRoleEntity,
+      WorkSpaceUserCommandEntity,
     ],
     migrations: ['./migrations/*.ts'],
   });

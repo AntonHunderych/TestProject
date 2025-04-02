@@ -2,9 +2,9 @@ import z from 'zod';
 import { WorkSpaceUserSchema } from './WorkSpaceUserSchema';
 import { WorkSpaceCommandSchema } from './WorkSpaceCommandSchema';
 
-export const WorkSpaceUserCommandSchema = z.object({
+export const WorkSpaceUserCommandSchema: any = z.object({
   userId: z.string(),
   commandId: z.string(),
-  user: WorkSpaceUserSchema.nullish(),
-  command: WorkSpaceCommandSchema.nullish(),
+  user: WorkSpaceUserSchema,
+  command: WorkSpaceCommandSchema,
 });

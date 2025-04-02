@@ -25,7 +25,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      await workSpaceCommandsTodoRepo.addCommandToTodo(req.body.todoId, req.workSpace.id, req.body.command);
+      await workSpaceCommandsTodoRepo.addCommandToTodo(req.body.todoId, req.body.command);
     },
   );
 

@@ -35,7 +35,7 @@ export class WorkSpaceUserEntity {
   @OneToMany(() => WorkSpaceCommentEntity, (comment) => comment.creator)
   comments: WorkSpaceCommentEntity[];
 
-  @OneToMany(() => WorkSpaceUserRoleEntity, (workSpaceUserRoleEntity) => workSpaceUserRoleEntity.role)
+  @OneToMany(() => WorkSpaceUserRoleEntity, (workSpaceUserRoleEntity) => workSpaceUserRoleEntity.user)
   roles: WorkSpaceUserRoleEntity[];
 
   @OneToMany(() => WorkSpaceTagTodoEntity, (workSpaceTagTodo) => workSpaceTagTodo.assignedBy)
@@ -46,4 +46,7 @@ export class WorkSpaceUserEntity {
 
   @OneToMany(() => WorkSpaceUserCommandEntity, (workSpaceUserCommandEntity) => workSpaceUserCommandEntity.user)
   commands: WorkSpaceUserCommandEntity[];
+
+  @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.attachByUser)
+  attachedCategoryToTodos: WorkSpaceTodoEntity;
 }

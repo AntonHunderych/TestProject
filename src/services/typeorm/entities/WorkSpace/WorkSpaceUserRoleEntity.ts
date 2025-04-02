@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
 import { WorkSpaceRolesEntity } from './WorkSpaceRolesEntity';
 
@@ -8,9 +8,16 @@ export class WorkSpaceUserRoleEntity {
   userId: string;
 
   @PrimaryColumn()
+  workSpaceId: string;
+
+  @PrimaryColumn()
   roleId: string;
 
   @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUserEntity) => workSpaceUserEntity.roles, { onDelete: 'CASCADE' })
+  @JoinColumn([
+    { name: 'userId', referencedColumnName: 'userId' },
+    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
+  ])
   user: WorkSpaceUserEntity;
 
   @ManyToOne(() => WorkSpaceRolesEntity, (workSpaceRolesEntity) => workSpaceRolesEntity.users, {

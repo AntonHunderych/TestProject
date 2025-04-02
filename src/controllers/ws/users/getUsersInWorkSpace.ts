@@ -19,7 +19,7 @@ export async function getUsersInWorkSpaceHandler(
       id: workSpaceUser.user.id,
       username: workSpaceUser.user.username,
       todos: workSpaceUser.createdTodos,
-      roles: workSpaceUser.roles,
+      roles: workSpaceUser.roles.map((role) => role.role),
     };
   });
 }

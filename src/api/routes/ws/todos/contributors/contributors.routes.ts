@@ -24,7 +24,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      return await contributorRepos.getTodoContributor(req.workSpace.id, req.params.id);
+      return await contributorRepos.getTodoContributor(req.params.id);
     },
   );
 
@@ -37,7 +37,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.addPerformersTodo),
     },
     async (req) => {
-      await contributorRepos.addContributor(req.workSpace.id, req.body.userId, req.body.todoId);
+      await contributorRepos.addContributor(req.body.userId, req.workSpace.id, req.body.todoId);
     },
   );
 
@@ -50,7 +50,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.removePerformersTodo),
     },
     async (req) => {
-      await contributorRepos.deleteContributor(req.workSpace.id, req.body.userId, req.body.todoId);
+      await contributorRepos.deleteContributor(req.body.userId, req.workSpace.id, req.body.todoId);
     },
   );
 };

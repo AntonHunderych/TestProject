@@ -1,36 +1,38 @@
 import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
-import { WorkSpaceCommandEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceCommandEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
 export interface IGetWorkSpaceCommandTodoRepo extends IRecreateRepo {
-  addCommandToTodo(todoId: string, workSpaceId: string, value: string): Promise<void>;
+  addCommandToTodo(todoId: string, commandId: string): Promise<void>;
 
   removeCommandFromTodo(todoId: string): Promise<void>;
 }
 
 export function getWorkSpaceCommandTodoRepo(db: DataSource | EntityManager): IGetWorkSpaceCommandTodoRepo {
-  const workSpaceTodoRepo = db.getRepository<WorkSpaceTodoEntity>(WorkSpaceTodoEntity);
+  const workSpaceTodoRepo = db.getRepository(WorkSpaceTodoEntity);
 
   return {
-    async addCommandToTodo(todoId: string, workSpaceId: string, value: string) {
+    async addCommandToTodo(todoId: string, commandId: string): Promise<void> {
       try {
-        const todo = await workSpaceTodoRepo.findOneOrFail({ where: { id: todoId }, relations: { command: true } });
-        const command = new WorkSpaceCommandEntity();
-        command.value = value;
-        command.workSpaceId = workSpaceId;
-        todo.command = command;
-        await workSpaceTodoRepo.save(todo);
+        await workSpaceTodoRepo
+          .createQueryBuilder()
+          .update()
+          .set({ commandId })
+          .where('"id"=:todoId', { todoId })
+          .execute();
       } catch (error) {
         throw new DBError('Failed to add command to todo', error);
       }
     },
-    async removeCommandFromTodo(todoId: string) {
+    async removeCommandFromTodo(todoId: string): Promise<void> {
       try {
-        const todo = await workSpaceTodoRepo.findOneOrFail({ where: { id: todoId }, relations: { command: true } });
-        todo.command = null;
-        await workSpaceTodoRepo.save(todo);
+        await workSpaceTodoRepo
+          .createQueryBuilder()
+          .update()
+          .set({ command: null, commandId: null })
+          .where('"id"=:todoId', { todoId })
+          .execute();
       } catch (error) {
         throw new DBError('Failed to remove command from todo', error);
       }

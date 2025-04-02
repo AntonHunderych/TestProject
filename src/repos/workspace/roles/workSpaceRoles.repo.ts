@@ -1,7 +1,5 @@
 import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceRolesEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
-import { Permissions } from '../../../types/enum/PermisionsEnum';
-import { WorkSpacePermissionsEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpacePermissionsEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
@@ -10,16 +8,10 @@ export interface IWorkSpaceRolesRepo extends IRecreateRepo {
   delete(workSpaceId: string, name: string): Promise<boolean>;
   getAll(): Promise<WorkSpaceRolesEntity[]>;
   getWorkSpaceRoles(workSpaceId: string): Promise<WorkSpaceRolesEntity[]>;
-  updatePermissionOnRole(
-    workSpaceId: string,
-    name: string,
-    permissionsValue: Permissions[],
-  ): Promise<WorkSpaceRolesEntity>;
 }
 
 export function getWorkSpaceRoleRepo(db: DataSource | EntityManager): IWorkSpaceRolesRepo {
   const workSpaceRolesRepo = db.getRepository(WorkSpaceRolesEntity);
-  const workSpacePermissions = db.getRepository(WorkSpacePermissionsEntity);
 
   return {
     async getAll(): Promise<WorkSpaceRolesEntity[]> {
@@ -48,27 +40,6 @@ export function getWorkSpaceRoleRepo(db: DataSource | EntityManager): IWorkSpace
         return !!(await workSpaceRolesRepo.delete([name, workSpaceId]));
       } catch (error) {
         throw new DBError('Error deleting workspace role', error);
-      }
-    },
-    async updatePermissionOnRole(
-      workSpaceId: string,
-      name: string,
-      permissionsValue: Permissions[],
-    ): Promise<WorkSpaceRolesEntity> {
-      try {
-        const permissions = await Promise.all(
-          permissionsValue.map((value) => workSpacePermissions.findOneOrFail({ where: { value } })),
-        );
-
-        const role = await workSpaceRolesRepo.findOneOrFail({
-          where: { workSpaceId, name },
-          relations: { permissions: true },
-        });
-
-        role.permissions = permissions;
-        return await workSpaceRolesRepo.save(role);
-      } catch (error) {
-        throw new DBError('Error updating permissions on workspace role', error);
       }
     },
     __recreateFunction: getWorkSpaceRoleRepo,

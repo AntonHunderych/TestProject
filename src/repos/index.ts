@@ -13,12 +13,15 @@ import { getWorkSpaceUserRoleRepo } from './workspace/userRole/workSpaceUserRole
 import { getTodoContributorRepo } from './workspace/todoContributor/todoContributor.repo';
 import { getWorkSpaceCommentRepos } from './workspace/comments/comments.repo';
 import { getTagRepo } from './tags/tags.repo';
-import { getWorkSpaceTagRepo } from './workspace/tags/workSpaceTags.repos';
+import { getWorkSpaceTagRepo } from './workspace/tags/workSpaceTags.repo';
 import { getWorkSpaceCategoryRepo } from './workspace/categories/workSpaceCategories.repo';
 import { getWorkSpaceCommandRepo } from './workspace/commands/workSpaceCommand.repo';
 import { getWorkSpaceCommandTodoRepo } from './workspace/commandsTodo/workSpaceCommandsTodo.repo';
 import { getTokenRepo } from './token/token.repo';
 import { getTodoTagRepo } from './todoTag/todoTag.repo';
+import { getWorkSpaceRolePermissionRepo } from './workspace/rolePermission/workSpaceRolePermission.repo';
+import { getWorkSpaceUserCommandRepo } from './workspace/userCommand/workSpaceUserCommand.repo';
+import { getWorkSpaceTagTodoRepo } from './workspace/tagTodo/workSpaceTagTodo.repo';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -42,6 +45,9 @@ export default function getRepos(db: DataSource) {
     workSpaceCategoryRepo: getWorkSpaceCategoryRepo(db),
     workSpaceCommandRepo: getWorkSpaceCommandRepo(db),
     workSpaceCommandTodoRepo: getWorkSpaceCommandTodoRepo(db),
+    workSpaceRolePermissionRepo: getWorkSpaceRolePermissionRepo(db),
+    workSpaceUserCommandRepo: getWorkSpaceUserCommandRepo(db),
+    workSpaceTagTodoRepo: getWorkSpaceTagTodoRepo(db),
   };
 }
 

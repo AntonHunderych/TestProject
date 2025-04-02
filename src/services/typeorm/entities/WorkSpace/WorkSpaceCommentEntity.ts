@@ -8,7 +8,7 @@ export class WorkSpaceCommentEntity extends BasicCommentEntity {
   @Column()
   workSpaceId: string;
 
-  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.comments)
+  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.comments, { onDelete: 'CASCADE' })
   @JoinColumn([
     {
       name: 'workSpaceId',

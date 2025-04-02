@@ -6,5 +6,5 @@ export const getWorkSpaceUserSchema = z.object({
   id: z.string(),
   username: z.string(),
   roles: z.array(getWorkSpaceRoleSchema),
-  todos: z.array(getWorkSpaceTodoSchema.omit({ creator: true, tags: true })),
+  todos: z.array(getWorkSpaceTodoSchema.omit({})),
 });

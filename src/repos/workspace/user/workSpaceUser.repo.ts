@@ -3,9 +3,10 @@ import { WorkSpaceUserEntity } from '../../../services/typeorm/entities/WorkSpac
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 import { WorkSpace } from '../../../types/entities/WorkSpace/WorkSpaceSchema';
+import { WorkSpaceUser, WorkSpaceUserSchema } from '../../../types/entities/WorkSpace/WorkSpaceUserSchema';
 
 export interface IWorkSpaceUserRepo extends IRecreateRepo {
-  addUserToWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUserEntity>;
+  addUserToWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUser>;
   getUserAllWorkSpaces(id: string): Promise<WorkSpace[]>;
   getAllCreatedWorkSpaces(id: string): Promise<WorkSpace[]>;
   existUserInWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUserEntity | undefined>;
@@ -17,29 +18,29 @@ export function getWorkSpaceUserRepo(db: DataSource | EntityManager): IWorkSpace
   const workSpaceUserRepo = db.getRepository(WorkSpaceUserEntity);
 
   return {
-    async addUserToWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUserEntity> {
+    async addUserToWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUser> {
       try {
-        const existingUser = await workSpaceUserRepo.findOne({
-          where: { workSpaceId, userId },
-        });
-
-        if (existingUser) {
-          return existingUser;
-        }
-
-        const newWorkSpaceUser = workSpaceUserRepo.create({
-          userId,
-          workSpaceId,
-        });
-
-        return await workSpaceUserRepo.save(newWorkSpaceUser);
+        const result = await workSpaceUserRepo
+          .createQueryBuilder()
+          .insert()
+          .values({ workSpaceId, userId })
+          .returning('*')
+          .execute();
+        return WorkSpaceUserSchema.parse(result.generatedMaps[0]);
       } catch (error) {
         throw new DBError('Error adding user to workspace', error);
       }
     },
     async deleteUserFromWorkSpace(workSpaceId: string, userId: string): Promise<boolean> {
       try {
-        return !!(await workSpaceUserRepo.delete({ workSpaceId, userId }));
+        const result = await workSpaceUserRepo
+          .createQueryBuilder()
+          .delete()
+          .where('"userId"=:userId', { userId })
+          .andWhere('"workSpaceId"=:workSpaceId', { workSpaceId })
+          .returning('*')
+          .execute();
+        return !!result.raw[0];
       } catch (error) {
         throw new DBError('Error deleting user from workspace', error);
       }
@@ -48,7 +49,11 @@ export function getWorkSpaceUserRepo(db: DataSource | EntityManager): IWorkSpace
       try {
         return await workSpaceUserRepo.find({
           where: { workSpaceId },
-          relations: { user: true, roles: true, createdTodos: true },
+          relations: {
+            user: true,
+            createdTodos: { contributors: true, tags: { workSpaceTag: true }, comments: true, category: true },
+            roles: { role: true },
+          },
         });
       } catch (error) {
         throw new DBError('Error fetching users in workspace', error);

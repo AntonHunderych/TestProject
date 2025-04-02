@@ -1,23 +1,20 @@
 import z from 'zod';
 import { BasicTodoSchema } from '../BasicTodoSchema';
-import { WorkSpaceSchema } from './WorkSpaceSchema';
-import { WorkSpaceUserSchema } from './WorkSpaceUserSchema';
 import { WorkSpaceCommentSchema } from './WorkSpaceCommentSchema';
-import { WorkSpaceTagSchema } from './WorkSpaceTagSchema';
-import { WorkSpaceTodoCategorySchema } from './WorkSpaceTodoCategorySchema';
-import { WorkSpaceCommandSchema } from './WorkSpaceCommandSchema';
+import { WorkSpaceCategorySchema } from './WorkSpaceCategorySchema';
+import { WorkSpaceTodoTagSchema } from './WorkSpaceTodoTagSchema';
 import { WorkSpaceContributorSchema } from './WorkSpaceContributorSchema';
+import { WorkSpaceCommandSchema } from './WorkSpaceCommandSchema';
 
-export const WorkSpaceTodoSchema: any = BasicTodoSchema.extend({
+export const WorkSpaceTodoSchema = BasicTodoSchema.extend({
   workSpaceId: z.string(),
-  workSpace: WorkSpaceSchema,
-  creator: WorkSpaceUserSchema,
-  categoryId: z.string(),
-  contributors: z.array(WorkSpaceContributorSchema).nullish(),
-  comments: z.array(WorkSpaceCommentSchema).nullish(),
-  tags: z.array(WorkSpaceTagSchema).nullish(),
-  category: WorkSpaceTodoCategorySchema.nullish(),
+  categoryId: z.string().nullish(),
+  commandId: z.string().nullish(),
+  contributors: z.array(z.lazy(() => WorkSpaceContributorSchema)),
+  comments: z.array(z.lazy(() => WorkSpaceCommentSchema)),
+  tags: z.array(z.lazy(() => WorkSpaceTodoTagSchema)),
+  category: WorkSpaceCategorySchema.nullish(),
   command: WorkSpaceCommandSchema.nullish(),
 });
 
-export type WorkSpaceTodo1 = z.infer<typeof WorkSpaceTodoSchema>;
+export type WorkSpaceTodo = z.infer<typeof WorkSpaceTodoSchema>;

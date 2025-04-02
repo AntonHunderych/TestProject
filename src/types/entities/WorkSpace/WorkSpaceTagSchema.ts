@@ -1,12 +1,9 @@
 import z from 'zod';
-import { WorkSpaceUserSchema } from './WorkSpaceUserSchema';
-import { WorkSpaceSchema } from './WorkSpaceSchema';
 import { WorkSpaceTodoTagSchema } from './WorkSpaceTodoTagSchema';
 
-export const WorkSpaceTagSchema: any = z.object({
-  todos: z.array(WorkSpaceTodoTagSchema).nullish(),
+export const WorkSpaceTagSchema = z.object({
+  todos: z.array(WorkSpaceTodoTagSchema),
   creatorId: z.string(),
-  creator: WorkSpaceUserSchema.nullish(),
   workSpaceId: z.string(),
-  workSpace: WorkSpaceSchema.nullish(),
 });
+export type WorkSpaceTag = z.infer<typeof WorkSpaceTagSchema>;

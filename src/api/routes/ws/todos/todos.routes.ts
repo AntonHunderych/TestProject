@@ -15,7 +15,7 @@ import { getAllTodoInWorkSpaceByCommand } from '../../../../controllers/ws/todos
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceTodoRepo = f.repos.workSpaceTodoRepo;
-  const workSpaceCommandRepo = f.repos.workSpaceCommandRepo;
+  const workSpaceCommandRepo = f.repos.workSpaceUserCommandRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);

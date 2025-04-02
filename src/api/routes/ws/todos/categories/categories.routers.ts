@@ -10,6 +10,7 @@ import { RoleEnum } from '../../../../../types/enum/RoleEnum';
 const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceCategoriesRepo = f.repos.workSpaceCategoryRepo;
+  const workSpaceTodoRepo = f.repos.workSpaceTodoRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
@@ -52,18 +53,6 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
     },
   );
 
-  f.get(
-    '/:id',
-    {
-      schema: {
-        params: UUIDGetter,
-      },
-    },
-    async (req) => {
-      return await workSpaceCategoriesRepo.getAllCategoryTodos(req.params.id);
-    },
-  );
-
   f.put(
     '/',
     {
@@ -91,7 +80,7 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       },
     },
     async (req) => {
-      return await workSpaceCategoriesRepo.attachTodo(req.body.todoId, req.body.categoryId, req.userData.id);
+      return await workSpaceTodoRepo.setCategoryToTodo(req.body.todoId, req.body.categoryId, req.userData.id);
     },
   );
 
@@ -103,7 +92,7 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       },
     },
     async (req) => {
-      return await workSpaceCategoriesRepo.removeTodo(req.params.id);
+      return await workSpaceTodoRepo.removeCategoryTodo(req.params.id);
     },
   );
 };

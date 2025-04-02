@@ -7,17 +7,17 @@ export class BasicTodoEntity {
   @Column()
   title: string;
 
-  @Column({ nullable: true })
-  description?: string;
+  @Column({ type: 'varchar', nullable: true })
+  description?: string | null;
 
-  @Column({ nullable: true })
-  eliminatedDate?: Date;
+  @Column({ type: 'timestamp', nullable: true })
+  eliminatedDate?: Date | null;
 
-  @Column({ nullable: true })
-  importance?: number;
+  @Column({ type: 'integer', nullable: true })
+  importance?: number | null;
 
-  @Column({ nullable: true })
-  status?: string;
+  @Column({ type: 'varchar', nullable: true })
+  status?: string | null;
 
   @Column({ name: 'creatorId' })
   creatorId: string;

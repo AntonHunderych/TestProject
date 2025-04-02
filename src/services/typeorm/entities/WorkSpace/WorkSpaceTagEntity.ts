@@ -13,7 +13,7 @@ export class WorkSpaceTagEntity extends BasicTagEntity {
   @Column()
   creatorId: string;
 
-  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.createdTags)
+  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.createdTags, { onDelete: 'CASCADE' })
   @JoinColumn([
     { name: 'creatorId', referencedColumnName: 'userId' },
     { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },

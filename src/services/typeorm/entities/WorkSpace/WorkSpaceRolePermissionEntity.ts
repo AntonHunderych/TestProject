@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { WorkSpaceRolesEntity } from './WorkSpaceRolesEntity';
 import { WorkSpacePermissionsEntity } from './WorkSpacePermissionsEntity';
 
@@ -17,6 +17,10 @@ export class WorkSpaceRolePermissionEntity {
 
   @ManyToOne(() => WorkSpacePermissionsEntity, (workSpacePermissionsEntity) => workSpacePermissionsEntity.roles, {
     onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    name: 'value',
+    referencedColumnName: 'value',
   })
   permission: WorkSpacePermissionsEntity;
 }

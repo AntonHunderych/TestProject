@@ -12,6 +12,7 @@ import { addRemoveTagSchema } from '../../../todos/tags/schema/addRemoveTagSchem
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceTagRepo = f.repos.workSpaceTagRepo;
+  const workSpaceTagTodoRepo = f.repos.workSpaceTagTodoRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
@@ -82,7 +83,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      return await workSpaceTagRepo.addTag(req.body.todoId, req.body.tagId, req.userData.id, req.workSpace.id);
+      return await workSpaceTagTodoRepo.addTag(req.body.todoId, req.body.tagId, req.userData.id, req.workSpace.id);
     },
   );
 
@@ -94,7 +95,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      return await workSpaceTagRepo.removeTag(req.body.todoId, req.body.tagId);
+      return await workSpaceTagTodoRepo.removeTag(req.body.todoId, req.body.tagId);
     },
   );
 };

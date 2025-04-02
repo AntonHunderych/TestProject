@@ -4,6 +4,7 @@ import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
 import { WorkSpaceRolesEntity } from './WorkSpaceRolesEntity';
 import { WorkSpaceTagEntity } from './WorkSpaceTagEntity';
 import { WorkSpaceCommandEntity } from './WorkSpaceCommandEntity';
+import { WorkSpaceCategoryEntity } from './WorkSpaceCategoryEntity';
 
 @Entity({ name: 'workSpace' })
 @Unique(['name', 'creatorId'])
@@ -34,4 +35,7 @@ export class WorkSpaceEntity {
 
   @OneToMany(() => WorkSpaceCommandEntity, (workSpaceCommand) => workSpaceCommand.workSpace)
   commands: WorkSpaceCommandEntity[];
+
+  @OneToMany(() => WorkSpaceCategoryEntity, (workSpaceCategoryEntity) => workSpaceCategoryEntity.workSpace)
+  categories: WorkSpaceCategoryEntity[];
 }

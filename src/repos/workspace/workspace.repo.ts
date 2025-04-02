@@ -2,7 +2,7 @@ import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceEntity } from '../../services/typeorm/entities/WorkSpace/WorkSpaceEntity';
 import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
-import { WorkSpace } from '../../types/entities/WorkSpace/WorkSpaceSchema';
+import { WorkSpace, WorkSpaceSchema } from '../../types/entities/WorkSpace/WorkSpaceSchema';
 
 export interface IWorkSpaceRepos extends IRecreateRepo {
   createWorkSpace(workSpace: IWorkSpaceCreate): Promise<WorkSpace>;
@@ -12,7 +12,7 @@ export interface IWorkSpaceRepos extends IRecreateRepo {
   getAllWorkSpaces(): Promise<WorkSpace[]>;
 }
 
-export type IWorkSpaceCreate = Omit<WorkSpace, 'id'>;
+export type IWorkSpaceCreate = Partial<WorkSpace>;
 export type IWorkSpaceUpdate = Partial<Omit<WorkSpace, 'id' | 'creatorId'>>;
 
 export function getWorkSpaceRepos(db: DataSource | EntityManager): IWorkSpaceRepos {
@@ -21,14 +21,20 @@ export function getWorkSpaceRepos(db: DataSource | EntityManager): IWorkSpaceRep
   return {
     async createWorkSpace(workSpace: IWorkSpaceCreate): Promise<WorkSpace> {
       try {
-        return await WorkSpaceRepos.save(workSpace);
+        const result = await WorkSpaceRepos.createQueryBuilder().insert().values(workSpace).returning('*').execute();
+        return WorkSpaceSchema.parse(result.generatedMaps[0]);
       } catch (error) {
         throw new DBError('Error creating workspace', error);
       }
     },
     async deleteWorkSpace(id: string): Promise<boolean> {
       try {
-        return !!(await WorkSpaceRepos.delete({ id }));
+        const result = await WorkSpaceRepos.createQueryBuilder()
+          .delete()
+          .where('id=:id', { id })
+          .returning('*')
+          .execute();
+        return !!result.raw[0];
       } catch (error) {
         throw new DBError('Error deleting workspace', error);
       }
@@ -44,7 +50,7 @@ export function getWorkSpaceRepos(db: DataSource | EntityManager): IWorkSpaceRep
       try {
         return await WorkSpaceRepos.findOneOrFail({
           where: { id },
-          relations: { todos: true, users: true, roles: true },
+          relations: { todos: true, users: true, roles: true, tags: true, commands: true, categories: true },
         });
       } catch (error) {
         throw new DBError('Error fetching workspace by id', error);
@@ -52,9 +58,13 @@ export function getWorkSpaceRepos(db: DataSource | EntityManager): IWorkSpaceRep
     },
     async updateWorkSpace(id: string, workSpace: IWorkSpaceUpdate): Promise<WorkSpace> {
       try {
-        const _workSpace = await WorkSpaceRepos.findOneOrFail({ where: { id } });
-        Object.assign(_workSpace, workSpace);
-        return await WorkSpaceRepos.save(_workSpace);
+        const result = await WorkSpaceRepos.createQueryBuilder()
+          .update()
+          .set(workSpace)
+          .where('id=:id', { id })
+          .returning('*')
+          .execute();
+        return result.raw[0];
       } catch (error) {
         throw new DBError('Error updating workspace', error);
       }

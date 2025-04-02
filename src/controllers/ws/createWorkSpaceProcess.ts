@@ -8,7 +8,7 @@ import { IWorkSpaceUserRoleRepo } from '../../repos/workspace/userRole/workSpace
 import { createWorkSpace } from './createWorkSpace';
 import { addUserToWorkSpace } from './users/addUserToWorkSpace';
 import { IWithTransaction } from '../../services/withTransaction/IWithTransaction';
-import { EDefaultRolesInWorkSpace } from '../../types/enum/EDefaultRolesInWorkSpace';
+import { IWorkSpaceRolePermissionRepo } from '../../repos/workspace/rolePermission/workSpaceRolePermission.repo';
 
 export async function createWorkSpaceProcess(
   withTransaction: IWithTransaction,
@@ -16,6 +16,7 @@ export async function createWorkSpaceProcess(
   workSpaceUserRepo: IWorkSpaceUserRepo,
   workSpaceRoleRepo: IWorkSpaceRolesRepo,
   workSpaceUserRoleRepo: IWorkSpaceUserRoleRepo,
+  workSpaceRolePermissions: IWorkSpaceRolePermissionRepo,
   workSpaceCreateData: { name: string; description: string },
   userId: string,
 ): Promise<WorkSpace> {
@@ -25,12 +26,20 @@ export async function createWorkSpaceProcess(
       workSpaceUserRepo,
       workSpaceRoleRepo,
       workSpaceUserRoleRepo,
+      workSpaceRolePermissions,
     },
     async (repos) => {
-      const workSpace = await createWorkSpace(repos.workSpaceRepo, { ...workSpaceCreateData, creatorId: userId });
+      const workSpace = await createWorkSpace(repos.workSpaceRepo, {
+        ...workSpaceCreateData,
+        creatorId: userId,
+      });
       await addUserToWorkSpace(repos.workSpaceUserRepo, workSpace.id, userId);
-      await addStandardRoleToWorkSpace(repos.workSpaceRoleRepo, workSpace.id);
-      await addWorkSpaceRoleToUser(repos.workSpaceUserRoleRepo, userId, workSpace.id, EDefaultRolesInWorkSpace.Creator);
+      const roles = await addStandardRoleToWorkSpace(
+        repos.workSpaceRoleRepo,
+        repos.workSpaceRolePermissions,
+        workSpace.id,
+      );
+      await addWorkSpaceRoleToUser(repos.workSpaceUserRoleRepo, userId, workSpace.id, roles[0].id);
       return workSpace;
     },
   );

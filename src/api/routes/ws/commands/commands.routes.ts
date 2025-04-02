@@ -8,6 +8,7 @@ import { RoleEnum } from '../../../../types/enum/RoleEnum';
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceCommandRepo = f.repos.workSpaceCommandRepo;
+  const workSpaceUserCommandRepo = f.repos.workSpaceUserCommandRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
@@ -56,13 +57,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     {
       schema: {
         body: z.object({
-          value: z.string(),
+          commandId: z.string(),
           userId: z.string(),
         }),
       },
     },
     async (req) => {
-      return await workSpaceCommandRepo.addUser(req.workSpace.id, req.body.value, req.body.userId);
+      return await workSpaceUserCommandRepo.addUser(req.workSpace.id, req.body.userId, req.body.commandId);
     },
   );
 
@@ -77,7 +78,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      return await workSpaceCommandRepo.removeUser(req.workSpace.id, req.body.value, req.body.userId);
+      return await workSpaceUserCommandRepo.removeUser(req.workSpace.id, req.body.value, req.body.userId);
     },
   );
 };

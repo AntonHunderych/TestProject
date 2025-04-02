@@ -12,8 +12,8 @@ export const filterEntityByUserCommand = <T extends EntityWithCommand>(): preSer
 
     const payloadArray = payload as T[];
 
-    const workSpaceCommandRepo = this.repos.workSpaceCommandRepo;
-    const userCommands = await workSpaceCommandRepo.getUserCommands(request.userData.id, request.workSpace.id);
+    const workSpaceUserCommandRepo = this.repos.workSpaceUserCommandRepo;
+    const userCommands = await workSpaceUserCommandRepo.getUserCommands(request.userData.id, request.workSpace.id);
 
     const userCommandsValue = new Set<string>(userCommands.map((command) => command.value));
 

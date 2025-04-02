@@ -1,14 +1,17 @@
-import { Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
 import { WorkSpaceEntity } from './WorkSpaceEntity';
 import { WorkSpaceUserCommandEntity } from './WorkSpaceUserCommandEntity';
 
 @Entity({ name: 'workSpaceCommand' })
 export class WorkSpaceCommandEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
   workSpaceId: string;
 
-  @PrimaryColumn()
+  @Column()
   value: string;
 
   @OneToMany(() => WorkSpaceUserCommandEntity, (workSpaceUserCommandEntity) => workSpaceUserCommandEntity.command)

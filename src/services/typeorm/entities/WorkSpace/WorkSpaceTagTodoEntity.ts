@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn, Unique } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, Unique } from 'typeorm';
 import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
 import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
 import { WorkSpaceTagEntity } from './WorkSpaceTagEntity';
@@ -20,6 +20,16 @@ export class WorkSpaceTagTodoEntity {
   @JoinColumn({ name: 'todoId' })
   workSpaceTodo: WorkSpaceTodoEntity;
 
-  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.assignedTags)
+  @Column({ nullable: true })
+  userId: string | null;
+
+  @Column()
+  workSpaceId: string;
+
+  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.assignedTags, { onDelete: 'SET NULL' })
+  @JoinColumn([
+    { name: 'userId', referencedColumnName: 'userId' },
+    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
+  ])
   assignedBy: WorkSpaceUserEntity;
 }

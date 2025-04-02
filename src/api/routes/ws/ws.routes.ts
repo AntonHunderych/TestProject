@@ -17,6 +17,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const workSpaceRoleRepo = f.repos.workSpaceRoleRepo;
   const workSpaceUserRepo = f.repos.workSpaceUserRepo;
   const workSpaceUserRoleRepo = f.repos.workSpaceUserRoleRepo;
+  const workSpaceRolePermission = f.repos.workSpaceRolePermissionRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
 
@@ -76,6 +77,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
         workSpaceUserRepo,
         workSpaceRoleRepo,
         workSpaceUserRoleRepo,
+        workSpaceRolePermission,
         req.body,
         req.userData.id,
       );

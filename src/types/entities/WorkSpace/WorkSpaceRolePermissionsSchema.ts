@@ -8,3 +8,5 @@ export const WorkSpaceRolePermissionsSchema: any = z.object({
   role: z.nullable(WorkSpaceRoleSchema).optional(),
   permission: z.number(WorkSpacePermissionsSchema).optional(),
 });
+
+export type WorkSpaceRolePermissions = z.infer<typeof WorkSpaceRolePermissionsSchema>;

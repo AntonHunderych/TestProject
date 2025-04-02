@@ -3,10 +3,10 @@ import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpac
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 import { Todo } from '../../../types/entities/TodoSchema';
-import { WorkSpaceTodo1 } from '../../../types/entities/WorkSpace/WorkSpaceTodoSchema';
+import { WorkSpaceTodo } from '../../../types/entities/WorkSpace/WorkSpaceTodoSchema';
 
 export interface IWorkSpaceTodoRepo extends IRecreateRepo {
-  create(todo: Partial<WorkSpaceTodo1>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo1>;
+  create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo>;
 
   findById(id: string): Promise<WorkSpaceTodoEntity>;
 
@@ -19,13 +19,17 @@ export interface IWorkSpaceTodoRepo extends IRecreateRepo {
   update(id: string, todo: Partial<WorkSpaceTodoEntity>): Promise<WorkSpaceTodoEntity>;
 
   delete(id: string): Promise<boolean>;
+
+  setCategoryToTodo(todoId: string, categoryId: string, userId: string): Promise<void>;
+
+  removeCategoryTodo(todoId: string): Promise<void>;
 }
 
 export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpaceTodoRepo {
   const wsTodoRepo = db.getRepository(WorkSpaceTodoEntity);
 
   return {
-    async create(todo: Partial<WorkSpaceTodo1>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodoEntity> {
+    async create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo> {
       try {
         const data = { ...todo, workSpaceId, creatorId };
         const result = await wsTodoRepo.createQueryBuilder().insert().values(data).returning('*').execute();
@@ -52,7 +56,7 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
             comments: true,
             contributors: true,
             tags: { workSpaceTag: true },
-            category: { category: true },
+            category: true,
             command: true,
           },
         });
@@ -120,6 +124,22 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
       } catch (error) {
         throw new DBError('Error deleting workspace todo', error);
       }
+    },
+    async setCategoryToTodo(todoId: string, categoryId: string, userId: string): Promise<void> {
+      await wsTodoRepo
+        .createQueryBuilder()
+        .update()
+        .set({ categoryId, attachedByUserId: userId, attachedData: new Date() })
+        .where('"id"=:todoId', { todoId })
+        .execute();
+    },
+    async removeCategoryTodo(todoId: string): Promise<void> {
+      await wsTodoRepo
+        .createQueryBuilder()
+        .update()
+        .set({ categoryId: null, attachedByUserId: null, attachedData: null })
+        .where('"id"=:todoId', { todoId })
+        .execute();
     },
     __recreateFunction: getWorkSpaceTodoRepo,
   };

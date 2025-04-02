@@ -7,6 +7,6 @@ export class BasicCategoryEntity {
   @Column({ unique: true })
   value: string;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column({ type: 'varchar', nullable: true })
+  description: string | null;
 }

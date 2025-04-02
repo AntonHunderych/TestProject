@@ -1,14 +1,14 @@
 import { IWorkSpaceTodoRepo } from '../../../repos/workspace/todos/workSpaceTodos.repo';
-import { IWorkSpaceCommandsRepo } from '../../../repos/workspace/commands/workSpaceCommand.repo';
 import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
+import { IWorkSpaceUserCommandRepo } from '../../../repos/workspace/userCommand/workSpaceUserCommand.repo';
 
 export async function getAllTodoInWorkSpaceByCommand(
   workSpaceTodoRepo: IWorkSpaceTodoRepo,
-  workSpaceCommand: IWorkSpaceCommandsRepo,
+  workSpaceUserCommandRepo: IWorkSpaceUserCommandRepo,
   workSpaceId: string,
   userId: string,
 ): Promise<WorkSpaceTodoEntity[]> {
-  const userCommands = await workSpaceCommand.getUserCommands(userId, workSpaceId);
+  const userCommands = await workSpaceUserCommandRepo.getUserCommands(userId, workSpaceId);
   return await workSpaceTodoRepo.findAllTodoInWorkSpaceByCommand(
     workSpaceId,
     userCommands.map((command) => command.value),

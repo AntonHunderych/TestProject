@@ -1,5 +1,3 @@
-import { getTodoSchema } from '../../../todos/schemas/getTodoShema';
+import { WorkSpaceTodoSchema } from '../../../../../types/entities/WorkSpace/WorkSpaceTodoSchema';
 
-export const getWorkSpaceTodoSchema = getTodoSchema.omit({
-  comments: true,
-});
+export const getWorkSpaceTodoSchema = WorkSpaceTodoSchema;
