@@ -7,6 +7,9 @@ import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
 import { addDeleteContributorSchema } from './schema/addDeleteContributorSchema';
 import { permissionsAccessHook } from '../../hooks/permissionsAccessHook';
 import { Permissions } from '../../../../../types/enum/PermisionsEnum';
+import { addContributors } from '../../../../../controllers/ws/contributors/addContributors';
+import { deleteContributor } from '../../../../../controllers/ws/contributors/deleteContributors';
+import { getTodoContributor } from '../../../../../controllers/ws/contributors/getTodoContributor';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -24,7 +27,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      return await contributorRepos.getTodoContributor(req.params.id);
+      return await getTodoContributor(contributorRepos, req.params.id);
     },
   );
 
@@ -37,7 +40,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.addPerformersTodo),
     },
     async (req) => {
-      await contributorRepos.addContributor(req.body.userId, req.workSpace.id, req.body.todoId);
+      await addContributors(contributorRepos, req.body.userId, req.body.todoId);
     },
   );
 
@@ -50,7 +53,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.removePerformersTodo),
     },
     async (req) => {
-      await contributorRepos.deleteContributor(req.body.userId, req.workSpace.id, req.body.todoId);
+      await deleteContributor(contributorRepos, req.body.userId, req.body.todoId);
     },
   );
 };

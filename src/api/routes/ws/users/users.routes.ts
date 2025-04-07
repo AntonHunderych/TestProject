@@ -5,7 +5,6 @@ import { dataFetchHook } from '../hooks/dataFetchHook';
 import { roleHook } from '../../../hooks/roleHook';
 import { RoleEnum } from '../../../../types/enum/RoleEnum';
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
-import { getWorkSpaceSchema } from '../schema/getWorkSpaceSchema';
 import { getWorkSpaceUserSchema } from './schema/getWorkSpaceUserSchema';
 import { getUsersInWorkSpaceHandler } from '../../../../controllers/ws/users/getUsersInWorkSpace';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
@@ -19,30 +18,6 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
-
-  f.get(
-    '/workSpaces/',
-    {
-      schema: {
-        response: {
-          200: z.array(getWorkSpaceSchema),
-        },
-      },
-    },
-    async (req) => await workSpaceUserRepo.getUserAllWorkSpaces(req.userData.id),
-  );
-
-  f.get(
-    '/workSpaces/created/',
-    {
-      schema: {
-        response: {
-          200: z.array(getWorkSpaceSchema),
-        },
-      },
-    },
-    async (req) => await workSpaceUserRepo.getAllCreatedWorkSpaces(req.userData.id),
-  );
 
   f.get(
     '/',
@@ -59,21 +34,18 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   );
 
   f.post(
-    '/addUser/',
+    '/add/:id',
     {
       schema: {
-        body: z.object({
-          userId: z.string(),
-          workSpaceId: z.string(),
-        }),
+        params: UUIDGetter,
       },
       preHandler: permissionsAccessHook(Permissions.addUserToWorkSpace),
     },
-    async (req) => await workSpaceUserRepo.addUserToWorkSpace(req.body.workSpaceId, req.body.userId),
+    async (req) => await workSpaceUserRepo.addUserToWorkSpace(req.workSpace.id, req.params.id),
   );
 
   f.delete(
-    '/deleteUser/:id',
+    '/remove/:id',
     {
       schema: {
         params: UUIDGetter,

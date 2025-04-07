@@ -13,19 +13,13 @@ export class WorkSpaceCategoryEntity extends BasicCategoryEntity {
   creatorId: string;
 
   @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.createdTags, { onDelete: 'CASCADE' })
-  @JoinColumn([
-    { name: 'creatorId', referencedColumnName: 'userId' },
-    {
-      name: 'workSpaceId',
-      referencedColumnName: 'workSpaceId',
-    },
-  ])
+  @JoinColumn([{ name: 'creatorId', referencedColumnName: 'id' }])
   creator: WorkSpaceUserEntity;
 
   @Column()
   workSpaceId: string;
 
-  @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.categories)
+  @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.categories, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'workSpaceId' })
   workSpace: WorkSpaceEntity;
 }

@@ -9,22 +9,11 @@ import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
 const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
 
-  const workSpaceRolesRepo = f.repos.workSpaceRoleRepo;
   const workSpaceUserRoleRepo = f.repos.workSpaceUserRoleRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.ADMIN]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
-
-  f.get(
-    '/',
-    {
-      schema: {},
-    },
-    async () => {
-      return await workSpaceRolesRepo.getAll();
-    },
-  );
 
   f.get(
     '/user/:id',
@@ -34,7 +23,7 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       },
     },
     async (req) => {
-      return await workSpaceUserRoleRepo.getAllUserRoles(req.params.id, req.workSpace.id);
+      return await workSpaceUserRoleRepo.getAllUserRoles(req.params.id);
     },
   );
 };

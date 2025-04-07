@@ -1,6 +1,3 @@
-import z from 'zod';
+import { WorkSpaceRoleSchema } from '../../../../../types/entities/WorkSpace/WorkSpaceRolesSchema';
 
-export const getWorkSpaceRoleSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-});
+export const getWorkSpaceRoleSchema = WorkSpaceRoleSchema;

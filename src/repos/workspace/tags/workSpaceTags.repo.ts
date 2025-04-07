@@ -2,18 +2,19 @@ import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceTagEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceTagEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
+import { WorkSpaceTag, WorkSpaceTagSchema } from '../../../types/entities/WorkSpace/WorkSpaceTagSchema';
 
-export interface IGetWorkSpaceTagRepo extends IRecreateRepo {
+export interface IWorkSpaceTagRepo extends IRecreateRepo {
   getTags(userId: string): Promise<WorkSpaceTagEntity[]>;
 
-  createTag(workSpaceId: string, userId: string, value: string): Promise<WorkSpaceTagEntity>;
+  createTag(workSpaceId: string, userId: string, value: string): Promise<WorkSpaceTag>;
 
-  updateTag(userId: string, value: string): Promise<WorkSpaceTagEntity>;
+  updateTag(tagId: string, value: string): Promise<WorkSpaceTag>;
 
-  deleteTag(userId: string): Promise<void>;
+  deleteTag(tagId: string): Promise<void>;
 }
 
-export function getWorkSpaceTagRepo(db: DataSource | EntityManager): IGetWorkSpaceTagRepo {
+export function getWorkSpaceTagRepo(db: DataSource | EntityManager): IWorkSpaceTagRepo {
   const workSpaceTagRepo = db.getRepository<WorkSpaceTagEntity>(WorkSpaceTagEntity);
 
   return {
@@ -24,33 +25,40 @@ export function getWorkSpaceTagRepo(db: DataSource | EntityManager): IGetWorkSpa
         throw new DBError('Failed to get tags', error);
       }
     },
-    async createTag(workSpaceId: string, userId: string, value: string): Promise<WorkSpaceTagEntity> {
+    async createTag(workSpaceId: string, userId: string, value: string): Promise<WorkSpaceTag> {
       try {
-        const newTag = workSpaceTagRepo.create({ workSpaceId, creatorId: userId, value });
-        return await workSpaceTagRepo.save(newTag);
+        const result = await workSpaceTagRepo
+          .createQueryBuilder()
+          .insert()
+          .values({
+            workSpaceId,
+            creatorId: userId,
+            value,
+          })
+          .returning('*')
+          .execute();
+        return WorkSpaceTagSchema.parse(result.generatedMaps[0]);
       } catch (error) {
         throw new DBError('Failed to create tag', error);
       }
     },
-    async updateTag(tagId: string, value: string): Promise<WorkSpaceTagEntity> {
+    async updateTag(tagId: string, value: string): Promise<WorkSpaceTag> {
       try {
-        const tag = await workSpaceTagRepo.findOneOrFail({ where: { id: tagId } });
-        if (!tag) {
-          throw new Error('Tag not found');
-        }
-        tag.value = value;
-        return await workSpaceTagRepo.save(tag);
+        const result = await workSpaceTagRepo
+          .createQueryBuilder()
+          .update()
+          .set({ value })
+          .where('id=:tagId', { tagId })
+          .returning('*')
+          .execute();
+        return WorkSpaceTagSchema.parse(result.raw[0]);
       } catch (error) {
         throw new DBError('Failed to update tag', error);
       }
     },
     async deleteTag(tagId: string): Promise<void> {
       try {
-        const tag = await workSpaceTagRepo.findOne({ where: { id: tagId } });
-        if (!tag) {
-          throw new Error('Tag not found');
-        }
-        await workSpaceTagRepo.remove(tag);
+        await workSpaceTagRepo.createQueryBuilder().delete().where('id=:tagId', { tagId }).execute();
       } catch (error) {
         throw new DBError('Failed to delete tag', error);
       }

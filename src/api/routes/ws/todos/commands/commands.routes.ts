@@ -1,10 +1,12 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
-import z from 'zod';
 import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
 import { roleHook } from '../../../../hooks/roleHook';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { RoleEnum } from '../../../../../types/enum/RoleEnum';
+import { addCommandTodoSchema } from './schema/addCommandTodoSchema';
+import { removeCommandFromTodo } from '../../../../../controllers/ws/commands/removeCommandFromTodo';
+import { addCommandToTodo } from '../../../../../controllers/ws/commands/addCommandToTodo';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -15,29 +17,26 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   f.addHook('preHandler', accessToWorkSpaceHook);
 
   f.post(
-    '/',
+    '/add',
     {
       schema: {
-        body: z.object({
-          todoId: z.string(),
-          command: z.string(),
-        }),
+        body: addCommandTodoSchema,
       },
     },
     async (req) => {
-      await workSpaceCommandsTodoRepo.addCommandToTodo(req.body.todoId, req.body.command);
+      await addCommandToTodo(workSpaceCommandsTodoRepo, req.body.todoId, req.body.command);
     },
   );
 
   f.delete(
-    '/:id',
+    '/remove/:id',
     {
       schema: {
         params: UUIDGetter,
       },
     },
     async (req) => {
-      await workSpaceCommandsTodoRepo.removeCommandFromTodo(req.params.id);
+      await removeCommandFromTodo(workSpaceCommandsTodoRepo, req.params.id);
     },
   );
 };

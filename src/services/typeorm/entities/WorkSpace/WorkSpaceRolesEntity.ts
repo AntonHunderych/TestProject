@@ -15,7 +15,7 @@ export class WorkSpaceRolesEntity {
   @Column()
   workSpaceId: string;
 
-  @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.roles)
+  @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.roles, { onDelete: 'CASCADE' })
   workSpace: WorkSpaceEntity;
 
   @OneToMany(() => WorkSpaceUserRoleEntity, (workSpaceUserRoleEntity) => workSpaceUserRoleEntity.user)

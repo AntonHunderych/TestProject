@@ -1,11 +1,11 @@
-import { IWorkSpaceRolesRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
+import { IWorkSpaceRoleRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
 import { TDefaultRolesInWorkSpaceOrCustom } from '../../../types/TDefaultRolesInWorkSpace';
-import { WorkSpaceRolesEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
+import { IWorkSpaceRole } from '../../../types/entities/WorkSpace/WorkSpaceRolesSchema';
 
 export async function createRole(
-  workSpaceRoleRepo: IWorkSpaceRolesRepo,
+  workSpaceRoleRepo: IWorkSpaceRoleRepo,
   workSpaceId: string,
   roleValue: TDefaultRolesInWorkSpaceOrCustom,
-): Promise<WorkSpaceRolesEntity> {
-  return await workSpaceRoleRepo.create(workSpaceId, roleValue);
+): Promise<IWorkSpaceRole> {
+  return await workSpaceRoleRepo.createRole(workSpaceId, roleValue);
 }

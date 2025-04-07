@@ -19,6 +19,6 @@ export class BasicTodoEntity {
   @Column({ type: 'varchar', nullable: true })
   status?: string | null;
 
-  @Column({ name: 'creatorId' })
-  creatorId: string;
+  @Column({ name: 'creatorId', type: 'varchar', nullable: true })
+  creatorId: string | null;
 }

@@ -4,12 +4,14 @@ import { RoleEnum } from '../../../../../types/enum/RoleEnum';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
-import z from 'zod';
 import { permissionsAccessHook } from '../../hooks/permissionsAccessHook';
 import { Permissions } from '../../../../../types/enum/PermisionsEnum';
 import { getWorkSpaceCommentSchema } from './schema/getWorkSpaceCommentSchema';
 import { createWorkSpaceCommentSchema } from './schema/createWorkSpaceCommentSchema';
 import { updateWorkSpaceCommentSchema } from './schema/updateWorkSpaceCommentSchema';
+import { createComment } from '../../../../../controllers/ws/comments/createComment';
+import { deleteComment } from '../../../../../controllers/ws/comments/deleteComment';
+import { updateComment } from '../../../../../controllers/ws/comments/updateComment';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -18,21 +20,6 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
-
-  f.get(
-    '/:id',
-    {
-      schema: {
-        params: UUIDGetter,
-        response: {
-          200: z.array(getWorkSpaceCommentSchema),
-        },
-      },
-    },
-    async (req) => {
-      return await workSpaceCommentRepos.getCommentsByTodoId(req.params.id);
-    },
-  );
 
   f.post(
     '/',
@@ -46,10 +33,10 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.writeComment),
     },
     async (req) => {
-      return await workSpaceCommentRepos.createComment({
+      await createComment(workSpaceCommentRepos, {
         text: req.body.comment,
         todoId: req.body.todoId,
-        authorId: req.userData.id,
+        authorId: req.workSpace.workSpaceUserId,
         workSpaceId: req.workSpace.id,
       });
     },
@@ -64,7 +51,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.deleteComment),
     },
     async (req) => {
-      await workSpaceCommentRepos.deleteComment(req.params.id);
+      await deleteComment(workSpaceCommentRepos, req.params.id);
     },
   );
 
@@ -80,7 +67,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.changeComment),
     },
     async (req) => {
-      return await workSpaceCommentRepos.updateComment(req.body.id, { text: req.body.comment });
+      return await updateComment(workSpaceCommentRepos, req.body.id, req.body.comment);
     },
   );
 };

@@ -8,16 +8,10 @@ export class WorkSpaceUserRoleEntity {
   userId: string;
 
   @PrimaryColumn()
-  workSpaceId: string;
-
-  @PrimaryColumn()
   roleId: string;
 
   @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUserEntity) => workSpaceUserEntity.roles, { onDelete: 'CASCADE' })
-  @JoinColumn([
-    { name: 'userId', referencedColumnName: 'userId' },
-    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
-  ])
+  @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: WorkSpaceUserEntity;
 
   @ManyToOne(() => WorkSpaceRolesEntity, (workSpaceRolesEntity) => workSpaceRolesEntity.users, {

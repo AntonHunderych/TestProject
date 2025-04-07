@@ -11,7 +11,7 @@ import { getWorkSpaceRoleRepo } from './workspace/roles/workSpaceRoles.repo';
 import { getWorkSpacePermissionRepo } from './workspace/permissions/workSpacePermissions.repo';
 import { getWorkSpaceUserRoleRepo } from './workspace/userRole/workSpaceUserRole.repo';
 import { getTodoContributorRepo } from './workspace/todoContributor/todoContributor.repo';
-import { getWorkSpaceCommentRepos } from './workspace/comments/comments.repo';
+import { getWorkSpaceCommentRepos } from './workspace/comments/workSpaceComments.repo';
 import { getTagRepo } from './tags/tags.repo';
 import { getWorkSpaceTagRepo } from './workspace/tags/workSpaceTags.repo';
 import { getWorkSpaceCategoryRepo } from './workspace/categories/workSpaceCategories.repo';

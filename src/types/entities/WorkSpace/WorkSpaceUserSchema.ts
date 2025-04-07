@@ -8,6 +8,7 @@ import { WorkSpaceUserRoleSchema } from './WorkSpaceUserRoleSchema';
 import { WorkSpaceUserCommandSchema } from './WorkSpaceUserCommandSchema';
 
 export const WorkSpaceUserSchema = z.object({
+  id: z.string(),
   userId: z.string(),
   workSpaceId: z.string(),
   createdTodos: z.array(WorkSpaceTodoSchema).optional(),

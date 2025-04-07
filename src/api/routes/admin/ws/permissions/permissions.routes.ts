@@ -38,7 +38,7 @@ const route: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       },
     },
     async (req) => {
-      return await workSpacePermissionsRepo.create(req.body.value);
+      return await workSpacePermissionsRepo.createPermission(req.body.value);
     },
   );
 
@@ -53,7 +53,7 @@ const route: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
       },
     },
     async (req) => {
-      return await workSpacePermissionsRepo.delete(req.params.id);
+      return await workSpacePermissionsRepo.deletePermission(req.params.id);
     },
   );
 };

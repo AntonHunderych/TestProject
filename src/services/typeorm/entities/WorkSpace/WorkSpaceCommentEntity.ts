@@ -9,18 +9,9 @@ export class WorkSpaceCommentEntity extends BasicCommentEntity {
   workSpaceId: string;
 
   @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.comments, { onDelete: 'CASCADE' })
-  @JoinColumn([
-    {
-      name: 'workSpaceId',
-      referencedColumnName: 'workSpaceId',
-    },
-    {
-      name: 'authorId',
-      referencedColumnName: 'userId',
-    },
-  ])
+  @JoinColumn([{ name: 'authorId', referencedColumnName: 'id' }])
   creator: WorkSpaceUserEntity;
 
-  @ManyToOne(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.comments)
+  @ManyToOne(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.comments, { onDelete: 'CASCADE' })
   todo: WorkSpaceTodoEntity;
 }

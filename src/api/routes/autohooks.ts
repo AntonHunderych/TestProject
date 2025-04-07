@@ -7,10 +7,12 @@ const hooks: FastifyPluginAsyncZod = async (fastify) => {
     fastify.addHook('preHandler', authHook);
     fastify.addHook('preHandler', async function (request: FastifyRequest) {
       const userData = { ...fastify.getUserDataFromJWT(request) };
-
       const roles = await this.repos.userRoleRepo.getUserRoles(userData.id);
 
-      Object.assign(request, { userData: { ...userData }, isAdmin: roles.some((r) => r.value === 'ADMIN') });
+      Object.assign(request, {
+        userData: { id: userData.id, email: userData.email, username: userData.username },
+        isAdmin: roles.some((r) => r.value === 'ADMIN'),
+      });
     });
   }
 };

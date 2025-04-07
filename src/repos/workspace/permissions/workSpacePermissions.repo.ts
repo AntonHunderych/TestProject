@@ -2,27 +2,35 @@ import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpacePermissionsEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpacePermissionsEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
+import { WorkSpacePermissionsSchema } from '../../../types/entities/WorkSpace/WorkSpacePermissionsSchema';
 
 export interface IWorkSpacePermissions extends IRecreateRepo {
   getAll(): Promise<WorkSpacePermissionsEntity[]>;
-  create(value: string): Promise<WorkSpacePermissionsEntity>;
-  delete(id: string): Promise<boolean>;
+  createPermission(value: string): Promise<WorkSpacePermissionsEntity>;
+  deletePermission(id: string): Promise<boolean>;
 }
 
 export function getWorkSpacePermissionRepo(db: DataSource | EntityManager): IWorkSpacePermissions {
   const workSpacePermissions = db.getRepository(WorkSpacePermissionsEntity);
 
   return {
-    async create(value: string): Promise<WorkSpacePermissionsEntity> {
+    async createPermission(value: string): Promise<WorkSpacePermissionsEntity> {
       try {
-        return await workSpacePermissions.save({ value });
+        const result = await workSpacePermissions
+          .createQueryBuilder()
+          .insert()
+          .values({ value })
+          .returning('*')
+          .execute();
+        return WorkSpacePermissionsSchema.parse(result.generatedMaps[0]);
       } catch (error) {
         throw new DBError('Error creating workspace permission', error);
       }
     },
-    async delete(id: string): Promise<boolean> {
+    async deletePermission(id: string): Promise<boolean> {
       try {
-        return !!(await workSpacePermissions.delete(id));
+        const result = await workSpacePermissions.createQueryBuilder().delete().where('id=:id', { id }).execute();
+        return !!result.raw[0];
       } catch (error) {
         throw new DBError('Error deleting workspace permission', error);
       }

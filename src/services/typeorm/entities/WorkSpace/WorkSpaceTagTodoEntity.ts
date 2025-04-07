@@ -23,13 +23,7 @@ export class WorkSpaceTagTodoEntity {
   @Column({ nullable: true })
   userId: string | null;
 
-  @Column()
-  workSpaceId: string;
-
   @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.assignedTags, { onDelete: 'SET NULL' })
-  @JoinColumn([
-    { name: 'userId', referencedColumnName: 'userId' },
-    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
-  ])
+  @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   assignedBy: WorkSpaceUserEntity;
 }

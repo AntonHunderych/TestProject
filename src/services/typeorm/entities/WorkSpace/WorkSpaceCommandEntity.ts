@@ -20,6 +20,6 @@ export class WorkSpaceCommandEntity {
   @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.command)
   todos: WorkSpaceTodoEntity[];
 
-  @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.commands)
+  @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.commands, { onDelete: 'CASCADE' })
   workSpace: WorkSpaceEntity;
 }

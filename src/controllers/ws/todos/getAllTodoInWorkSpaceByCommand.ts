@@ -8,7 +8,7 @@ export async function getAllTodoInWorkSpaceByCommand(
   workSpaceId: string,
   userId: string,
 ): Promise<WorkSpaceTodoEntity[]> {
-  const userCommands = await workSpaceUserCommandRepo.getUserCommands(userId, workSpaceId);
+  const userCommands = await workSpaceUserCommandRepo.getUserCommands(userId);
   return await workSpaceTodoRepo.findAllTodoInWorkSpaceByCommand(
     workSpaceId,
     userCommands.map((command) => command.value),

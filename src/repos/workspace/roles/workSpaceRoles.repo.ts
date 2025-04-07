@@ -2,42 +2,35 @@ import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceRolesEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
+import { IWorkSpaceRole, WorkSpaceRoleSchema } from '../../../types/entities/WorkSpace/WorkSpaceRolesSchema';
 
-export interface IWorkSpaceRolesRepo extends IRecreateRepo {
-  create(workSpaceId: string, name: string): Promise<WorkSpaceRolesEntity>;
-  delete(workSpaceId: string, name: string): Promise<boolean>;
-  getAll(): Promise<WorkSpaceRolesEntity[]>;
-  getWorkSpaceRoles(workSpaceId: string): Promise<WorkSpaceRolesEntity[]>;
+export interface IWorkSpaceRoleRepo extends IRecreateRepo {
+  createRole(workSpaceId: string, name: string): Promise<IWorkSpaceRole>;
+  deleteRole(roleId: string): Promise<boolean>;
 }
 
-export function getWorkSpaceRoleRepo(db: DataSource | EntityManager): IWorkSpaceRolesRepo {
+export function getWorkSpaceRoleRepo(db: DataSource | EntityManager): IWorkSpaceRoleRepo {
   const workSpaceRolesRepo = db.getRepository(WorkSpaceRolesEntity);
 
   return {
-    async getAll(): Promise<WorkSpaceRolesEntity[]> {
+    async createRole(workSpaceId: string, name: string): Promise<IWorkSpaceRole> {
       try {
-        return await workSpaceRolesRepo.find();
-      } catch (error) {
-        throw new DBError('Error fetching all workspace roles', error);
-      }
-    },
-    async getWorkSpaceRoles(workSpaceId: string): Promise<WorkSpaceRolesEntity[]> {
-      try {
-        return await workSpaceRolesRepo.find({ where: { workSpaceId } });
-      } catch (error) {
-        throw new DBError('Error fetching workspace roles by workspace ID', error);
-      }
-    },
-    async create(workSpaceId: string, name: string): Promise<WorkSpaceRolesEntity> {
-      try {
-        return await workSpaceRolesRepo.save({ name, workSpaceId });
+        const result = await workSpaceRolesRepo
+          .createQueryBuilder()
+          .insert()
+          .values({ workSpaceId, name })
+          .returning('*')
+          .execute();
+        return WorkSpaceRoleSchema.parse(result.generatedMaps[0]);
       } catch (error) {
         throw new DBError('Error creating workspace role', error);
       }
     },
-    async delete(workSpaceId: string, name: string): Promise<boolean> {
+    async deleteRole(roleId: string): Promise<boolean> {
       try {
-        return !!(await workSpaceRolesRepo.delete([name, workSpaceId]));
+        return !!(
+          await workSpaceRolesRepo.createQueryBuilder().delete().where('id=:id', { roleId }).returning('*').execute()
+        ).raw[0];
       } catch (error) {
         throw new DBError('Error deleting workspace role', error);
       }

@@ -21,13 +21,13 @@ export class WorkSpaceEntity {
   @Column()
   creatorId: string;
 
-  @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.workSpace, { cascade: ['remove'] })
+  @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.workSpace)
   todos: WorkSpaceTodoEntity[];
 
-  @OneToMany(() => WorkSpaceUserEntity, (wsUser) => wsUser.workSpace, { cascade: ['remove'] })
+  @OneToMany(() => WorkSpaceUserEntity, (wsUser) => wsUser.workSpace)
   users: WorkSpaceUserEntity[];
 
-  @OneToMany(() => WorkSpaceRolesEntity, (workSpaceRoles) => workSpaceRoles.workSpace, { cascade: ['remove'] })
+  @OneToMany(() => WorkSpaceRolesEntity, (workSpaceRoles) => workSpaceRoles.workSpace)
   roles: WorkSpaceRolesEntity[];
 
   @OneToMany(() => WorkSpaceTagEntity, (workSpaceTag) => workSpaceTag.workSpace)

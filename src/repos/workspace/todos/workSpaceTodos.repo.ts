@@ -16,7 +16,7 @@ export interface IWorkSpaceTodoRepo extends IRecreateRepo {
 
   findAllTodoInWorkSpaceByCommand(workSpaceId: string, commandValue: string[]): Promise<WorkSpaceTodoEntity[]>;
 
-  update(id: string, todo: Partial<WorkSpaceTodoEntity>): Promise<WorkSpaceTodoEntity>;
+  update(id: string, todo: Partial<WorkSpaceTodo>): Promise<WorkSpaceTodo>;
 
   delete(id: string): Promise<boolean>;
 

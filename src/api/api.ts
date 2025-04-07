@@ -28,7 +28,13 @@ declare module 'fastify' {
     repos: IRepos;
     crypto: ICrypto;
     withTransaction: IWithTransaction;
-    getUserDataFromJWT: (req: FastifyRequest) => { id: string; username: string; email: string };
+    getUserDataFromJWT: (req: FastifyRequest) => {
+      id: string;
+      username: string;
+      email: string;
+      workSpaceId?: string;
+      workSpaceUserId?: string;
+    };
   }
 
   export interface FastifyRequest {
@@ -40,6 +46,7 @@ declare module 'fastify' {
     };
     workSpace: {
       id: string;
+      workSpaceUserId: string;
     };
     isAdmin: boolean;
   }

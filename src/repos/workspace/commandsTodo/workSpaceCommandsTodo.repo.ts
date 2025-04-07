@@ -3,13 +3,13 @@ import { WorkSpaceTodoEntity } from '../../../services/typeorm/entities/WorkSpac
 import { DBError } from '../../../types/errors/DBError';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IGetWorkSpaceCommandTodoRepo extends IRecreateRepo {
+export interface IWorkSpaceCommandTodoRepo extends IRecreateRepo {
   addCommandToTodo(todoId: string, commandId: string): Promise<void>;
 
   removeCommandFromTodo(todoId: string): Promise<void>;
 }
 
-export function getWorkSpaceCommandTodoRepo(db: DataSource | EntityManager): IGetWorkSpaceCommandTodoRepo {
+export function getWorkSpaceCommandTodoRepo(db: DataSource | EntityManager): IWorkSpaceCommandTodoRepo {
   const workSpaceTodoRepo = db.getRepository(WorkSpaceTodoEntity);
 
   return {

@@ -10,18 +10,14 @@ import { WorkSpaceCategoryEntity } from './WorkSpaceCategoryEntity';
 
 @Entity({ name: 'workSpaceTodo' })
 export class WorkSpaceTodoEntity extends BasicTodoEntity {
-  @Column({ name: 'workSpaceId', nullable: false, update: false })
+  @Column({ name: 'workSpaceId' })
   workSpaceId: string;
 
-  @ManyToOne(() => WorkSpaceEntity, (ws) => ws.todos, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'workSpaceId' })
+  @ManyToOne(() => WorkSpaceEntity, (workSpace) => workSpace.todos, { onDelete: 'CASCADE' })
   workSpace: WorkSpaceEntity;
 
   @ManyToOne(() => WorkSpaceUserEntity, (worksSpaceUser) => worksSpaceUser.createdTodos, { onDelete: 'CASCADE' })
-  @JoinColumn([
-    { name: 'creatorId', referencedColumnName: 'userId' },
-    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
-  ])
+  @JoinColumn([{ name: 'creatorId', referencedColumnName: 'id' }])
   creator: WorkSpaceUserEntity;
 
   @OneToMany(() => WorkSpaceContributorEntity, (workSpaceContributorEntity) => workSpaceContributorEntity.todo)
@@ -43,16 +39,13 @@ export class WorkSpaceTodoEntity extends BasicTodoEntity {
   @JoinColumn([{ name: 'categoryId', referencedColumnName: 'id' }])
   category: WorkSpaceCategoryEntity | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   attachedByUserId: string | null;
 
   @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUSerEntity) => workSpaceUSerEntity.attachedCategoryToTodos, {
     onDelete: 'SET NULL',
   })
-  @JoinColumn([
-    { name: 'attachedByUserId', referencedColumnName: 'userId' },
-    { name: 'workSpaceId', referencedColumnName: 'workSpaceId' },
-  ])
+  @JoinColumn([{ name: 'attachedByUserId', referencedColumnName: 'id' }])
   attachByUser: WorkSpaceUserEntity | null;
 
   @Column({ type: 'timestamp', nullable: true })

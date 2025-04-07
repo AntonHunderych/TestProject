@@ -2,83 +2,55 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import { roleHook } from '../../../hooks/roleHook';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
-import z from 'zod';
 import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
+import { createCommand } from '../../../../controllers/ws/commands/createCommand';
+import { updateCommandSchema } from './schema/updateCommandSchema';
+import { updateCommand } from '../../../../controllers/ws/commands/updateCommand';
+import { deleteCommand } from '../../../../controllers/ws/commands/deleteCommand';
+import { createCommandSchema } from './schema/createCommandSchema';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceCommandRepo = f.repos.workSpaceCommandRepo;
-  const workSpaceUserCommandRepo = f.repos.workSpaceUserCommandRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
 
-  f.get(
-    '/',
-    {
-      schema: {},
-    },
-    async (req) => {
-      return await workSpaceCommandRepo.getAll(req.workSpace.id);
-    },
-  );
-
   f.post(
     '/',
     {
       schema: {
-        body: z.object({
-          value: z.string(),
-        }),
+        body: createCommandSchema,
       },
     },
     async (req) => {
-      return await workSpaceCommandRepo.create(req.workSpace.id, req.body.value);
+      return await createCommand(workSpaceCommandRepo, req.workSpace.id, req.body.value);
     },
   );
 
-  f.delete(
+  f.put(
     '/',
     {
       schema: {
-        body: z.object({
-          value: z.string(),
-        }),
+        body: updateCommandSchema,
       },
     },
     async (req) => {
-      return await workSpaceCommandRepo.delete(req.workSpace.id, req.body.value);
-    },
-  );
-
-  f.post(
-    '/addUser',
-    {
-      schema: {
-        body: z.object({
-          commandId: z.string(),
-          userId: z.string(),
-        }),
-      },
-    },
-    async (req) => {
-      return await workSpaceUserCommandRepo.addUser(req.workSpace.id, req.body.userId, req.body.commandId);
+      return await updateCommand(workSpaceCommandRepo, req.body.commandId, req.body.value);
     },
   );
 
   f.delete(
-    '/removeUser',
+    '/:id',
     {
       schema: {
-        body: z.object({
-          value: z.string(),
-          userId: z.string(),
-        }),
+        params: UUIDGetter,
       },
     },
     async (req) => {
-      return await workSpaceUserCommandRepo.removeUser(req.workSpace.id, req.body.value, req.body.userId);
+      return await deleteCommand(workSpaceCommandRepo, req.params.id);
     },
   );
 };

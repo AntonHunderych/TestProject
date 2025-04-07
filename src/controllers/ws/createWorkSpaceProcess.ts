@@ -1,9 +1,9 @@
-import { IWorkSpaceRepos } from '../../repos/workspace/workspace.repo';
+import { IWorkSpaceRepo } from '../../repos/workspace/workspace.repo';
 import { IWorkSpaceUserRepo } from '../../repos/workspace/user/workSpaceUser.repo';
 import { WorkSpace } from '../../types/entities/WorkSpace/WorkSpaceSchema';
 import { addStandardRoleToWorkSpace } from './roles/addStandardRoleToWorkSpace';
-import { addWorkSpaceRoleToUser } from './roles/addWorkSpaceRoleToUser';
-import { IWorkSpaceRolesRepo } from '../../repos/workspace/roles/workSpaceRoles.repo';
+import { addRoleToUser } from './roles/addRoleToUser';
+import { IWorkSpaceRoleRepo } from '../../repos/workspace/roles/workSpaceRoles.repo';
 import { IWorkSpaceUserRoleRepo } from '../../repos/workspace/userRole/workSpaceUserRole.repo';
 import { createWorkSpace } from './createWorkSpace';
 import { addUserToWorkSpace } from './users/addUserToWorkSpace';
@@ -12,9 +12,9 @@ import { IWorkSpaceRolePermissionRepo } from '../../repos/workspace/rolePermissi
 
 export async function createWorkSpaceProcess(
   withTransaction: IWithTransaction,
-  workSpaceRepo: IWorkSpaceRepos,
+  workSpaceRepo: IWorkSpaceRepo,
   workSpaceUserRepo: IWorkSpaceUserRepo,
-  workSpaceRoleRepo: IWorkSpaceRolesRepo,
+  workSpaceRoleRepo: IWorkSpaceRoleRepo,
   workSpaceUserRoleRepo: IWorkSpaceUserRoleRepo,
   workSpaceRolePermissions: IWorkSpaceRolePermissionRepo,
   workSpaceCreateData: { name: string; description: string },
@@ -33,13 +33,13 @@ export async function createWorkSpaceProcess(
         ...workSpaceCreateData,
         creatorId: userId,
       });
-      await addUserToWorkSpace(repos.workSpaceUserRepo, workSpace.id, userId);
+      const workSpaceUser = await addUserToWorkSpace(repos.workSpaceUserRepo, workSpace.id, userId);
       const roles = await addStandardRoleToWorkSpace(
         repos.workSpaceRoleRepo,
         repos.workSpaceRolePermissions,
         workSpace.id,
       );
-      await addWorkSpaceRoleToUser(repos.workSpaceUserRoleRepo, userId, workSpace.id, roles[0].id);
+      await addRoleToUser(repos.workSpaceUserRoleRepo, workSpaceUser.id, roles[0].id);
       return workSpace;
     },
   );

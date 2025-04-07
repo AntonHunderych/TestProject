@@ -4,7 +4,7 @@ import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 import { WorkSpace, WorkSpaceSchema } from '../../types/entities/WorkSpace/WorkSpaceSchema';
 
-export interface IWorkSpaceRepos extends IRecreateRepo {
+export interface IWorkSpaceRepo extends IRecreateRepo {
   createWorkSpace(workSpace: IWorkSpaceCreate): Promise<WorkSpace>;
   getWorkSpaceById(id: string): Promise<WorkSpace>;
   updateWorkSpace(id: string, workSpace: IWorkSpaceUpdate): Promise<WorkSpace>;
@@ -15,7 +15,7 @@ export interface IWorkSpaceRepos extends IRecreateRepo {
 export type IWorkSpaceCreate = Partial<WorkSpace>;
 export type IWorkSpaceUpdate = Partial<Omit<WorkSpace, 'id' | 'creatorId'>>;
 
-export function getWorkSpaceRepos(db: DataSource | EntityManager): IWorkSpaceRepos {
+export function getWorkSpaceRepos(db: DataSource | EntityManager): IWorkSpaceRepo {
   const WorkSpaceRepos = db.getRepository(WorkSpaceEntity);
 
   return {
@@ -48,12 +48,17 @@ export function getWorkSpaceRepos(db: DataSource | EntityManager): IWorkSpaceRep
     },
     async getWorkSpaceById(id: string): Promise<WorkSpace> {
       try {
-        return await WorkSpaceRepos.findOneOrFail({
-          where: { id },
-          relations: { todos: true, users: true, roles: true, tags: true, commands: true, categories: true },
-        });
+        return await WorkSpaceRepos.createQueryBuilder('workSpace')
+          .leftJoinAndSelect('workSpace.todos', 'todos')
+          .leftJoinAndSelect('workSpace.users', 'users')
+          .leftJoinAndSelect('workSpace.roles', 'roles')
+          .leftJoinAndSelect('workSpace.tags', 'tags')
+          .leftJoinAndSelect('workSpace.commands', 'commands')
+          .leftJoinAndSelect('workSpace.categories', 'categories')
+          .where('workSpace.id = :id', { id })
+          .getOneOrFail();
       } catch (error) {
-        throw new DBError('Error fetching workspace by id', error);
+        throw new DBError(`Error fetching workspace by id ${id}`, error);
       }
     },
     async updateWorkSpace(id: string, workSpace: IWorkSpaceUpdate): Promise<WorkSpace> {

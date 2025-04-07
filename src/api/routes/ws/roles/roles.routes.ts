@@ -7,32 +7,23 @@ import { getWorkSpaceRoleSchema } from './schema/getWorkSpaceRoleSchema';
 import { createWorkSpaceRoleSchema } from './schema/createWorkSpaceRoleSchema';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
 import { createRoleHandler } from '../../../../controllers/ws/roles/createRoleHandler';
-import { deleteWorkSpaceRoleSchema } from './schema/deleteWorkSpaceRoleSchema';
 import { FastifyInstance } from 'fastify';
 import { RoleEnum } from '../../../../types/enum/RoleEnum';
 import { Permissions } from '../../../../types/enum/PermisionsEnum';
 import { updatePermissionsOnRole } from './schema/updatePermissionsOnRole';
 import { updatePermissionOnRole } from '../../../../controllers/ws/roles/updatePermissionsOnRole';
+import { deleteRole } from '../../../../controllers/ws/roles/deleteRole';
+import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 
 const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
 
-  const workSpaceRolesRepo = f.repos.workSpaceRoleRepo;
+  const workSpaceRoleRepo = f.repos.workSpaceRoleRepo;
   const workSpaceRolesPermissionsRepo = f.repos.workSpaceRolePermissionRepo;
 
   f.addHook('preHandler', roleHook([RoleEnum.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
-
-  f.get(
-    '/',
-    {
-      schema: {
-        response: { 200: z.array(getWorkSpaceRoleSchema) },
-      },
-    },
-    async (req) => await workSpaceRolesRepo.getWorkSpaceRoles(req.workSpace.id),
-  );
 
   f.post(
     '/',
@@ -46,7 +37,7 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
     async (req) =>
       await createRoleHandler(
         f.withTransaction,
-        workSpaceRolesRepo,
+        workSpaceRoleRepo,
         workSpaceRolesPermissionsRepo,
         req.workSpace.id,
         req.body.name,
@@ -75,12 +66,12 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
     {
       schema: {
         response: { 200: z.boolean() },
-        body: deleteWorkSpaceRoleSchema,
+        params: UUIDGetter,
       },
       preHandler: permissionsAccessHook(Permissions.deleteRole),
     },
     async (req) => {
-      return await workSpaceRolesRepo.delete(req.workSpace.id, req.body.name);
+      return await deleteRole(workSpaceRoleRepo, req.params.id);
     },
   );
 };

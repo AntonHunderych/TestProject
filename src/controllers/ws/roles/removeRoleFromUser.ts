@@ -1,10 +1,9 @@
 import { IWorkSpaceUserRoleRepo } from '../../../repos/workspace/userRole/workSpaceUserRole.repo';
 
-export async function addWorkSpaceRoleToUser(
+export async function removeRoleFromUser(
   workSpaceUserRoleRepo: IWorkSpaceUserRoleRepo,
   userId: string,
-  workSpaceId: string,
   roleId: string,
 ): Promise<void> {
-  return await workSpaceUserRoleRepo.giveRoleToUser(userId, workSpaceId, roleId);
+  await workSpaceUserRoleRepo.removeRoleFromUser(userId, roleId);
 }

@@ -10,9 +10,9 @@ export const WorkSpaceTodoSchema = BasicTodoSchema.extend({
   workSpaceId: z.string(),
   categoryId: z.string().nullish(),
   commandId: z.string().nullish(),
-  contributors: z.array(z.lazy(() => WorkSpaceContributorSchema)),
-  comments: z.array(z.lazy(() => WorkSpaceCommentSchema)),
-  tags: z.array(z.lazy(() => WorkSpaceTodoTagSchema)),
+  contributors: z.array(z.lazy(() => WorkSpaceContributorSchema)).optional(),
+  comments: z.array(z.lazy(() => WorkSpaceCommentSchema)).optional(),
+  tags: z.array(z.lazy(() => WorkSpaceTodoTagSchema)).optional(),
   category: WorkSpaceCategorySchema.nullish(),
   command: WorkSpaceCommandSchema.nullish(),
 });

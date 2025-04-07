@@ -7,5 +7,5 @@ export const BasicTodoSchema = z.object({
   importance: z.number().nullish(),
   eliminatedDate: z.date().nullish(),
   status: z.string().nullish(),
-  creatorId: z.string(),
+  creatorId: z.string().nullish(),
 });

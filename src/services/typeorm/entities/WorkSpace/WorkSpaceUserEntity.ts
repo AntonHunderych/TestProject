@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, Unique } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { UserEntity } from '../UserEntity';
 import { WorkSpaceEntity } from './WorkSpaceEntity';
 import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
@@ -12,10 +12,13 @@ import { WorkSpaceUserCommandEntity } from './WorkSpaceUserCommandEntity';
 @Entity({ name: 'workSpaceUser' })
 @Unique(['userId', 'workSpaceId'])
 export class WorkSpaceUserEntity {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column('uuid')
   userId: string;
 
-  @PrimaryColumn('uuid')
+  @Column('uuid')
   workSpaceId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.wsUsers, { onDelete: 'CASCADE' })
@@ -23,7 +26,7 @@ export class WorkSpaceUserEntity {
   user: UserEntity;
 
   @ManyToOne(() => WorkSpaceEntity, (workspace) => workspace.users, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'workSpaceId' })
+  @JoinColumn({ name: 'workSpaceId', referencedColumnName: 'id' })
   workSpace: WorkSpaceEntity;
 
   @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.creator)

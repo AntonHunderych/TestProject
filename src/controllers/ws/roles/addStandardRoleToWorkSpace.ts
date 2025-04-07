@@ -1,9 +1,9 @@
-import { IWorkSpaceRolesRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
+import { IWorkSpaceRoleRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
 import { Permissions } from '../../../types/enum/PermisionsEnum';
 import { createRole } from './createRole';
 import { _updatePermissionOnRole } from './_updatePermissionOnRole';
 import { IWorkSpaceRolePermissionRepo } from '../../../repos/workspace/rolePermission/workSpaceRolePermission.repo';
-import { WorkSpaceRolesEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceRolesEntity';
+import { IWorkSpaceRole } from '../../../types/entities/WorkSpace/WorkSpaceRolesSchema';
 
 const rolePermissions: Record<string, Permissions[]> = {
   Creator: [
@@ -59,11 +59,11 @@ const rolePermissions: Record<string, Permissions[]> = {
 };
 
 export async function addStandardRoleToWorkSpace(
-  workSpaceRoleRepo: IWorkSpaceRolesRepo,
+  workSpaceRoleRepo: IWorkSpaceRoleRepo,
   workSpaceRolePermission: IWorkSpaceRolePermissionRepo,
   workSpaceId: string,
-): Promise<WorkSpaceRolesEntity[]> {
-  const roles: WorkSpaceRolesEntity[] = [];
+): Promise<IWorkSpaceRole[]> {
+  const roles: IWorkSpaceRole[] = [];
   roles.push(await createRole(workSpaceRoleRepo, workSpaceId, 'Creator'));
   roles.push(await createRole(workSpaceRoleRepo, workSpaceId, 'User'));
   roles.push(await createRole(workSpaceRoleRepo, workSpaceId, 'Visitor'));

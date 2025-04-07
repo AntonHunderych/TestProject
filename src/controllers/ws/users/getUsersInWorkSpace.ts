@@ -13,7 +13,7 @@ export async function getUsersInWorkSpaceHandler(
   workSpaceUserRepo: IWorkSpaceUserRepo,
   workSpaceId: string,
 ): Promise<IGetUsersInWorkSpaceHandler[]> {
-  const users = await workSpaceUserRepo.getUserInWorkSpace(workSpaceId);
+  const users = await workSpaceUserRepo.getUsersInWorkSpace(workSpaceId);
   return users.map((workSpaceUser) => {
     return {
       id: workSpaceUser.user.id,

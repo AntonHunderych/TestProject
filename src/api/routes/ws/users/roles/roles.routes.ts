@@ -6,7 +6,8 @@ import { RoleEnum } from '../../../../../types/enum/RoleEnum';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { addDeleteRoleUserSchema } from './schema/addDeleteRoleUserSchema';
-import { addWorkSpaceRoleToUser } from '../../../../../controllers/ws/roles/addWorkSpaceRoleToUser';
+import { addRoleToUser } from '../../../../../controllers/ws/roles/addRoleToUser';
+import { removeRoleFromUser } from '../../../../../controllers/ws/roles/removeRoleFromUser';
 
 const routers: FastifyPluginAsyncZod = async function (fastify) {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -17,7 +18,7 @@ const routers: FastifyPluginAsyncZod = async function (fastify) {
   f.addHook('preHandler', accessToWorkSpaceHook);
 
   f.post(
-    '/',
+    '/add',
     {
       schema: {
         body: addDeleteRoleUserSchema,
@@ -25,12 +26,12 @@ const routers: FastifyPluginAsyncZod = async function (fastify) {
       },
     },
     async (req) => {
-      return await addWorkSpaceRoleToUser(userRolesRepo, req.body.userId, req.workSpace.id, req.body.roleValue);
+      return await addRoleToUser(userRolesRepo, req.body.userId, req.body.roleId);
     },
   );
 
   f.delete(
-    '/',
+    '/remove',
     {
       schema: {
         body: addDeleteRoleUserSchema,
@@ -38,7 +39,7 @@ const routers: FastifyPluginAsyncZod = async function (fastify) {
       },
     },
     async (req) => {
-      return await userRolesRepo.removeRoleFromUser(req.body.userId, req.workSpace.id, req.body.roleValue);
+      return await removeRoleFromUser(userRolesRepo, req.body.userId, req.body.roleId);
     },
   );
 };
