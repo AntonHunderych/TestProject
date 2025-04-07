@@ -19,6 +19,8 @@ import { errorHandler } from './error/errorHandler';
 import cors from '@fastify/cors';
 import { getWithTransaction } from '../services/withTransaction/withTransaction';
 import { IWithTransaction } from '../services/withTransaction/IWithTransaction';
+import { getMailSender } from '../services/mailSender/SendGridMailSender';
+import { IMailSender } from '../services/mailSender/IMailSender';
 
 dotenv.config();
 
@@ -35,6 +37,7 @@ declare module 'fastify' {
       workSpaceId?: string;
       workSpaceUserId?: string;
     };
+    mailSender: IMailSender;
   }
 
   export interface FastifyRequest {
@@ -132,6 +135,7 @@ async function run() {
   f.decorate('crypto', getCryptoService());
   f.decorate('getUserDataFromJWT', getUserDataFromJWT);
   f.decorate('withTransaction', getWithTransaction(pgDataSource));
+  f.decorate('mailSender', getMailSender());
 
   f.setValidatorCompiler(validatorCompiler);
   f.setSerializerCompiler(serializerCompiler);

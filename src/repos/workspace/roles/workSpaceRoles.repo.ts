@@ -7,6 +7,7 @@ import { IWorkSpaceRole, WorkSpaceRoleSchema } from '../../../types/entities/Wor
 export interface IWorkSpaceRoleRepo extends IRecreateRepo {
   createRole(workSpaceId: string, name: string): Promise<IWorkSpaceRole>;
   deleteRole(roleId: string): Promise<boolean>;
+  getRoleByValue(value: string): Promise<IWorkSpaceRole>;
 }
 
 export function getWorkSpaceRoleRepo(db: DataSource | EntityManager): IWorkSpaceRoleRepo {
@@ -33,6 +34,13 @@ export function getWorkSpaceRoleRepo(db: DataSource | EntityManager): IWorkSpace
         ).raw[0];
       } catch (error) {
         throw new DBError('Error deleting workspace role', error);
+      }
+    },
+    async getRoleByValue(value: string): Promise<IWorkSpaceRole> {
+      try {
+        return await workSpaceRolesRepo.findOneOrFail({ where: { name: value } });
+      } catch (e) {
+        throw new DBError('Error find role by value', e);
       }
     },
     __recreateFunction: getWorkSpaceRoleRepo,

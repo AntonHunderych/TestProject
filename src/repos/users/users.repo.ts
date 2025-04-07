@@ -3,7 +3,7 @@ import { UserEntity } from '../../services/typeorm/entities/UserEntity';
 import { DBError } from '../../types/errors/DBError';
 import { IRecreateRepo } from '../../types/IRecreatebleRepo';
 
-export interface IUsersRepo extends IRecreateRepo {
+export interface IUserRepo extends IRecreateRepo {
   getAllUsers(): Promise<UserEntity[]>;
   getUserById(id: string): Promise<UserEntity>;
   getUserByEmail(email: string): Promise<UserEntity | null>;
@@ -12,7 +12,7 @@ export interface IUsersRepo extends IRecreateRepo {
   deleteUser(id: string): Promise<boolean>;
 }
 
-export function getUserRepo(db: DataSource | EntityManager): IUsersRepo {
+export function getUserRepo(db: DataSource | EntityManager): IUserRepo {
   const _usersRepo = db.getRepository(UserEntity);
 
   return {

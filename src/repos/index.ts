@@ -22,6 +22,7 @@ import { getTodoTagRepo } from './todoTag/todoTag.repo';
 import { getWorkSpaceRolePermissionRepo } from './workspace/rolePermission/workSpaceRolePermission.repo';
 import { getWorkSpaceUserCommandRepo } from './workspace/userCommand/workSpaceUserCommand.repo';
 import { getWorkSpaceTagTodoRepo } from './workspace/tagTodo/workSpaceTagTodo.repo';
+import { getWorkSpaceInviteLinkRepo } from './workspace/inviteLink/inviteLink.repo';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -48,6 +49,7 @@ export default function getRepos(db: DataSource) {
     workSpaceRolePermissionRepo: getWorkSpaceRolePermissionRepo(db),
     workSpaceUserCommandRepo: getWorkSpaceUserCommandRepo(db),
     workSpaceTagTodoRepo: getWorkSpaceTagTodoRepo(db),
+    workSpaceInviteLinkRepo: getWorkSpaceInviteLinkRepo(db),
   };
 }
 

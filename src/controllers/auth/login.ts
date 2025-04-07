@@ -1,4 +1,4 @@
-import { IUsersRepo } from '../../repos/users/users.repo';
+import { IUserRepo } from '../../repos/users/users.repo';
 import ICrypto from '../../services/crypto/ICrypto';
 
 export interface ILoginRegisterResp {
@@ -8,7 +8,7 @@ export interface ILoginRegisterResp {
 }
 
 export async function login(
-  userRepo: IUsersRepo,
+  userRepo: IUserRepo,
   crypto: ICrypto,
   password: string,
   email: string,

@@ -24,6 +24,7 @@ import { WorkSpaceContributorEntity } from './entities/WorkSpace/WorkSpaceContri
 import { WorkSpaceRolePermissionEntity } from './entities/WorkSpace/WorkSpaceRolePermissionEntity';
 import { WorkSpaceUserRoleEntity } from './entities/WorkSpace/WorkSpaceUserRoleEntity';
 import { WorkSpaceUserCommandEntity } from './entities/WorkSpace/WorkSpaceUserCommandEntity';
+import { WorkSpaceInviteLinkEntity } from './entities/WorkSpace/WorkSpaceInviteLinkEntity';
 
 dotenv.config();
 
@@ -61,6 +62,7 @@ export function getDataSource() {
       WorkSpaceRolePermissionEntity,
       WorkSpaceUserRoleEntity,
       WorkSpaceUserCommandEntity,
+      WorkSpaceInviteLinkEntity,
     ],
     migrations: ['./migrations/*.ts'],
   });

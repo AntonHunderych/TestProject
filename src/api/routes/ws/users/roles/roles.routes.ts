@@ -6,7 +6,7 @@ import { ERole } from '../../../../../types/enum/ERole';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { addDeleteRoleUserSchema } from './schema/addDeleteRoleUserSchema';
-import { addRoleToUser } from '../../../../../controllers/ws/roles/addRoleToUser';
+import { addRoleToUserByRoleId } from '../../../../../controllers/ws/roles/addRoleToUserByRoleId';
 import { removeRoleFromUser } from '../../../../../controllers/ws/roles/removeRoleFromUser';
 
 const routers: FastifyPluginAsyncZod = async function (fastify) {
@@ -26,7 +26,7 @@ const routers: FastifyPluginAsyncZod = async function (fastify) {
       },
     },
     async (req) => {
-      return await addRoleToUser(userRolesRepo, req.body.userId, req.body.roleId);
+      return await addRoleToUserByRoleId(userRolesRepo, req.body.userId, req.body.roleId);
     },
   );
 

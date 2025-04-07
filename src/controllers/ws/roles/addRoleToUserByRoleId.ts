@@ -1,6 +1,6 @@
 import { IWorkSpaceUserRoleRepo } from '../../../repos/workspace/userRole/workSpaceUserRole.repo';
 
-export async function addRoleToUser(
+export async function addRoleToUserByRoleId(
   workSpaceUserRoleRepo: IWorkSpaceUserRoleRepo,
   userId: string,
   roleId: string,

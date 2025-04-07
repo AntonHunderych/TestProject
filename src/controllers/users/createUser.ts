@@ -1,4 +1,4 @@
-import { IUsersRepo } from '../../repos/users/users.repo';
+import { IUserRepo } from '../../repos/users/users.repo';
 import { IUserRoleRepo } from '../../repos/userRole/userRole.repo';
 import { giveDefaultRoleToUser } from '../userRole/giveDefaultRoleToUser';
 import { User } from '../../types/entities/UserSchema';
@@ -8,7 +8,7 @@ import { IWithTransaction } from '../../services/withTransaction/IWithTransactio
 
 export default async function createUser(
   withTransaction: IWithTransaction,
-  userRepo: IUsersRepo,
+  userRepo: IUserRepo,
   roleRepo: IRolesRepo,
   userRoleRepo: IUserRoleRepo,
   date: TCreateUserInput,

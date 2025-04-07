@@ -9,11 +9,14 @@ import { getWorkSpaceUserSchema } from './schema/getWorkSpaceUserSchema';
 import { getUsersInWorkSpaceHandler } from '../../../../controllers/ws/users/getUsersInWorkSpace';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
 import { Permissions } from '../../../../types/enum/EPermissions';
+import { inviteUserToWorkSpace } from '../../../../controllers/ws/users/inviteUserToWorkSpace';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
 
   const workSpaceUserRepo = f.repos.workSpaceUserRepo;
+  const userRepo = f.repos.userRepo;
+  const workSpaceInviteLinkRepo = f.repos.workSpaceInviteLinkRepo;
 
   f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
@@ -41,7 +44,16 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
       preHandler: permissionsAccessHook(Permissions.addUserToWorkSpace),
     },
-    async (req) => await workSpaceUserRepo.addUserToWorkSpace(req.workSpace.id, req.params.id),
+    async (req) => {
+      return await inviteUserToWorkSpace(
+        f.mailSender,
+        userRepo,
+        workSpaceInviteLinkRepo,
+        f.crypto,
+        req.workSpace.id,
+        req.params.id,
+      );
+    },
   );
 
   f.delete(

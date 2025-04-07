@@ -1,4 +1,4 @@
-import { IUsersRepo } from '../../repos/users/users.repo';
+import { IUserRepo } from '../../repos/users/users.repo';
 import ICrypto from '../../services/crypto/ICrypto';
 import createUser from '../users/createUser';
 import { IUserRoleRepo } from '../../repos/userRole/userRole.repo';
@@ -11,7 +11,7 @@ import { IWithTransaction } from '../../services/withTransaction/IWithTransactio
 
 export async function register(
   withTransaction: IWithTransaction,
-  userRepo: IUsersRepo,
+  userRepo: IUserRepo,
   userRoleRepo: IUserRoleRepo,
   roleRepo: IRolesRepo,
   crypto: ICrypto,

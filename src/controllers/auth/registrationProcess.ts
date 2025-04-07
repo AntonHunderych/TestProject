@@ -1,4 +1,4 @@
-import { IUsersRepo } from '../../repos/users/users.repo';
+import { IUserRepo } from '../../repos/users/users.repo';
 import { IUserRoleRepo } from '../../repos/userRole/userRole.repo';
 import ICrypto from '../../services/crypto/ICrypto';
 import { JWT } from 'fastify-jwt';
@@ -11,7 +11,7 @@ import { IWithTransaction } from '../../services/withTransaction/IWithTransactio
 
 export async function registrationProcess(
   withTransaction: IWithTransaction,
-  userRepo: IUsersRepo,
+  userRepo: IUserRepo,
   userRoleRepo: IUserRoleRepo,
   tokenRepo: ITokenRepo,
   roleRepo: IRolesRepo,

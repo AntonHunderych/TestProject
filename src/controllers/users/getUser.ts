@@ -1,4 +1,4 @@
-import { IUsersRepo } from '../../repos/users/users.repo';
+import { IUserRepo } from '../../repos/users/users.repo';
 import { HttpError } from '../../api/error/HttpError';
 import { TagEntity } from '../../services/typeorm/entities/TagEntity';
 import { WorkSpace } from '../../types/entities/WorkSpace/WorkSpaceSchema';
@@ -13,7 +13,7 @@ export interface GetUserByIdResp {
   workSpaces: WorkSpace[];
 }
 
-export default async function getUserById(rep: IUsersRepo, id: string): Promise<GetUserByIdResp> {
+export default async function getUserById(rep: IUserRepo, id: string): Promise<GetUserByIdResp> {
   try {
     const user = await rep.getUserById(id);
     return {
