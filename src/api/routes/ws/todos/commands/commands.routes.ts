@@ -3,7 +3,7 @@ import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
 import { roleHook } from '../../../../hooks/roleHook';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
-import { RoleEnum } from '../../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../../types/enum/ERole';
 import { addCommandTodoSchema } from './schema/addCommandTodoSchema';
 import { removeCommandFromTodo } from '../../../../../controllers/ws/commands/removeCommandFromTodo';
 import { addCommandToTodo } from '../../../../../controllers/ws/commands/addCommandToTodo';
@@ -12,7 +12,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceCommandsTodoRepo = f.repos.workSpaceCommandTodoRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
 

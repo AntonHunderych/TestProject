@@ -5,13 +5,13 @@ import { createPermissionSchema } from './schema/createPermissionSchema';
 import { getPermissionSchema } from './schema/getPermissionSchema';
 import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
 import { FastifyInstance } from 'fastify';
-import { RoleEnum } from '../../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../../types/enum/ERole';
 
 const route: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpacePermissionsRepo = f.repos.workSpacePermissionRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.ADMIN]));
+  f.addHook('preHandler', roleHook([ERole.ADMIN]));
 
   f.get(
     '/',

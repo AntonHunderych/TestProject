@@ -2,7 +2,7 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import { roleHook } from '../../../hooks/roleHook';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
-import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../types/enum/ERole';
 import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 import { createCommand } from '../../../../controllers/ws/commands/createCommand';
 import { updateCommandSchema } from './schema/updateCommandSchema';
@@ -14,7 +14,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceCommandRepo = f.repos.workSpaceCommandRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
 

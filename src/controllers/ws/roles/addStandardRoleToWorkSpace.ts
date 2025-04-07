@@ -1,5 +1,5 @@
 import { IWorkSpaceRoleRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
-import { Permissions } from '../../../types/enum/PermisionsEnum';
+import { Permissions } from '../../../types/enum/EPermissions';
 import { createRole } from './createRole';
 import { _updatePermissionOnRole } from './_updatePermissionOnRole';
 import { IWorkSpaceRolePermissionRepo } from '../../../repos/workspace/rolePermission/workSpaceRolePermission.repo';

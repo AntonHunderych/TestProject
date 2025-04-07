@@ -9,13 +9,13 @@ import { createTodo } from '../../../controllers/todos/createTodo';
 import { updateTodoSchema } from './schemas/updateTodoSchema';
 import { updateTodo } from '../../../controllers/todos/updateTodo';
 import { deleteTodo } from '../../../controllers/todos/deleteTodo';
-import { RoleEnum } from '../../../types/enum/RoleEnum';
+import { ERole } from '../../../types/enum/ERole';
 
 export const routes: FastifyPluginAsyncZod = async function (fastify) {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const todoRepo = f.repos.todoRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
 
   f.get(
     '/user/',

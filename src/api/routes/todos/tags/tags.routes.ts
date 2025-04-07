@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../types/enum/ERole';
 import z from 'zod';
 import { getTagSchema } from './schema/getTagSchema';
 import { createTagSchema } from './schema/createTagSchema';
@@ -18,7 +18,7 @@ const routers: FastifyPluginAsyncZod = async (fastify) => {
   const tagRepo = f.repos.tagRepo;
   const todoTagRepo = f.repos.todoTagRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
 
   f.get(
     '/',

@@ -3,14 +3,14 @@ import { UUIDGetter } from '../../common/schemas/UUIDGetter';
 import { createWorkSpaceSchema } from './schema/createWorkSpaceSchema';
 import { accessToWorkSpaceHook, accessToWorkSpaceHookArgWorkSpaceId } from './hooks/accessToWorkSpaceHook';
 import { roleHook } from '../../hooks/roleHook';
-import { RoleEnum } from '../../../types/enum/RoleEnum';
+import { ERole } from '../../../types/enum/ERole';
 import { startWorkSpaceSchema } from './schema/startWorkSpaceSchema';
 import { stopWorkSpaceSchema } from './schema/stopWorkSpaceSchema';
 import { createWorkSpaceProcess } from '../../../controllers/ws/createWorkSpaceProcess';
 import { getWorkSpaceSchema } from './schema/getWorkSpaceSchema';
 import { generateTokensThenGetAccessToken } from '../../../controllers/auth/generateTokensThenGetAccessToken';
 import { permissionsAccessHook } from './hooks/permissionsAccessHook';
-import { Permissions } from '../../../types/enum/PermisionsEnum';
+import { Permissions } from '../../../types/enum/EPermissions';
 import { createWorkSpaceRespSchema } from './schema/createWorkSpaceSchemaRespSchema';
 import { deleteWorkSpace } from '../../../controllers/ws/deleteWorkSpace';
 import { getWorkSpaceById } from '../../../controllers/ws/getWorkSpaceById';
@@ -26,7 +26,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const workSpaceUserRoleRepo = f.repos.workSpaceUserRoleRepo;
   const workSpaceRolePermission = f.repos.workSpaceRolePermissionRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
 
   f.get(
     '/start/:id',

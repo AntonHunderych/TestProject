@@ -8,8 +8,8 @@ import { createWorkSpaceRoleSchema } from './schema/createWorkSpaceRoleSchema';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
 import { createRoleHandler } from '../../../../controllers/ws/roles/createRoleHandler';
 import { FastifyInstance } from 'fastify';
-import { RoleEnum } from '../../../../types/enum/RoleEnum';
-import { Permissions } from '../../../../types/enum/PermisionsEnum';
+import { ERole } from '../../../../types/enum/ERole';
+import { Permissions } from '../../../../types/enum/EPermissions';
 import { updatePermissionsOnRole } from './schema/updatePermissionsOnRole';
 import { updatePermissionOnRole } from '../../../../controllers/ws/roles/updatePermissionsOnRole';
 import { deleteRole } from '../../../../controllers/ws/roles/deleteRole';
@@ -21,7 +21,7 @@ const routes: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const workSpaceRoleRepo = f.repos.workSpaceRoleRepo;
   const workSpaceRolesPermissionsRepo = f.repos.workSpaceRolePermissionRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
 

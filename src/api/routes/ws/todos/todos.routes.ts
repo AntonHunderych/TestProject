@@ -2,9 +2,9 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../types/enum/PermisionsEnum';
+import { Permissions } from '../../../../types/enum/EPermissions';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../types/enum/ERole';
 import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 import z from 'zod';
 import { getAllTodoInWorkSpaceByCommand } from '../../../../controllers/ws/todos/getAllTodoInWorkSpaceByCommand';
@@ -20,7 +20,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const workSpaceTodoRepo = f.repos.workSpaceTodoRepo;
   const workSpaceCommandRepo = f.repos.workSpaceUserCommandRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
 

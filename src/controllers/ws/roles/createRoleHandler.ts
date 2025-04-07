@@ -1,4 +1,4 @@
-import { Permissions } from '../../../types/enum/PermisionsEnum';
+import { Permissions } from '../../../types/enum/EPermissions';
 import { IWorkSpaceRoleRepo } from '../../../repos/workspace/roles/workSpaceRoles.repo';
 import { IWithTransaction } from '../../../services/withTransaction/IWithTransaction';
 import { IWorkSpaceRolePermissionRepo } from '../../../repos/workspace/rolePermission/workSpaceRolePermission.repo';

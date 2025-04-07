@@ -2,7 +2,7 @@ import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zo
 import { FastifyInstance } from 'fastify';
 import z from 'zod';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../types/enum/ERole';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
 import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
@@ -10,13 +10,13 @@ import { createWorkSpaceCategory } from '../../../../controllers/ws/categories/c
 import { deleteWorkSpaceCategory } from '../../../../controllers/ws/categories/deleteWorkSpaceCategory';
 import { updateWorkSpaceCategory } from '../../../../controllers/ws/categories/updateWorkSpaceCategory';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../types/enum/PermisionsEnum';
+import { Permissions } from '../../../../types/enum/EPermissions';
 
 const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceCategoriesRepo = f.repos.workSpaceCategoryRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
 

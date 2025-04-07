@@ -1,8 +1,8 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { permissionsAccessHook } from '../../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../../types/enum/PermisionsEnum';
+import { Permissions } from '../../../../../types/enum/EPermissions';
 import { roleHook } from '../../../../hooks/roleHook';
-import { RoleEnum } from '../../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../../types/enum/ERole';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { addDeleteRoleUserSchema } from './schema/addDeleteRoleUserSchema';
@@ -13,7 +13,7 @@ const routers: FastifyPluginAsyncZod = async function (fastify) {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const userRolesRepo = f.repos.workSpaceUserRoleRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
 

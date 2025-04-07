@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../types/enum/ERole';
 import { getTodoSchema } from '../../todos/schemas/getTodoShema';
 import z from 'zod';
 import { getAllUserTodos } from '../../../../controllers/todos/getAllUserTodos';
@@ -12,7 +12,7 @@ export const routes: FastifyPluginAsyncZod = async function (fastify) {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const todoRepo = f.repos.todoRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.ADMIN]));
+  f.addHook('preHandler', roleHook([ERole.ADMIN]));
 
   f.get(
     '/',

@@ -3,13 +3,13 @@ import { roleHook } from '../../../../hooks/roleHook';
 import { addRemoveRoleSchema } from './schemas/addRemoveRoleSchema';
 import { giveRoleToUser } from '../../../../../controllers/userRole/giveRoleToUser';
 import { removeRoleFromUser } from '../../../../../controllers/userRole/removeRoleFromUser';
-import { RoleEnum } from '../../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../../types/enum/ERole';
 
 const routes: FastifyPluginAsyncZod = async (f) => {
   const userRoleRepo = f.repos.userRoleRepo;
   const roleRepo = f.repos.roleRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.ADMIN]));
+  f.addHook('preHandler', roleHook([ERole.ADMIN]));
 
   f.post(
     '/',

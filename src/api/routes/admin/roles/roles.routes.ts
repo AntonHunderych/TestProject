@@ -8,13 +8,13 @@ import { getAllRoles } from '../../../../controllers/roles/getAllRole';
 import { getRoleByValue } from '../../../../controllers/roles/getRoleByValue';
 import { createRole } from '../../../../controllers/roles/createRole';
 import { deleteRole } from '../../../../controllers/roles/deleteRole';
-import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../types/enum/ERole';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const roleRepo = f.repos.roleRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.ADMIN]));
+  f.addHook('preHandler', roleHook([ERole.ADMIN]));
 
   f.get(
     '/',

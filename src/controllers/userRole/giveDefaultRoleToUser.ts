@@ -1,5 +1,5 @@
 import { IUserRoleRepo } from '../../repos/userRole/userRole.repo';
-import { RoleEnum } from '../../types/enum/RoleEnum';
+import { ERole } from '../../types/enum/ERole';
 import { IRolesRepo } from '../../repos/roles/roles.repo';
 
 export async function giveDefaultRoleToUser(
@@ -7,6 +7,6 @@ export async function giveDefaultRoleToUser(
   roleRepo: IRolesRepo,
   userId: string,
 ): Promise<void> {
-  const role = await roleRepo.getRoleByValue(RoleEnum.USER);
+  const role = await roleRepo.getRoleByValue(ERole.USER);
   return await userRoleRepo.giveRoleToUser(userId, role.id);
 }

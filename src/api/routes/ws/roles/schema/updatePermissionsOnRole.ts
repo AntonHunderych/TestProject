@@ -1,5 +1,5 @@
 import z from 'zod';
-import { PermissionsEnumSchema } from '../../../../../types/enum/PermisionsEnum';
+import { PermissionsEnumSchema } from '../../../../../types/enum/EPermissions';
 
 export const updatePermissionsOnRole = z.object({
   roleId: z.string(),

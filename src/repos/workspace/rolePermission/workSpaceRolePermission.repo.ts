@@ -1,5 +1,5 @@
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
-import { Permissions } from '../../../types/enum/PermisionsEnum';
+import { Permissions } from '../../../types/enum/EPermissions';
 import { DBError } from '../../../types/errors/DBError';
 import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceRolePermissions } from '../../../types/entities/WorkSpace/WorkSpaceRolePermissionsSchema';

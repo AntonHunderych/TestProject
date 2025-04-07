@@ -3,19 +3,19 @@ import z from 'zod';
 import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { roleHook } from '../../../hooks/roleHook';
-import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../types/enum/ERole';
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
 import { getWorkSpaceUserSchema } from './schema/getWorkSpaceUserSchema';
 import { getUsersInWorkSpaceHandler } from '../../../../controllers/ws/users/getUsersInWorkSpace';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../types/enum/PermisionsEnum';
+import { Permissions } from '../../../../types/enum/EPermissions';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
 
   const workSpaceUserRepo = f.repos.workSpaceUserRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
 

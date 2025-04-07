@@ -1,12 +1,12 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { roleHook } from '../../../../hooks/roleHook';
-import { RoleEnum } from '../../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../../types/enum/ERole';
 import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { UUIDGetter } from '../../../../common/schemas/UUIDGetter';
 import { addDeleteContributorSchema } from './schema/addDeleteContributorSchema';
 import { permissionsAccessHook } from '../../hooks/permissionsAccessHook';
-import { Permissions } from '../../../../../types/enum/PermisionsEnum';
+import { Permissions } from '../../../../../types/enum/EPermissions';
 import { addContributors } from '../../../../../controllers/ws/contributors/addContributors';
 import { deleteContributor } from '../../../../../controllers/ws/contributors/deleteContributors';
 import { getTodoContributor } from '../../../../../controllers/ws/contributors/getTodoContributor';
@@ -15,7 +15,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const contributorRepos = f.repos.workSpaceContributorRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
   f.addHook('preHandler', accessToWorkSpaceHook);
 

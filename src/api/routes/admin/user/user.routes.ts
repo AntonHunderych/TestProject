@@ -1,5 +1,5 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
-import { RoleEnum } from '../../../../types/enum/RoleEnum';
+import { ERole } from '../../../../types/enum/ERole';
 import { roleHook } from '../../../hooks/roleHook';
 import { getUsersRespSchema } from '../../users/schemas/getUsersSchema';
 import getAllUsers from '../../../../controllers/users/getUsers';
@@ -18,7 +18,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const userRoleRepo = f.repos.userRoleRepo;
   const roleRepo = f.repos.roleRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.ADMIN]));
+  f.addHook('preHandler', roleHook([ERole.ADMIN]));
 
   f.get(
     '/',
@@ -47,7 +47,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: createRespUserSchema,
         },
       },
-      preHandler: roleHook([RoleEnum.ADMIN]),
+      preHandler: roleHook([ERole.ADMIN]),
     },
     async (req) => {
       await createUser(f.withTransaction, userRepo, roleRepo, userRoleRepo, {
@@ -66,7 +66,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: deleteRespUserSchema,
         },
       },
-      preHandler: roleHook([RoleEnum.ADMIN]),
+      preHandler: roleHook([ERole.ADMIN]),
     },
     async (req) => await deleteUser(userRepo, req.params.id),
   );
@@ -81,7 +81,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: createRespUserSchema,
         },
       },
-      preHandler: roleHook([RoleEnum.ADMIN]),
+      preHandler: roleHook([ERole.ADMIN]),
     },
     async (req) => updateUser(userRepo, req.params.id, req.body),
   );

@@ -10,7 +10,7 @@ import getAllUsers from '../../../controllers/users/getUsers';
 import { deleteRespUserSchema } from './schemas/deleteRespUserSchema';
 import { updateUserSchema } from './schemas/updateUserSchema';
 import { roleHook } from '../../hooks/roleHook';
-import { RoleEnum } from '../../../types/enum/RoleEnum';
+import { ERole } from '../../../types/enum/ERole';
 import { createRespUserSchema } from './schemas/createRespUserSchema';
 import { getUserDataSchema } from './schemas/getUserDataSchema';
 
@@ -20,7 +20,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const userRoleRepo = f.repos.userRoleRepo;
   const roleRepo = f.repos.roleRepo;
 
-  f.addHook('preHandler', roleHook([RoleEnum.USER]));
+  f.addHook('preHandler', roleHook([ERole.USER]));
 
   f.get(
     '/admin/',
@@ -30,7 +30,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: getUsersRespSchema,
         },
       },
-      preHandler: roleHook([RoleEnum.ADMIN]),
+      preHandler: roleHook([ERole.ADMIN]),
     },
     async () => {
       const users = await getAllUsers(userRepo);
@@ -62,7 +62,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: createRespUserSchema,
         },
       },
-      preHandler: roleHook([RoleEnum.ADMIN]),
+      preHandler: roleHook([ERole.ADMIN]),
     },
     async (req) => {
       await createUser(f.withTransaction, userRepo, roleRepo, userRoleRepo, {
@@ -81,7 +81,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: deleteRespUserSchema,
         },
       },
-      preHandler: roleHook([RoleEnum.ADMIN]),
+      preHandler: roleHook([ERole.ADMIN]),
     },
     async (req) => await deleteUser(userRepo, req.params.id),
   );
@@ -96,7 +96,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: createRespUserSchema,
         },
       },
-      preHandler: roleHook([RoleEnum.ADMIN]),
+      preHandler: roleHook([ERole.ADMIN]),
     },
     async (req) => updateUser(userRepo, req.params.id, req.body),
   );
