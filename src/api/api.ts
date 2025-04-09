@@ -21,6 +21,10 @@ import { getWithTransaction } from '../services/withTransaction/withTransaction'
 import { IWithTransaction } from '../services/withTransaction/IWithTransaction';
 import { getMailSender } from '../services/mailSender/SendGridMailSender';
 import { IMailSender } from '../services/mailSender/IMailSender';
+import { getScheduler } from '../services/scheduler/Scheduler';
+import { getNotification } from '../services/notification/Notification';
+import { IScheduler } from '../services/scheduler/IScheduler';
+import { INotificationService } from '../services/notification/INotificationService';
 
 dotenv.config();
 
@@ -38,6 +42,8 @@ declare module 'fastify' {
       workSpaceUserId?: string;
     };
     mailSender: IMailSender;
+    scheduler: IScheduler;
+    notification: INotificationService;
   }
 
   export interface FastifyRequest {
@@ -136,6 +142,8 @@ async function run() {
   f.decorate('getUserDataFromJWT', getUserDataFromJWT);
   f.decorate('withTransaction', getWithTransaction(pgDataSource));
   f.decorate('mailSender', getMailSender());
+  f.decorate('scheduler', getScheduler());
+  f.decorate('notification', getNotification(f.scheduler));
 
   f.setValidatorCompiler(validatorCompiler);
   f.setSerializerCompiler(serializerCompiler);

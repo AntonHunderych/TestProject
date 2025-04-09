@@ -1,23 +1,24 @@
 import { DataSource, EntityManager } from 'typeorm';
 import { DBError } from '../../../types/errors/DBError';
-import { WorkSpaceUserEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceUserEntity';
 import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 import { WorkSpaceContributorEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceContributorEntity';
 
 export interface ITodoContributorRepo extends IRecreateRepo {
   addContributor(userId: string, todoId: string): Promise<void>;
   deleteContributor(userId: string, todoId: string): Promise<void>;
-  getTodoContributor(todoId: string): Promise<WorkSpaceUserEntity[]>;
+  getTodoContributor(todoId: string, workSpaceUserId: string): Promise<WorkSpaceContributorEntity>;
 }
 
 export function getTodoContributorRepo(db: DataSource | EntityManager): ITodoContributorRepo {
   const workSpaceContributor = db.getRepository(WorkSpaceContributorEntity);
 
   return {
-    async getTodoContributor(todoId: string): Promise<WorkSpaceUserEntity[]> {
+    async getTodoContributor(todoId: string, workSpaceUserId: string): Promise<WorkSpaceContributorEntity> {
       try {
-        const contributors = await workSpaceContributor.find({ where: { todoId }, relations: { user: true } });
-        return contributors.map((contr) => contr.user);
+        return await workSpaceContributor.findOneOrFail({
+          where: { todoId, userId: workSpaceUserId },
+          relations: { user: true, todo: true },
+        });
       } catch (error) {
         throw new DBError('Error getting contributors', error);
       }

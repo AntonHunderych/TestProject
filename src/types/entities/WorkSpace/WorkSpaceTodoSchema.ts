@@ -15,6 +15,7 @@ export const WorkSpaceTodoSchema = BasicTodoSchema.extend({
   tags: z.array(z.lazy(() => WorkSpaceTodoTagSchema)).optional(),
   category: WorkSpaceCategorySchema.nullish(),
   command: WorkSpaceCommandSchema.nullish(),
+  notification: z.boolean(),
 });
 
 export type WorkSpaceTodo = z.infer<typeof WorkSpaceTodoSchema>;

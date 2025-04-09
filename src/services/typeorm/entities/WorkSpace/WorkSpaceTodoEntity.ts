@@ -7,6 +7,7 @@ import { BasicTodoEntity } from '../BasicTodoEntity';
 import { WorkSpaceTagTodoEntity } from './WorkSpaceTagTodoEntity';
 import { WorkSpaceContributorEntity } from './WorkSpaceContributorEntity';
 import { WorkSpaceCategoryEntity } from './WorkSpaceCategoryEntity';
+import { WorkSpaceGoogleCalendarEventEntity } from './WorkSpaceGoogleCalendarEventEntity';
 
 @Entity({ name: 'workSpaceTodo' })
 export class WorkSpaceTodoEntity extends BasicTodoEntity {
@@ -56,4 +57,13 @@ export class WorkSpaceTodoEntity extends BasicTodoEntity {
   @ManyToOne(() => WorkSpaceCommandEntity, (workSpaceCommand) => workSpaceCommand, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'commandId' })
   command: WorkSpaceCommandEntity | null;
+
+  @Column({ type: 'boolean', default: false })
+  notification: boolean;
+
+  @OneToMany(
+    () => WorkSpaceGoogleCalendarEventEntity,
+    (workSpaceGoogleCalendarEvent) => workSpaceGoogleCalendarEvent.todo,
+  )
+  googleCalendarEvents: WorkSpaceGoogleCalendarEventEntity[];
 }

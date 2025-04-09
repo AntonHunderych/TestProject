@@ -8,6 +8,8 @@ import { WorkSpaceTagTodoEntity } from './WorkSpaceTagTodoEntity';
 import { WorkSpaceContributorEntity } from './WorkSpaceContributorEntity';
 import { WorkSpaceUserRoleEntity } from './WorkSpaceUserRoleEntity';
 import { WorkSpaceUserCommandEntity } from './WorkSpaceUserCommandEntity';
+import { WorkSpaceGoogleCalendarEventEntity } from './WorkSpaceGoogleCalendarEventEntity';
+import { WorkSpaceGoogleCalendarTokenEntity } from './WorkSpaceGoogleCalendarTokenEntity';
 
 @Entity({ name: 'workSpaceUser' })
 @Unique(['userId', 'workSpaceId'])
@@ -52,4 +54,16 @@ export class WorkSpaceUserEntity {
 
   @OneToMany(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.attachByUser)
   attachedCategoryToTodos: WorkSpaceTodoEntity;
+
+  @OneToMany(
+    () => WorkSpaceGoogleCalendarEventEntity,
+    (workSpaceGoogleCalendarEvent) => workSpaceGoogleCalendarEvent.user,
+  )
+  googleCalendarEvents: WorkSpaceGoogleCalendarEventEntity[];
+
+  @OneToMany(
+    () => WorkSpaceGoogleCalendarTokenEntity,
+    (workSpaceGoogleCalendarTokenEntity) => workSpaceGoogleCalendarTokenEntity.user,
+  )
+  googleCalendarToken: WorkSpaceGoogleCalendarTokenEntity[];
 }

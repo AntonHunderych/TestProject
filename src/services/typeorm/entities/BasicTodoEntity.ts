@@ -16,8 +16,8 @@ export class BasicTodoEntity {
   @Column({ type: 'integer', nullable: true })
   importance?: number | null;
 
-  @Column({ type: 'varchar', nullable: true })
-  status?: string | null;
+  @Column({ type: 'boolean', nullable: true })
+  completed: boolean;
 
   @Column({ name: 'creatorId', type: 'varchar', nullable: true })
   creatorId: string | null;

@@ -14,6 +14,8 @@ import { updateTodo } from '../../../../controllers/ws/todos/updateTodo';
 import { getWorkSpaceTodoSchema } from './schema/getWorkSpaceTodoSchema';
 import { createWorkSpaceTodoSchema } from './schema/createWorkSpaceTodoSchema';
 import { updateWorkSpaceTodoSchema } from './schema/updateWorkSpaceTodoSchema';
+import { onNotification } from '../../../../controllers/ws/notification/onNotification';
+import { offNotification } from '../../../../controllers/ws/notification/offNotification';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -88,7 +90,31 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.changeTodo),
     },
     async (req) => {
-      return await updateTodo(workSpaceTodoRepo, req.params.id, req.body);
+      return await updateTodo(workSpaceTodoRepo, f.notification, f.mailSender, req.params.id, req.body);
+    },
+  );
+
+  f.post(
+    '/notification/on/:id',
+    {
+      schema: {
+        params: UUIDGetter,
+      },
+    },
+    async (req) => {
+      await onNotification(workSpaceTodoRepo, f.notification, f.mailSender, req.params.id);
+    },
+  );
+
+  f.delete(
+    '/notification/off/:id',
+    {
+      schema: {
+        params: UUIDGetter,
+      },
+    },
+    async (req) => {
+      await offNotification(workSpaceTodoRepo, f.notification, req.params.id);
     },
   );
 };

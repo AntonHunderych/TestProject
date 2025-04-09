@@ -10,6 +10,8 @@ export interface IWorkSpaceTodoRepo extends IRecreateRepo {
 
   findById(id: string): Promise<WorkSpaceTodoEntity>;
 
+  getTodoWithContributors(id: string): Promise<WorkSpaceTodoEntity>;
+
   findAll(): Promise<WorkSpaceTodoEntity[]>;
 
   findAllTodoInWorkSpace(workSpaceId: string): Promise<WorkSpaceTodoEntity[]>;
@@ -44,6 +46,17 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
         return await wsTodoRepo.findOneOrFail({ where: { id }, relations: { creator: true } });
       } catch (error) {
         throw new DBError('Error fetching workspace todo by id', error);
+      }
+    },
+
+    async getTodoWithContributors(id: string): Promise<WorkSpaceTodoEntity> {
+      try {
+        return await wsTodoRepo.findOneOrFail({
+          where: { id },
+          relations: { contributors: { user: { user: true, workSpace: true } } },
+        });
+      } catch (error) {
+        throw new DBError('Error getting todo with contributors', error);
       }
     },
 
