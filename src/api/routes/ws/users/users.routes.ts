@@ -48,10 +48,12 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       return await inviteUserToWorkSpace(
         f.mailSender,
         userRepo,
+        workSpaceUserRepo,
         workSpaceInviteLinkRepo,
         f.crypto,
         req.workSpace.id,
         req.params.id,
+        req.userData.id,
       );
     },
   );

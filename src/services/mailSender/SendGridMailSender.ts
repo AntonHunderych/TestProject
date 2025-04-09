@@ -12,7 +12,7 @@ export function getMailSender(): IMailSender {
           ...mailData,
           from: process.env.SENDER_EMAIL!,
         });
-      } catch (e: any) {
+      } catch (e) {
         throw new ApplicationError('Error sending email', e);
       }
     },

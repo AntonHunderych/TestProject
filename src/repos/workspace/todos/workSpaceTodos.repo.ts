@@ -6,7 +6,7 @@ import { Todo } from '../../../types/entities/TodoSchema';
 import { WorkSpaceTodo } from '../../../types/entities/WorkSpace/WorkSpaceTodoSchema';
 
 export interface IWorkSpaceTodoRepo extends IRecreateRepo {
-  create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo>;
+  create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodoEntity>;
 
   findById(id: string): Promise<WorkSpaceTodoEntity>;
 
@@ -16,7 +16,7 @@ export interface IWorkSpaceTodoRepo extends IRecreateRepo {
 
   findAllTodoInWorkSpaceByCommand(workSpaceId: string, commandValue: string[]): Promise<WorkSpaceTodoEntity[]>;
 
-  update(id: string, todo: Partial<WorkSpaceTodo>): Promise<WorkSpaceTodo>;
+  update(id: string, todo: Partial<WorkSpaceTodo>): Promise<WorkSpaceTodoEntity>;
 
   delete(id: string): Promise<boolean>;
 
@@ -29,7 +29,7 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
   const wsTodoRepo = db.getRepository(WorkSpaceTodoEntity);
 
   return {
-    async create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodo> {
+    async create(todo: Partial<WorkSpaceTodo>, workSpaceId: string, creatorId: string): Promise<WorkSpaceTodoEntity> {
       try {
         const data = { ...todo, workSpaceId, creatorId };
         const result = await wsTodoRepo.createQueryBuilder().insert().values(data).returning('*').execute();

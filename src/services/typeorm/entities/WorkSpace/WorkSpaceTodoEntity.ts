@@ -33,7 +33,6 @@ export class WorkSpaceTodoEntity extends BasicTodoEntity {
   categoryId: string | null;
 
   @ManyToOne(() => WorkSpaceCategoryEntity, (workSpaceCategoryEntity) => workSpaceCategoryEntity.todos, {
-    cascade: ['insert'],
     onDelete: 'SET NULL',
   })
   @JoinColumn([{ name: 'categoryId', referencedColumnName: 'id' }])

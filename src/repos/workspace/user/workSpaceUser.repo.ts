@@ -9,6 +9,7 @@ export interface IWorkSpaceUserRepo extends IRecreateRepo {
   existUserInWorkSpace(workSpaceId: string, userId: string): Promise<WorkSpaceUserEntity | undefined>;
   deleteUserFromWorkSpace(workSpaceId: string, userId: string): Promise<boolean>;
   getUsersInWorkSpace(workSpaceId: string): Promise<WorkSpaceUserEntity[]>;
+  getUserWithWorkSpace(userId: string, workSpaceId: string): Promise<WorkSpaceUserEntity>;
 }
 
 export function getWorkSpaceUserRepo(db: DataSource | EntityManager): IWorkSpaceUserRepo {
@@ -65,6 +66,16 @@ export function getWorkSpaceUserRepo(db: DataSource | EntityManager): IWorkSpace
         return userInWorkSpace ? userInWorkSpace : undefined;
       } catch (error) {
         throw new DBError('Error checking if user exists in workspace', error);
+      }
+    },
+    async getUserWithWorkSpace(userId: string, workSpaceId: string): Promise<WorkSpaceUserEntity> {
+      try {
+        return await workSpaceUserRepo.findOneOrFail({
+          where: { userId, workSpaceId },
+          relations: { user: true, workSpace: true },
+        });
+      } catch (e) {
+        throw new DBError('Error getting user with workspace', e);
       }
     },
     __recreateFunction: getWorkSpaceUserRepo,
