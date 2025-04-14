@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
-import { WorkSpaceCalendarEntity } from './WorkSpaceCalendarEntity';
+import { WorkSpaceEntity } from './WorkSpaceEntity';
 
 @Entity('workSpaceGoogleCalendarToken')
 export class WorkSpaceGoogleCalendarTokenEntity {
@@ -14,7 +14,7 @@ export class WorkSpaceGoogleCalendarTokenEntity {
   userId: string;
 
   @Column()
-  calendarId: string;
+  workSpaceId: string;
 
   @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUserEntity) => workSpaceUserEntity.googleCalendarToken, {
     onDelete: 'CASCADE',
@@ -22,9 +22,9 @@ export class WorkSpaceGoogleCalendarTokenEntity {
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: WorkSpaceUserEntity;
 
-  @ManyToOne(() => WorkSpaceCalendarEntity, (workSpaceCalendarEntity) => workSpaceCalendarEntity.tokens, {
+  @ManyToOne(() => WorkSpaceEntity, (workSpaceEntity) => workSpaceEntity.tokens, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'calendarId', referencedColumnName: 'id' })
-  calendar: WorkSpaceCalendarEntity;
+  @JoinColumn({ name: 'workSpaceId', referencedColumnName: 'id' })
+  workSpace: WorkSpaceEntity;
 }

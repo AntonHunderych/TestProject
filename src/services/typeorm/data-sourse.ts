@@ -25,7 +25,6 @@ import { WorkSpaceRolePermissionEntity } from './entities/WorkSpace/WorkSpaceRol
 import { WorkSpaceUserRoleEntity } from './entities/WorkSpace/WorkSpaceUserRoleEntity';
 import { WorkSpaceUserCommandEntity } from './entities/WorkSpace/WorkSpaceUserCommandEntity';
 import { WorkSpaceInviteLinkEntity } from './entities/WorkSpace/WorkSpaceInviteLinkEntity';
-import { WorkSpaceCalendarEntity } from './entities/WorkSpace/WorkSpaceCalendarEntity';
 import { WorkSpaceGoogleCalendarTokenEntity } from './entities/WorkSpace/WorkSpaceGoogleCalendarTokenEntity';
 import { WorkSpaceGoogleCalendarEventEntity } from './entities/WorkSpace/WorkSpaceGoogleCalendarEventEntity';
 
@@ -66,7 +65,6 @@ export function getDataSource() {
       WorkSpaceUserRoleEntity,
       WorkSpaceUserCommandEntity,
       WorkSpaceInviteLinkEntity,
-      WorkSpaceCalendarEntity,
       WorkSpaceGoogleCalendarTokenEntity,
       WorkSpaceGoogleCalendarEventEntity,
     ],

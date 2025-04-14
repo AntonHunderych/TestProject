@@ -1,11 +1,12 @@
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
 import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
 import { WorkSpaceRolesEntity } from './WorkSpaceRolesEntity';
 import { WorkSpaceTagEntity } from './WorkSpaceTagEntity';
 import { WorkSpaceCommandEntity } from './WorkSpaceCommandEntity';
 import { WorkSpaceCategoryEntity } from './WorkSpaceCategoryEntity';
-import { WorkSpaceCalendarEntity } from './WorkSpaceCalendarEntity';
+import { WorkSpaceGoogleCalendarEventEntity } from './WorkSpaceGoogleCalendarEventEntity';
+import { WorkSpaceGoogleCalendarTokenEntity } from './WorkSpaceGoogleCalendarTokenEntity';
 
 @Entity({ name: 'workSpace' })
 @Unique(['name', 'creatorId'])
@@ -40,6 +41,15 @@ export class WorkSpaceEntity {
   @OneToMany(() => WorkSpaceCategoryEntity, (workSpaceCategoryEntity) => workSpaceCategoryEntity.workSpace)
   categories: WorkSpaceCategoryEntity[];
 
-  @OneToOne(() => WorkSpaceCalendarEntity, (workSpaceCalendarEntity) => workSpaceCalendarEntity.workSpace)
-  calendar: WorkSpaceCalendarEntity;
+  @OneToMany(
+    () => WorkSpaceGoogleCalendarEventEntity,
+    (workSpaceGoogleCalendarEvent) => workSpaceGoogleCalendarEvent.workSpace,
+  )
+  events: WorkSpaceGoogleCalendarEventEntity[];
+
+  @OneToMany(
+    () => WorkSpaceGoogleCalendarTokenEntity,
+    (workSpaceGoogleCalendarToken) => workSpaceGoogleCalendarToken.workSpace,
+  )
+  tokens: WorkSpaceGoogleCalendarTokenEntity[];
 }

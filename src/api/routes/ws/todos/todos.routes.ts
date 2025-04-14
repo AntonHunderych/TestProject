@@ -16,6 +16,9 @@ import { createWorkSpaceTodoSchema } from './schema/createWorkSpaceTodoSchema';
 import { updateWorkSpaceTodoSchema } from './schema/updateWorkSpaceTodoSchema';
 import { onNotification } from '../../../../controllers/ws/notification/onNotification';
 import { offNotification } from '../../../../controllers/ws/notification/offNotification';
+import { insertTodoSynchronizeGoogleCalendar } from '../../../../controllers/ws/googleCalendar/synchronize/insertTodoSynchronizeGoogleCalendar';
+import { deleteTodoSynchronizeGoogleCalendar } from '../../../../controllers/ws/googleCalendar/synchronize/deleteTodoSynchronizeGoogleCalendar';
+import { updateTodoSynchronizeGoogleCalendar } from '../../../../controllers/ws/googleCalendar/synchronize/updateTodoSynchronizeGoogleCalendar';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -57,7 +60,16 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.createTodo),
     },
     async (req) => {
-      return await createTodo(workSpaceTodoRepo, req.body, req.workSpace.id, req.workSpace.workSpaceUserId);
+      const todo = await createTodo(workSpaceTodoRepo, req.body, req.workSpace.id, req.workSpace.workSpaceUserId);
+      await insertTodoSynchronizeGoogleCalendar(
+        f.withTransaction,
+        f.calendar,
+        f.repos.workSpaceGoogleCalendarTokenRepo,
+        f.repos.workSpaceGoogleCalendarEventRepo,
+        req.workSpace.id,
+        todo,
+      );
+      return todo;
     },
   );
 
@@ -73,6 +85,14 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.deleteTodo),
     },
     async (req) => {
+      await deleteTodoSynchronizeGoogleCalendar(
+        f.withTransaction,
+        f.calendar,
+        f.repos.workSpaceGoogleCalendarTokenRepo,
+        f.repos.workSpaceGoogleCalendarEventRepo,
+        req.workSpace.id,
+        req.params.id,
+      );
       return await deleteTodo(workSpaceTodoRepo, req.params.id);
     },
   );
@@ -90,7 +110,17 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.changeTodo),
     },
     async (req) => {
-      return await updateTodo(workSpaceTodoRepo, f.notification, f.mailSender, req.params.id, req.body);
+      const newTodo = await updateTodo(workSpaceTodoRepo, f.notification, f.mailSender, req.params.id, req.body);
+      await updateTodoSynchronizeGoogleCalendar(
+        f.withTransaction,
+        f.calendar,
+        f.repos.workSpaceGoogleCalendarTokenRepo,
+        f.repos.workSpaceGoogleCalendarEventRepo,
+        req.workSpace.id,
+        newTodo,
+        req.body,
+      );
+      return newTodo;
     },
   );
 

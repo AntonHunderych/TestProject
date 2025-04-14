@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 export class BasicTodoEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -21,4 +21,7 @@ export class BasicTodoEntity {
 
   @Column({ name: 'creatorId', type: 'varchar', nullable: true })
   creatorId: string | null;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }
