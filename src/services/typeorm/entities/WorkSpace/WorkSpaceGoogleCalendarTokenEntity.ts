@@ -1,8 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
 import { WorkSpaceEntity } from './WorkSpaceEntity';
+import { WorkSpaceGoogleCalendarEventEntity } from './WorkSpaceGoogleCalendarEventEntity';
 
 @Entity('workSpaceGoogleCalendarToken')
+@Unique(['userId', 'workSpaceId'])
 export class WorkSpaceGoogleCalendarTokenEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -16,6 +18,9 @@ export class WorkSpaceGoogleCalendarTokenEntity {
   @Column()
   workSpaceId: string;
 
+  @Column()
+  calendarId: string;
+
   @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUserEntity) => workSpaceUserEntity.googleCalendarToken, {
     onDelete: 'CASCADE',
   })
@@ -27,4 +32,10 @@ export class WorkSpaceGoogleCalendarTokenEntity {
   })
   @JoinColumn({ name: 'workSpaceId', referencedColumnName: 'id' })
   workSpace: WorkSpaceEntity;
+
+  @OneToMany(
+    () => WorkSpaceGoogleCalendarEventEntity,
+    (workSpaceGoogleCalendarEventEntity) => workSpaceGoogleCalendarEventEntity.token,
+  )
+  events: WorkSpaceGoogleCalendarEventEntity[];
 }

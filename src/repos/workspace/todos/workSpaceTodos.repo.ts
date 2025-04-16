@@ -20,7 +20,7 @@ export interface IWorkSpaceTodoRepo extends IRecreateRepo {
 
   update(id: string, todo: Partial<WorkSpaceTodo>): Promise<WorkSpaceTodoEntity>;
 
-  delete(id: string): Promise<boolean>;
+  delete(id: string): Promise<WorkSpaceTodoEntity>;
 
   setCategoryToTodo(todoId: string, categoryId: string, userId: string): Promise<void>;
 
@@ -43,7 +43,7 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
 
     async findById(id: string): Promise<WorkSpaceTodoEntity> {
       try {
-        return await wsTodoRepo.findOneOrFail({ where: { id }, relations: { creator: true } });
+        return await wsTodoRepo.findOneOrFail({ where: { id }, relations: { command: true } });
       } catch (error) {
         throw new DBError('Error fetching workspace todo by id', error);
       }
@@ -130,10 +130,10 @@ export function getWorkSpaceTodoRepo(db: DataSource | EntityManager): IWorkSpace
       }
     },
 
-    async delete(id: string): Promise<boolean> {
+    async delete(id: string): Promise<WorkSpaceTodoEntity> {
       try {
         const result = await wsTodoRepo.createQueryBuilder().delete().where('id=:id', { id }).returning('*').execute();
-        return !!result.raw[0];
+        return result.raw[0];
       } catch (error) {
         throw new DBError('Error deleting workspace todo', error);
       }

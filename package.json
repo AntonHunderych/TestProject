@@ -23,6 +23,7 @@
     "@fastify/swagger": "^9.4.2",
     "@fastify/swagger-ui": "^5.2.2",
     "@sendgrid/mail": "^8.1.4",
+    "bullmq": "^5.48.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^8.0.0",

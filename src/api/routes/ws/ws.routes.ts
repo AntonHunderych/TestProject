@@ -16,6 +16,7 @@ import { deleteWorkSpace } from '../../../controllers/ws/deleteWorkSpace';
 import { getWorkSpaceById } from '../../../controllers/ws/getWorkSpaceById';
 import { getAccessWorkSpaceTokenSetRefresh } from '../../../controllers/ws/getAccessWorkSpaceTokenSetRefresh';
 import { dataFetchHook } from './hooks/dataFetchHook';
+import { clearWorkSpaceData } from '../../../controllers/ws/clearWorkSpaceData';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -25,6 +26,8 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const workSpaceUserRepo = f.repos.workSpaceUserRepo;
   const workSpaceUserRoleRepo = f.repos.workSpaceUserRoleRepo;
   const workSpaceRolePermission = f.repos.workSpaceRolePermissionRepo;
+  const workSpaceGoogleCalendarTokenRepo = f.repos.workSpaceGoogleCalendarTokenRepo;
+  const workSpaceTodoRepo = f.repos.workSpaceTodoRepo;
 
   f.addHook('preHandler', roleHook([ERole.USER]));
 
@@ -115,6 +118,15 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: [dataFetchHook, permissionsAccessHook(Permissions.deleteWorkSpace), accessToWorkSpaceHook],
     },
     async (req) => {
+      await clearWorkSpaceData(
+        workSpaceRepo,
+        req.params.id,
+        workSpaceGoogleCalendarTokenRepo,
+        f.calendar,
+        f.getOAuth2Client,
+        workSpaceTodoRepo,
+        f.notification,
+      );
       return await deleteWorkSpace(workSpaceRepo, req.params.id);
     },
   );

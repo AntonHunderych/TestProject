@@ -1,10 +1,9 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { WorkSpaceTodoEntity } from './WorkSpaceTodoEntity';
-import { WorkSpaceUserEntity } from './WorkSpaceUserEntity';
-import { WorkSpaceEntity } from './WorkSpaceEntity';
+import { WorkSpaceGoogleCalendarTokenEntity } from './WorkSpaceGoogleCalendarTokenEntity';
 
 @Entity({ name: 'workSpaceGoogleCalendarEvent' })
-@Unique(['todoId', 'userId', 'workSpaceId'])
+@Unique(['todoId', 'tokenId'])
 export class WorkSpaceGoogleCalendarEventEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -13,23 +12,20 @@ export class WorkSpaceGoogleCalendarEventEntity {
   todoId: string;
 
   @Column()
-  workSpaceId: string;
-
-  @Column()
-  userId: string;
-
-  @Column()
   eventId: string;
 
   @ManyToOne(() => WorkSpaceTodoEntity, (workSpaceTodo) => workSpaceTodo.googleCalendarEvents, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'todoId', referencedColumnName: 'id' })
   todo: WorkSpaceTodoEntity;
 
-  @ManyToOne(() => WorkSpaceEntity, (workSpaceEntity) => workSpaceEntity.events, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'workSpaceId', referencedColumnName: 'id' })
-  workSpace: WorkSpaceEntity;
+  @Column()
+  tokenId: string;
 
-  @ManyToOne(() => WorkSpaceUserEntity, (workSpaceUser) => workSpaceUser.googleCalendarEvents, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-  user: WorkSpaceUserEntity;
+  @ManyToOne(
+    () => WorkSpaceGoogleCalendarTokenEntity,
+    (workSpaceGoogleCalendarToken) => workSpaceGoogleCalendarToken.events,
+    { onDelete: 'CASCADE' },
+  )
+  @JoinColumn({ name: 'tokenId' })
+  token: WorkSpaceGoogleCalendarTokenEntity;
 }

@@ -1,13 +1,12 @@
-import { IWithTransaction } from '../../../../services/withTransaction/IWithTransaction';
 import { ICalendar } from '../../../../services/calendar/ICalendar';
 import { IWorkSpaceGoogleCalendarToken } from '../../../../repos/workspace/googleCalendarToken/workSpaceGoogleCalendarToken.repo';
-import { IWorkSpaceGoogleCalendarEvent } from '../../../../repos/workspace/googleCalendarEvent/workSpaceGoogleCalendarEvent';
 import { WorkSpaceTodoEntity } from '../../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
-import { WorkSpaceGoogleCalendarEventEntity } from '../../../../services/typeorm/entities/WorkSpace/WorkSpaceGoogleCalendarEventEntity';
-import { WorkSpaceGoogleCalendarTokenEntity } from '../../../../services/typeorm/entities/WorkSpace/WorkSpaceGoogleCalendarTokenEntity';
+import { getTokensFilteredByUserCommand } from './getTokensFilteredByUserCommand';
+import { updateCalendarEvent } from './updateCalendarEvent';
+import { ApplicationError } from '../../../../types/errors/ApplicationError';
+import { IWorkSpaceGoogleCalendarEvent } from '../../../../repos/workspace/googleCalendarEvent/workSpaceGoogleCalendarEvent';
 
 export async function updateTodoSynchronizeGoogleCalendar(
-  withTransaction: IWithTransaction,
   calendar: ICalendar,
   workSpaceGoogleCalendarTokenRepo: IWorkSpaceGoogleCalendarToken,
   workSpaceGoogleCalendarEventRepo: IWorkSpaceGoogleCalendarEvent,
@@ -15,44 +14,27 @@ export async function updateTodoSynchronizeGoogleCalendar(
   todo: WorkSpaceTodoEntity,
   newTodoData: Partial<WorkSpaceTodoEntity>,
 ) {
-  if (
-    newTodoData.eliminatedDate === undefined &&
-    newTodoData.title === undefined &&
-    newTodoData.description === undefined
-  ) {
+  if (!newTodoData.eliminatedDate && !newTodoData.title && !newTodoData.description) {
     return;
   }
-  const events: WorkSpaceGoogleCalendarEventEntity[] = await workSpaceGoogleCalendarEventRepo.getEventsByTodoId(
+  if (!(await workSpaceGoogleCalendarEventRepo.eventExist(todo.id))) {
+    return;
+  }
+
+  const tokensToProcess = await getTokensFilteredByUserCommand(
+    todo.command,
     todo.id,
+    workSpaceId,
+    workSpaceGoogleCalendarTokenRepo,
   );
-  const tokens: WorkSpaceGoogleCalendarTokenEntity[] = await workSpaceGoogleCalendarTokenRepo.getUserTokens(
-    events.map((event) => event.userId),
-  );
-  await withTransaction(
-    {
-      workSpaceGoogleCalendarEventRepo,
-    },
-    async (repos) => {
-      for (const event of events) {
-        const token = tokens.find((token) => token.userId === event.userId);
-        if (!token) {
-          continue;
-        }
-        await calendar.updateEvent(
-          token.token,
-          workSpaceId,
-          event.eventId,
-          {
-            summary: newTodoData?.title,
-            description: newTodoData?.description as string | undefined,
-          },
-          {
-            startTime: todo.createdAt,
-            finishTime: newTodoData.eliminatedDate ? newTodoData.eliminatedDate : todo.eliminatedDate!,
-          },
-        );
-        await repos.workSpaceGoogleCalendarEventRepo.setEvent(todo.id, token.userId, workSpaceId, event.eventId);
-      }
-    },
-  );
+
+  try {
+    await Promise.all(
+      tokensToProcess.map((token) =>
+        updateCalendarEvent(calendar, token, token.calendarId, todo, newTodoData, token.events[0].eventId),
+      ),
+    );
+  } catch (e) {
+    throw new ApplicationError('Error updating todo in Google Calendar', e);
+  }
 }

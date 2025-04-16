@@ -1,39 +1,46 @@
 import { IWorkSpaceGoogleCalendarEvent } from '../../../../repos/workspace/googleCalendarEvent/workSpaceGoogleCalendarEvent';
 import { IWorkSpaceGoogleCalendarToken } from '../../../../repos/workspace/googleCalendarToken/workSpaceGoogleCalendarToken.repo';
 import { WorkSpaceTodoEntity } from '../../../../services/typeorm/entities/WorkSpace/WorkSpaceTodoEntity';
-import { IWithTransaction } from '../../../../services/withTransaction/IWithTransaction';
 import { ICalendar } from '../../../../services/calendar/ICalendar';
 import { setCalendarEvent } from './setCalendarEvent';
+import { getTokensFilteredByUserCommand } from './getTokensFilteredByUserCommand';
+import { ApplicationError } from '../../../../types/errors/ApplicationError';
+import { setGoogleCalendarEvents } from '../events/setGoogleCalendarEvents';
 
 export async function insertTodoSynchronizeGoogleCalendar(
-  withTransaction: IWithTransaction,
   calendar: ICalendar,
   workSpaceGoogleCalendarTokenRepo: IWorkSpaceGoogleCalendarToken,
   workSpaceGoogleCalendarEventRepo: IWorkSpaceGoogleCalendarEvent,
   workSpaceId: string,
   todo: WorkSpaceTodoEntity,
 ) {
-  if (todo.eliminatedDate === null || todo.eliminatedDate === undefined) {
+  if (!todo.eliminatedDate) {
     return;
   }
-  const tokensWithUserData = await workSpaceGoogleCalendarTokenRepo.getTokensWithUserCommand(workSpaceId);
+  if (await workSpaceGoogleCalendarEventRepo.eventExist(todo.id)) {
+    return;
+  }
 
-  await withTransaction(
-    {
-      workSpaceGoogleCalendarEventRepo,
-    },
-    async (repos) => {
-      if (todo.command) {
-        for (const token of tokensWithUserData) {
-          if (token.user.commands.map((userCommand) => userCommand.command).includes(todo.command)) {
-            await setCalendarEvent(calendar, token, workSpaceId, todo, repos.workSpaceGoogleCalendarEventRepo);
-          }
-        }
-      } else {
-      }
-      for (const token of tokensWithUserData) {
-        await setCalendarEvent(calendar, token, workSpaceId, todo, repos.workSpaceGoogleCalendarEventRepo);
-      }
-    },
+  const tokensToProcess = await getTokensFilteredByUserCommand(
+    todo.command,
+    todo.id,
+    workSpaceId,
+    workSpaceGoogleCalendarTokenRepo,
   );
+
+  try {
+    const data = await Promise.all(
+      tokensToProcess.map(async (token) => {
+        return {
+          todoId: todo.id,
+          eventId: await setCalendarEvent(calendar, token, token.calendarId, todo),
+          tokenId: token.id,
+        };
+      }),
+    );
+
+    await setGoogleCalendarEvents(workSpaceGoogleCalendarEventRepo, data);
+  } catch (e) {
+    throw new ApplicationError('Error inserting todo into Google Calendar', e);
+  }
 }

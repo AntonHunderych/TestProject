@@ -3,11 +3,12 @@ import { roleHook } from '../../../hooks/roleHook';
 import { ERole } from '../../../../types/enum/ERole';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
-import { google } from 'googleapis';
-import z from 'zod';
+import { clearWorkSpaceUserCalendarData } from '../../../../controllers/ws/googleCalendar/clearWorkSpaceUserCalendarData';
+import { ECalendarQueueEvents } from '../../../../types/enum/ECalendarQueue';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
+  const workSpaceGoogleCalendarTokenRepo = f.repos.workSpaceGoogleCalendarTokenRepo;
 
   f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
@@ -27,26 +28,21 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     return reply.redirect(url);
   });
 
-  f.get(
-    '/',
-    {
-      schema: {
-        querystring: z.object({
-          token: z.string(),
-        }),
-      },
-    },
-    async (req) => {
-      const client = f.getOAuth2Client();
-      client.setCredentials({
-        refresh_token: req.query.token,
-      });
-      const calendar = google.calendar({ version: 'v3', auth: client });
-      return await calendar.events.list({
-        calendarId: 'primary',
-      });
-    },
-  );
+  f.delete('/disconnect', {}, async (req) => {
+    await clearWorkSpaceUserCalendarData(
+      workSpaceGoogleCalendarTokenRepo,
+      f.calendar,
+      f.getOAuth2Client,
+      req.workSpace.workSpaceUserId,
+    );
+  });
+
+  f.post('/synchronize', {}, async (req) => {
+    await f.addCalendarJob(ECalendarQueueEvents.synchronizeCalendar, {
+      workSpaceId: req.workSpace.id,
+      workSpaceUserId: req.workSpace.workSpaceUserId,
+    });
+  });
 };
 
 export default routes;

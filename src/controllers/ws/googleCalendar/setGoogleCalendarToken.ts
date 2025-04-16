@@ -5,6 +5,7 @@ export async function setGoogleCalendarToken(
   workSpaceUserId: string,
   token: string,
   workSpaceId: string,
+  calendarId: string,
 ) {
-  await workSpaceGoogleCalendarTokensRepo.setToken(token, workSpaceUserId, workSpaceId);
+  await workSpaceGoogleCalendarTokensRepo.setToken(token, workSpaceUserId, workSpaceId, calendarId);
 }

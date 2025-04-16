@@ -5,7 +5,6 @@ import { WorkSpaceRolesEntity } from './WorkSpaceRolesEntity';
 import { WorkSpaceTagEntity } from './WorkSpaceTagEntity';
 import { WorkSpaceCommandEntity } from './WorkSpaceCommandEntity';
 import { WorkSpaceCategoryEntity } from './WorkSpaceCategoryEntity';
-import { WorkSpaceGoogleCalendarEventEntity } from './WorkSpaceGoogleCalendarEventEntity';
 import { WorkSpaceGoogleCalendarTokenEntity } from './WorkSpaceGoogleCalendarTokenEntity';
 
 @Entity({ name: 'workSpace' })
@@ -40,12 +39,6 @@ export class WorkSpaceEntity {
 
   @OneToMany(() => WorkSpaceCategoryEntity, (workSpaceCategoryEntity) => workSpaceCategoryEntity.workSpace)
   categories: WorkSpaceCategoryEntity[];
-
-  @OneToMany(
-    () => WorkSpaceGoogleCalendarEventEntity,
-    (workSpaceGoogleCalendarEvent) => workSpaceGoogleCalendarEvent.workSpace,
-  )
-  events: WorkSpaceGoogleCalendarEventEntity[];
 
   @OneToMany(
     () => WorkSpaceGoogleCalendarTokenEntity,

@@ -8,22 +8,20 @@ import { ERole } from '../../../../types/enum/ERole';
 import { UUIDGetter } from '../../../common/schemas/UUIDGetter';
 import z from 'zod';
 import { getAllTodoInWorkSpaceByCommand } from '../../../../controllers/ws/todos/getAllTodoInWorkSpaceByCommand';
-import { createTodo } from '../../../../controllers/ws/todos/createTodo';
-import { deleteTodo } from '../../../../controllers/ws/todos/deleteTodo';
-import { updateTodo } from '../../../../controllers/ws/todos/updateTodo';
 import { getWorkSpaceTodoSchema } from './schema/getWorkSpaceTodoSchema';
 import { createWorkSpaceTodoSchema } from './schema/createWorkSpaceTodoSchema';
 import { updateWorkSpaceTodoSchema } from './schema/updateWorkSpaceTodoSchema';
 import { onNotification } from '../../../../controllers/ws/notification/onNotification';
 import { offNotification } from '../../../../controllers/ws/notification/offNotification';
-import { insertTodoSynchronizeGoogleCalendar } from '../../../../controllers/ws/googleCalendar/synchronize/insertTodoSynchronizeGoogleCalendar';
-import { deleteTodoSynchronizeGoogleCalendar } from '../../../../controllers/ws/googleCalendar/synchronize/deleteTodoSynchronizeGoogleCalendar';
-import { updateTodoSynchronizeGoogleCalendar } from '../../../../controllers/ws/googleCalendar/synchronize/updateTodoSynchronizeGoogleCalendar';
+import { createTodoProcess } from '../../../../controllers/ws/todos/createTodoProcess';
+import { deleteTodoProcess } from '../../../../controllers/ws/todos/deleteTodoProcess';
+import { updateTodoProcess } from '../../../../controllers/ws/todos/updateTodoProcess';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceTodoRepo = f.repos.workSpaceTodoRepo;
   const workSpaceCommandRepo = f.repos.workSpaceUserCommandRepo;
+  const workSpaceGoogleCalendarTokenRepo = f.repos.workSpaceGoogleCalendarTokenRepo;
 
   f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
@@ -60,16 +58,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.createTodo),
     },
     async (req) => {
-      const todo = await createTodo(workSpaceTodoRepo, req.body, req.workSpace.id, req.workSpace.workSpaceUserId);
-      await insertTodoSynchronizeGoogleCalendar(
-        f.withTransaction,
-        f.calendar,
-        f.repos.workSpaceGoogleCalendarTokenRepo,
-        f.repos.workSpaceGoogleCalendarEventRepo,
+      return await createTodoProcess(
+        workSpaceTodoRepo,
+        req.body,
         req.workSpace.id,
-        todo,
+        req.workSpace.workSpaceUserId,
+        f.addCalendarJob,
       );
-      return todo;
     },
   );
 
@@ -85,15 +80,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.deleteTodo),
     },
     async (req) => {
-      await deleteTodoSynchronizeGoogleCalendar(
-        f.withTransaction,
-        f.calendar,
-        f.repos.workSpaceGoogleCalendarTokenRepo,
-        f.repos.workSpaceGoogleCalendarEventRepo,
-        req.workSpace.id,
+      return deleteTodoProcess(
+        workSpaceTodoRepo,
+        workSpaceGoogleCalendarTokenRepo,
         req.params.id,
+        req.workSpace.id,
+        f.addCalendarJob,
       );
-      return await deleteTodo(workSpaceTodoRepo, req.params.id);
     },
   );
 
@@ -110,17 +103,14 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: permissionsAccessHook(Permissions.changeTodo),
     },
     async (req) => {
-      const newTodo = await updateTodo(workSpaceTodoRepo, f.notification, f.mailSender, req.params.id, req.body);
-      await updateTodoSynchronizeGoogleCalendar(
-        f.withTransaction,
-        f.calendar,
-        f.repos.workSpaceGoogleCalendarTokenRepo,
-        f.repos.workSpaceGoogleCalendarEventRepo,
-        req.workSpace.id,
-        newTodo,
+      return await updateTodoProcess(
+        workSpaceTodoRepo,
+        f.notification,
+        f.mailSender,
+        req.params.id,
         req.body,
+        f.addCalendarJob,
       );
-      return newTodo;
     },
   );
 

@@ -6,7 +6,7 @@ import { WorkSpace, WorkSpaceSchema } from '../../types/entities/WorkSpace/WorkS
 
 export interface IWorkSpaceRepo extends IRecreateRepo {
   createWorkSpace(workSpace: IWorkSpaceCreate): Promise<WorkSpace>;
-  getWorkSpaceById(id: string): Promise<WorkSpace>;
+  getWorkSpaceById(id: string): Promise<WorkSpaceEntity>;
   updateWorkSpace(id: string, workSpace: IWorkSpaceUpdate): Promise<WorkSpace>;
   deleteWorkSpace(id: string): Promise<boolean>;
   getAllWorkSpaces(): Promise<WorkSpace[]>;
@@ -46,7 +46,7 @@ export function getWorkSpaceRepos(db: DataSource | EntityManager): IWorkSpaceRep
         throw new DBError('Error fetching all workspaces', error);
       }
     },
-    async getWorkSpaceById(id: string): Promise<WorkSpace> {
+    async getWorkSpaceById(id: string): Promise<WorkSpaceEntity> {
       try {
         return await WorkSpaceRepos.createQueryBuilder('workSpace')
           .leftJoinAndSelect('workSpace.todos', 'todos')

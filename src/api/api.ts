@@ -29,6 +29,8 @@ import { AuthorizationCode } from 'simple-oauth2';
 import { getGoogleCalendar } from '../services/calendar/googleCalendar';
 import { ICalendar } from '../services/calendar/ICalendar';
 import { getOAuth2Client } from '../services/OAuth2Client/getOAuth2Client';
+import { AddCalendarJob } from '../services/queue/calendar/calendarQueue';
+import { initWorker } from '../services/queue/calendar/calendarWorker';
 
 dotenv.config();
 
@@ -51,6 +53,7 @@ declare module 'fastify' {
     scheduler: IScheduler;
     notification: INotificationService;
     calendar: ICalendar;
+    addCalendarJob: typeof AddCalendarJob;
   }
 
   export interface FastifyRequest {
@@ -168,6 +171,7 @@ async function run() {
   );
   f.decorate('getOAuth2Client', getOAuth2Client);
   f.decorate('calendar', getGoogleCalendar(f));
+  f.decorate('addCalendarJob', AddCalendarJob);
 
   f.setValidatorCompiler(validatorCompiler);
   f.setSerializerCompiler(serializerCompiler);
@@ -190,6 +194,9 @@ async function run() {
   });
 
   await f.ready();
+
+  initWorker(f);
+
   f.listen(
     {
       port: 3000,

@@ -22,4 +22,7 @@ export interface ICalendar {
       startTime: Date;
     },
   ): Promise<void>;
+  deleteAllEvent(token: string, calendarId: string): Promise<void>;
+  deleteCalendar(token: string, calendarId: string): Promise<void>;
+  createCalendar(token: string, calendarId: string): Promise<void>;
 }

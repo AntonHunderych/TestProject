@@ -1,8 +1,12 @@
 import { IWorkSpaceGoogleCalendarEvent } from '../../../../repos/workspace/googleCalendarEvent/workSpaceGoogleCalendarEvent';
 
-export async function deleteGoogleCalendarEvent(
+export async function setGoogleCalendarEvents(
   workSpaceGoogleCalendarEventRepo: IWorkSpaceGoogleCalendarEvent,
-  todoId: string,
+  data: {
+    todoId: string;
+    eventId: string;
+    tokenId: string;
+  }[],
 ) {
-  await workSpaceGoogleCalendarEventRepo.deleteEvents(todoId);
+  await workSpaceGoogleCalendarEventRepo.setEvents(data);
 }
