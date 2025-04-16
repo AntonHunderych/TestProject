@@ -9,6 +9,7 @@ import { WorkSpaceContributorEntity } from './WorkSpaceContributorEntity';
 import { WorkSpaceUserRoleEntity } from './WorkSpaceUserRoleEntity';
 import { WorkSpaceUserCommandEntity } from './WorkSpaceUserCommandEntity';
 import { WorkSpaceGoogleCalendarTokenEntity } from './WorkSpaceGoogleCalendarTokenEntity';
+import { WorkSpaceFileEntity } from './WorkSpaceFileEntity';
 
 @Entity({ name: 'workSpaceUser' })
 @Unique(['userId', 'workSpaceId'])
@@ -59,4 +60,7 @@ export class WorkSpaceUserEntity {
     (workSpaceGoogleCalendarTokenEntity) => workSpaceGoogleCalendarTokenEntity.user,
   )
   googleCalendarToken: WorkSpaceGoogleCalendarTokenEntity[];
+
+  @OneToMany(() => WorkSpaceFileEntity, (workSpaceFile) => workSpaceFile.uploadBy)
+  uploadedFiles: WorkSpaceFileEntity[];
 }

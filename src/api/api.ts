@@ -25,19 +25,19 @@ import { getScheduler } from '../services/scheduler/Scheduler';
 import { getNotification } from '../services/notification/Notification';
 import { IScheduler } from '../services/scheduler/IScheduler';
 import { INotificationService } from '../services/notification/INotificationService';
-import { AuthorizationCode } from 'simple-oauth2';
 import { getGoogleCalendar } from '../services/calendar/googleCalendar';
 import { ICalendar } from '../services/calendar/ICalendar';
 import { getOAuth2Client } from '../services/OAuth2Client/getOAuth2Client';
 import { AddCalendarJob } from '../services/queue/calendar/calendarQueue';
 import { initWorker } from '../services/queue/calendar/calendarWorker';
+import { getFileManagerS3 } from '../services/aws/s3/s3';
+import { IFileManager } from '../types/services/fileManager';
 
 dotenv.config();
 
 declare module 'fastify' {
   export interface FastifyInstance {
     googleOAuth2: OAuth2Namespace;
-    simpleOAuth: AuthorizationCode;
     getOAuth2Client: typeof getOAuth2Client;
     repos: IRepos;
     crypto: ICrypto;
@@ -54,6 +54,7 @@ declare module 'fastify' {
     notification: INotificationService;
     calendar: ICalendar;
     addCalendarJob: typeof AddCalendarJob;
+    fileManager: IFileManager;
   }
 
   export interface FastifyRequest {
@@ -154,24 +155,10 @@ async function run() {
   f.decorate('mailSender', getMailSender());
   f.decorate('scheduler', getScheduler());
   f.decorate('notification', getNotification(f.scheduler));
-  f.decorate(
-    'simpleOAuth',
-    new AuthorizationCode({
-      client: {
-        id: process.env.GOOGLE_CLIENT_ID!,
-        secret: process.env.GOOGLE_CLIENT_SECRET!,
-      },
-      auth: {
-        tokenHost: 'https://oauth2.googleapis.com',
-        tokenPath: '/token',
-        authorizeHost: 'https://accounts.google.com',
-        authorizePath: '/o/oauth2/v2/auth',
-      },
-    }),
-  );
   f.decorate('getOAuth2Client', getOAuth2Client);
   f.decorate('calendar', getGoogleCalendar(f));
   f.decorate('addCalendarJob', AddCalendarJob);
+  f.decorate('fileManager', getFileManagerS3());
 
   f.setValidatorCompiler(validatorCompiler);
   f.setSerializerCompiler(serializerCompiler);

@@ -27,6 +27,7 @@ import { WorkSpaceUserCommandEntity } from './entities/WorkSpace/WorkSpaceUserCo
 import { WorkSpaceInviteLinkEntity } from './entities/WorkSpace/WorkSpaceInviteLinkEntity';
 import { WorkSpaceGoogleCalendarTokenEntity } from './entities/WorkSpace/WorkSpaceGoogleCalendarTokenEntity';
 import { WorkSpaceGoogleCalendarEventEntity } from './entities/WorkSpace/WorkSpaceGoogleCalendarEventEntity';
+import { WorkSpaceFileEntity } from './entities/WorkSpace/WorkSpaceFileEntity';
 
 dotenv.config();
 
@@ -67,6 +68,7 @@ export function getDataSource() {
       WorkSpaceInviteLinkEntity,
       WorkSpaceGoogleCalendarTokenEntity,
       WorkSpaceGoogleCalendarEventEntity,
+      WorkSpaceFileEntity,
     ],
     migrations: ['./migrations/*.ts'],
   });

@@ -25,6 +25,7 @@ import { getWorkSpaceTagTodoRepo } from './workspace/tagTodo/workSpaceTagTodo.re
 import { getWorkSpaceInviteLinkRepo } from './workspace/inviteLink/inviteLink.repo';
 import { getWorkSpaceGoogleCalendarTokenRepo } from './workspace/googleCalendarToken/workSpaceGoogleCalendarToken.repo';
 import { getWorkSpaceGoogleCalendarEventRepo } from './workspace/googleCalendarEvent/workSpaceGoogleCalendarEvent';
+import { getWorkSpaceFileRepo } from './workspace/files/workSpaceFile.repo';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -54,6 +55,7 @@ export default function getRepos(db: DataSource) {
     workSpaceInviteLinkRepo: getWorkSpaceInviteLinkRepo(db),
     workSpaceGoogleCalendarTokenRepo: getWorkSpaceGoogleCalendarTokenRepo(db),
     workSpaceGoogleCalendarEventRepo: getWorkSpaceGoogleCalendarEventRepo(db),
+    workSpaceFileRepo: getWorkSpaceFileRepo(db),
   };
 }
 

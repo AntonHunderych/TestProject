@@ -6,6 +6,7 @@ import { WorkSpaceTagEntity } from './WorkSpaceTagEntity';
 import { WorkSpaceCommandEntity } from './WorkSpaceCommandEntity';
 import { WorkSpaceCategoryEntity } from './WorkSpaceCategoryEntity';
 import { WorkSpaceGoogleCalendarTokenEntity } from './WorkSpaceGoogleCalendarTokenEntity';
+import { WorkSpaceFileEntity } from './WorkSpaceFileEntity';
 
 @Entity({ name: 'workSpace' })
 @Unique(['name', 'creatorId'])
@@ -45,4 +46,7 @@ export class WorkSpaceEntity {
     (workSpaceGoogleCalendarToken) => workSpaceGoogleCalendarToken.workSpace,
   )
   tokens: WorkSpaceGoogleCalendarTokenEntity[];
+
+  @OneToMany(() => WorkSpaceFileEntity, (workSpaceUser) => workSpaceUser.workSpace)
+  files: WorkSpaceFileEntity[];
 }
