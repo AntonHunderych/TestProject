@@ -3,7 +3,7 @@ import { ApplicationError } from '../../types/errors/ApplicationError';
 import Stripe from 'stripe';
 
 export function getPaymentStripe(): IPayment {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
   return {
     async createPayment(

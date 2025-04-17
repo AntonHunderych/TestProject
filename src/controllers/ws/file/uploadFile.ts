@@ -1,23 +1,24 @@
+import { IWithTransaction } from '../../../services/withTransaction/IWithTransaction';
 import { IFileManager } from '../../../types/services/fileManager';
 import { IWorkSpaceFile } from '../../../repos/workspace/files/workSpaceFile.repo';
-import { IWithTransaction } from '../../../services/withTransaction/IWithTransaction';
 import { EContentType } from '../../../types/enum/EFileTypes';
 
-export async function getUploadUrl(
+export async function uploadFile(
   withTransaction: IWithTransaction,
   fileManager: IFileManager,
   workSpaceFileRepo: IWorkSpaceFile,
   fileName: string,
   fileType: EContentType,
+  file: Buffer,
   workSpaceId: string,
-): Promise<string> {
+) {
   return await withTransaction(
     {
       workSpaceFileRepo,
     },
     async (repos) => {
-      const file = await repos.workSpaceFileRepo.createFile(fileName, fileType, workSpaceId);
-      return await fileManager.getUploadFileUrl(file.id, fileType);
+      const fileDb = await repos.workSpaceFileRepo.createFile(fileName, fileType, workSpaceId);
+      return await fileManager.uploadFile(fileDb.id, fileType, file);
     },
   );
 }

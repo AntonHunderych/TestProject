@@ -34,6 +34,7 @@ import { getFileManagerS3 } from '../services/aws/s3/s3';
 import { IFileManager } from '../types/services/fileManager';
 import { getPaymentStripe } from '../services/payment/stripe';
 import { IPayment } from '../types/services/payment';
+import { fastifyMultipart } from '@fastify/multipart';
 
 dotenv.config();
 
@@ -129,6 +130,11 @@ async function run() {
     process.exit(1);
   });
 
+  f.register(fastifyMultipart, {
+    limits: {
+      fileSize: 10 * 1024 * 1024,
+    },
+  });
   f.register(cors);
   f.register(fastifyJwt, {
     secret: 'your-secret-key',

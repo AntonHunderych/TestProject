@@ -12,6 +12,9 @@ import { roleHook } from '../../../hooks/roleHook';
 import { ERole } from '../../../../types/enum/ERole';
 import { dataFetchHook } from '../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../hooks/accessToWorkSpaceHook';
+import { EContentType } from '../../../../types/enum/EFileTypes';
+import { ApplicationError } from '../../../../types/errors/ApplicationError';
+import { uploadFile } from '../../../../controllers/ws/file/uploadFile';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -42,6 +45,26 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       );
     },
   );
+
+  f.post('/file', {}, async (req) => {
+    try {
+      const data = await req.file();
+      if (!data) {
+        throw new ApplicationError('File not found');
+      }
+      return await uploadFile(
+        f.withTransaction,
+        f.fileManager,
+        workSpaceFileRepo,
+        data.filename,
+        data.mimetype as EContentType,
+        await data.toBuffer(),
+        req.workSpace.id,
+      );
+    } catch (e) {
+      throw new ApplicationError('error upload file', e);
+    }
+  });
 
   f.get(
     '/',
