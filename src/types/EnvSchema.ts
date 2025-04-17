@@ -12,6 +12,8 @@ export const EnvSchema = z.object({
   SENDGRID_API_KEY: z.string(),
   WEB_APP_URL: z.string(),
   SENDER_EMAIL: z.string(),
+  STRIPE_SECRET_KEY: z.string(),
+  STRIPE_PUBLIC_KEY: z.string(),
 });
 
 export type Env = z.infer<typeof EnvSchema>;

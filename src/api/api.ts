@@ -32,6 +32,8 @@ import { AddCalendarJob } from '../services/queue/calendar/calendarQueue';
 import { initWorker } from '../services/queue/calendar/calendarWorker';
 import { getFileManagerS3 } from '../services/aws/s3/s3';
 import { IFileManager } from '../types/services/fileManager';
+import { getPaymentStripe } from '../services/payment/stripe';
+import { IPayment } from '../types/services/payment';
 
 dotenv.config();
 
@@ -55,6 +57,7 @@ declare module 'fastify' {
     calendar: ICalendar;
     addCalendarJob: typeof AddCalendarJob;
     fileManager: IFileManager;
+    payment: IPayment;
   }
 
   export interface FastifyRequest {
@@ -159,6 +162,7 @@ async function run() {
   f.decorate('calendar', getGoogleCalendar(f));
   f.decorate('addCalendarJob', AddCalendarJob);
   f.decorate('fileManager', getFileManagerS3());
+  f.decorate('payment', getPaymentStripe());
 
   f.setValidatorCompiler(validatorCompiler);
   f.setSerializerCompiler(serializerCompiler);
