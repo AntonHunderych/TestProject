@@ -1,6 +1,5 @@
 import { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { FastifyInstance } from 'fastify';
-import z from 'zod';
 import { roleHook } from '../../../hooks/roleHook';
 import { ERole } from '../../../../types/enum/ERole';
 import { dataFetchHook } from '../hooks/dataFetchHook';
@@ -11,6 +10,9 @@ import { deleteWorkSpaceCategory } from '../../../../controllers/ws/categories/d
 import { updateWorkSpaceCategory } from '../../../../controllers/ws/categories/updateWorkSpaceCategory';
 import { permissionsAccessHook } from '../hooks/permissionsAccessHook';
 import { Permissions } from '../../../../types/enum/EPermissions';
+import { updateWorkSpaceCategorySchema } from './schema/updateWorkSpaceCategorySchema';
+import { createWorkSpaceCategorySchema } from './schema/createWorkSpaceCategorySchema';
+import { getWorkSpaceCategorySchema } from './schema/getWorkSpaceCategorySchema';
 
 const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -24,10 +26,10 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
     '/',
     {
       schema: {
-        body: z.object({
-          value: z.string(),
-          description: z.string().optional(),
-        }),
+        body: createWorkSpaceCategorySchema,
+        response: {
+          200: getWorkSpaceCategorySchema,
+        },
       },
       preHandler: permissionsAccessHook(Permissions.createCategory),
     },
@@ -58,11 +60,10 @@ const routers: FastifyPluginAsyncZod = async (fastify: FastifyInstance) => {
     '/',
     {
       schema: {
-        body: z.object({
-          categoryId: z.string(),
-          value: z.string(),
-          description: z.string().optional(),
-        }),
+        body: updateWorkSpaceCategorySchema,
+        response: {
+          200: getWorkSpaceCategorySchema,
+        },
         preHandler: permissionsAccessHook(Permissions.changeCategory),
       },
     },

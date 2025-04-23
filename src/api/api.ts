@@ -3,9 +3,8 @@ import fastifyAutoload from '@fastify/autoload';
 import { join } from 'node:path';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import { initDB, pgDataSource } from '../services/typeorm/data-sourse';
-import getRepos, { IRepos } from '../repos';
+import getRepos from '../repos';
 import getCryptoService from '../services/crypto/myCrypto';
-import ICrypto from '../services/crypto/ICrypto';
 import fastifyJwt from 'fastify-jwt';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
@@ -13,70 +12,25 @@ import { skipAuthHook } from './hooks/skipAuthHook';
 import { getUserDataFromJWT } from './plugins/getUserDataFromJWT';
 import dotenv from 'dotenv';
 import fastifyOauth2 from 'fastify-oauth2';
-import { OAuth2Namespace } from '@fastify/oauth2';
 import fastifyCookie from '@fastify/cookie';
 import { errorHandler } from './error/errorHandler';
 import cors from '@fastify/cors';
 import { getWithTransaction } from '../services/withTransaction/withTransaction';
-import { IWithTransaction } from '../services/withTransaction/IWithTransaction';
 import { getMailSender } from '../services/mailSender/SendGridMailSender';
-import { IMailSender } from '../services/mailSender/IMailSender';
 import { getScheduler } from '../services/scheduler/Scheduler';
 import { getNotification } from '../services/notification/Notification';
-import { IScheduler } from '../services/scheduler/IScheduler';
-import { INotificationService } from '../services/notification/INotificationService';
 import { getGoogleCalendar } from '../services/calendar/googleCalendar';
-import { ICalendar } from '../services/calendar/ICalendar';
 import { getOAuth2Client } from '../services/OAuth2Client/getOAuth2Client';
 import { AddCalendarJob } from '../services/queue/calendar/calendarQueue';
-import { initWorker } from '../services/queue/calendar/calendarWorker';
+import { initCalendarWorker } from '../services/queue/calendar/calendarWorker';
 import { getFileManagerS3 } from '../services/aws/s3/s3';
-import { IFileManager } from '../types/services/fileManager';
 import { getPaymentStripe } from '../services/payment/stripe';
-import { IPayment } from '../types/services/payment';
 import { fastifyMultipart } from '@fastify/multipart';
 import rawBodyPlugin from 'fastify-raw-body';
 import rateLimit from '@fastify/rate-limit';
+import '../types/TFastify';
 
 dotenv.config();
-
-declare module 'fastify' {
-  export interface FastifyInstance {
-    googleOAuth2: OAuth2Namespace;
-    getOAuth2Client: typeof getOAuth2Client;
-    repos: IRepos;
-    crypto: ICrypto;
-    withTransaction: IWithTransaction;
-    getUserDataFromJWT: (req: FastifyRequest) => {
-      id: string;
-      username: string;
-      email: string;
-      workSpaceId?: string;
-      workSpaceUserId?: string;
-    };
-    mailSender: IMailSender;
-    scheduler: IScheduler;
-    notification: INotificationService;
-    calendar: ICalendar;
-    addCalendarJob: typeof AddCalendarJob;
-    fileManager: IFileManager;
-    payment: IPayment;
-  }
-
-  export interface FastifyRequest {
-    skipAuth?: boolean;
-    userData: {
-      id: string;
-      username: string;
-      email: string;
-    };
-    workSpace: {
-      id: string;
-      workSpaceUserId: string;
-    };
-    isAdmin: boolean;
-  }
-}
 
 function setupSwagger(f: FastifyInstance) {
   f.register(fastifySwagger, {
@@ -206,7 +160,7 @@ async function run() {
 
   await f.ready();
 
-  initWorker(f);
+  initCalendarWorker(f);
 
   f.listen(
     {

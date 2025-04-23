@@ -3,7 +3,7 @@ import { skipAuthHook } from '../../hooks/skipAuthHook';
 import { verifyPaymentAndCheckCompleted } from '../../../controllers/payments /verifiePayment';
 import { createPayment } from '../../../controllers/payments /createPayment';
 import z from 'zod';
-import { getAllPayments } from '../../../controllers/payments /getAllPayments';
+import { getAllPaymentsProducts } from '../../../controllers/payments /getAllPaymentsProducts';
 import { getPaymentProductSchema } from './schemas/getPaymentProductSchema';
 import { createPaymentSchema } from './schemas/createPaymentSchema';
 
@@ -33,7 +33,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async () => {
-      return await getAllPayments(paymentProductRepo);
+      return await getAllPaymentsProducts(paymentProductRepo);
     },
   );
 

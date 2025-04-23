@@ -9,7 +9,7 @@ import { FastifyInstance } from 'fastify';
 import { synchronizeCalendar } from '../../../controllers/ws/googleCalendar/synchronize/synchronizeCalendar';
 import { getTokensFilteredByUserCommand } from '../../../controllers/ws/googleCalendar/synchronize/getTokensFilteredByUserCommand';
 
-export function initWorker(f: FastifyInstance) {
+export function initCalendarWorker(f: FastifyInstance) {
   const worker = new Worker(
     'calendarTask',
     async (job) => {
