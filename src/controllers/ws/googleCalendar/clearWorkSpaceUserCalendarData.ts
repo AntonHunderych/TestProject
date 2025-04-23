@@ -1,6 +1,5 @@
 import { IWorkSpaceGoogleCalendarToken } from '../../../repos/workspace/googleCalendarToken/workSpaceGoogleCalendarToken.repo';
 import { ICalendar } from '../../../services/calendar/ICalendar';
-import { convertUUIDToGoogleId } from './synchronize/convertUUIDToGoogleId';
 import { getOAuth2Client } from '../../../services/OAuth2Client/getOAuth2Client';
 import { ApplicationError } from '../../../types/errors/ApplicationError';
 
@@ -11,7 +10,7 @@ export async function clearWorkSpaceUserCalendarData(
   workSpaceUserId: string,
 ) {
   const token = await workSpaceGoogleCalendarTokenRepo.getUserTokenWithCommand(workSpaceUserId);
-  await calendar.deleteCalendar(token.token, convertUUIDToGoogleId(token.workSpaceId));
+  await calendar.deleteCalendar(token.token, token.calendarId);
   try {
     const client = _getOAuth2Client();
     await client.revokeToken(token.token);

@@ -7,6 +7,7 @@ import { updateTodoSynchronizeGoogleCalendar } from '../../../controllers/ws/goo
 import { deleteTodoSynchronizeGoogleCalendar } from '../../../controllers/ws/googleCalendar/synchronize/deleteTodoSynchronizeGoogleCalendar';
 import { FastifyInstance } from 'fastify';
 import { synchronizeCalendar } from '../../../controllers/ws/googleCalendar/synchronize/synchronizeCalendar';
+import { getTokensFilteredByUserCommand } from '../../../controllers/ws/googleCalendar/synchronize/getTokensFilteredByUserCommand';
 
 export function initWorker(f: FastifyInstance) {
   const worker = new Worker(
@@ -70,6 +71,34 @@ export function initWorker(f: FastifyInstance) {
               f.repos.workSpaceTodoRepo,
               workSpaceUserId,
               workSpaceId,
+            );
+            break;
+          }
+          case ECalendarQueueEvents.updateTodoCommandSynchronize: {
+            const { workSpaceId, todo, pastCommandId } = job.data
+              .data as TCalendarQueueData[ECalendarQueueEvents.updateTodoCommandSynchronize];
+
+            todo.createdAt = new Date(todo.createdAt);
+            todo.eliminatedDate = todo.eliminatedDate ? new Date(todo.eliminatedDate) : undefined;
+
+            const tokensToDelete = await getTokensFilteredByUserCommand(
+              pastCommandId,
+              todo.id,
+              workSpaceId,
+              f.repos.workSpaceGoogleCalendarTokenRepo,
+            );
+            await deleteTodoSynchronizeGoogleCalendar(
+              f.calendar,
+              f.repos.workSpaceGoogleCalendarEventRepo,
+              todo,
+              tokensToDelete,
+            );
+            await insertTodoSynchronizeGoogleCalendar(
+              f.calendar,
+              f.repos.workSpaceGoogleCalendarTokenRepo,
+              f.repos.workSpaceGoogleCalendarEventRepo,
+              workSpaceId,
+              todo,
             );
             break;
           }

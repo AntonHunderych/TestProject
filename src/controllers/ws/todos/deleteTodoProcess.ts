@@ -14,7 +14,7 @@ export async function deleteTodoProcess(
 ) {
   const workSpaceTodo = await workSpaceTodoRepo.findById(todoId);
   const tokensToProcess = await getTokensFilteredByUserCommand(
-    workSpaceTodo.command,
+    workSpaceTodo.commandId,
     workSpaceTodo.id,
     workSpaceId,
     workSpaceGoogleCalendarTokenRepo,

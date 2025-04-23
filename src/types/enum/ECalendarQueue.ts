@@ -3,4 +3,5 @@ export enum ECalendarQueueEvents {
   updateTodoSynchronize = 'updateTodoSynchronize',
   deleteTodoSynchronize = 'deleteTodoSynchronize',
   synchronizeCalendar = 'synchronizeCalendar',
+  updateTodoCommandSynchronize = 'updateTodoCommandSynchronize',
 }

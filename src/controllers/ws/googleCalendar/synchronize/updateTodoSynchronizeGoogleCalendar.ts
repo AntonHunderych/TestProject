@@ -22,7 +22,7 @@ export async function updateTodoSynchronizeGoogleCalendar(
   }
 
   const tokensToProcess = await getTokensFilteredByUserCommand(
-    todo.command,
+    todo.commandId,
     todo.id,
     workSpaceId,
     workSpaceGoogleCalendarTokenRepo,

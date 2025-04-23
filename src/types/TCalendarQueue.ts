@@ -20,4 +20,9 @@ export type TCalendarQueueData = {
     workSpaceId: string;
     workSpaceUserId: string;
   };
+  [ECalendarQueueEvents.updateTodoCommandSynchronize]: {
+    workSpaceId: string;
+    todo: WorkSpaceTodoEntity;
+    pastCommandId: string;
+  };
 };

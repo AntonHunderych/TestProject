@@ -5,12 +5,13 @@ import { dataFetchHook } from '../../hooks/dataFetchHook';
 import { accessToWorkSpaceHook } from '../../hooks/accessToWorkSpaceHook';
 import { ERole } from '../../../../../types/enum/ERole';
 import { addCommandTodoSchema } from './schema/addCommandTodoSchema';
-import { removeCommandFromTodo } from '../../../../../controllers/ws/commands/removeCommandFromTodo';
-import { addCommandToTodo } from '../../../../../controllers/ws/commands/addCommandToTodo';
+import { addCommandToTodoProcess } from '../../../../../controllers/ws/commands/addCommandToTodoProcess';
+import { removeCommandFromTodoProcess } from '../../../../../controllers/ws/commands/removeCommandFromTodoProcess';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
   const workSpaceCommandsTodoRepo = f.repos.workSpaceCommandTodoRepo;
+  const workSpaceTodoRepo = f.repos.workSpaceTodoRepo;
 
   f.addHook('preHandler', roleHook([ERole.USER]));
   f.addHook('preHandler', dataFetchHook);
@@ -24,7 +25,14 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      await addCommandToTodo(workSpaceCommandsTodoRepo, req.body.todoId, req.body.command);
+      await addCommandToTodoProcess(
+        workSpaceTodoRepo,
+        f.addCalendarJob,
+        req.workSpace.id,
+        workSpaceCommandsTodoRepo,
+        req.body.todoId,
+        req.body.command,
+      );
     },
   );
 
@@ -36,7 +44,13 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async (req) => {
-      await removeCommandFromTodo(workSpaceCommandsTodoRepo, req.params.id);
+      await removeCommandFromTodoProcess(
+        workSpaceTodoRepo,
+        f.addCalendarJob,
+        req.workSpace.id,
+        workSpaceCommandsTodoRepo,
+        req.params.id,
+      );
     },
   );
 };
