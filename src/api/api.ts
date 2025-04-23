@@ -36,6 +36,7 @@ import { getPaymentStripe } from '../services/payment/stripe';
 import { IPayment } from '../types/services/payment';
 import { fastifyMultipart } from '@fastify/multipart';
 import rawBodyPlugin from 'fastify-raw-body';
+import rateLimit from '@fastify/rate-limit';
 
 dotenv.config();
 
@@ -131,14 +132,20 @@ async function run() {
     process.exit(1);
   });
 
+  f.register(rateLimit, {
+    max: 50,
+    timeWindow: '1 minute',
+    allowList: ['127.0.0.1'],
+    ban: 2,
+  });
   f.register(fastifyMultipart, {
     limits: {
       fileSize: 10 * 1024 * 1024,
     },
   });
   f.register(rawBodyPlugin, {
-    field: 'rawBody', // req.rawBody буде доступне
-    global: false, // лише на певному маршруті
+    field: 'rawBody',
+    global: false,
     encoding: 'utf8',
     runFirst: true,
   });

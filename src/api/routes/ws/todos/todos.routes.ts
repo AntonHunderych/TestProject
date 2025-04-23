@@ -55,6 +55,12 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
           200: getWorkSpaceTodoSchema,
         },
       },
+      config: {
+        rateLimit: {
+          max: 20,
+          timeWindow: '1 minute',
+        },
+      },
       preHandler: permissionsAccessHook(Permissions.createTodo),
     },
     async (req) => {
