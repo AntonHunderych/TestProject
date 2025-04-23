@@ -26,6 +26,11 @@ import { getWorkSpaceInviteLinkRepo } from './workspace/inviteLink/inviteLink.re
 import { getWorkSpaceGoogleCalendarTokenRepo } from './workspace/googleCalendarToken/workSpaceGoogleCalendarToken.repo';
 import { getWorkSpaceGoogleCalendarEventRepo } from './workspace/googleCalendarEvent/workSpaceGoogleCalendarEvent';
 import { getWorkSpaceFileRepo } from './workspace/files/workSpaceFile.repo';
+import { getPaymentHistoryRepo } from './payment/paymentHistory.repo';
+import { getPaymentErrorRepo } from './payment/paymentError.repo';
+import { getPaymentProductRepo } from './payment/paymentProduct.repo';
+import { getUserLimitRepo } from './limits/userLimits.repo';
+import { getLimitChangeRepo } from './limits/limitsChange.repo';
 
 export default function getRepos(db: DataSource) {
   return {
@@ -56,6 +61,11 @@ export default function getRepos(db: DataSource) {
     workSpaceGoogleCalendarTokenRepo: getWorkSpaceGoogleCalendarTokenRepo(db),
     workSpaceGoogleCalendarEventRepo: getWorkSpaceGoogleCalendarEventRepo(db),
     workSpaceFileRepo: getWorkSpaceFileRepo(db),
+    paymentHistoryRepo: getPaymentHistoryRepo(db),
+    paymentErrorRepo: getPaymentErrorRepo(db),
+    paymentProductRepo: getPaymentProductRepo(db),
+    userLimitRepo: getUserLimitRepo(db),
+    limitChangeRepo: getLimitChangeRepo(db),
   };
 }
 

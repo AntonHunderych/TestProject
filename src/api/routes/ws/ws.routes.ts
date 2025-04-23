@@ -12,11 +12,10 @@ import { generateTokensThenGetAccessToken } from '../../../controllers/auth/gene
 import { permissionsAccessHook } from './hooks/permissionsAccessHook';
 import { Permissions } from '../../../types/enum/EPermissions';
 import { createWorkSpaceRespSchema } from './schema/createWorkSpaceSchemaRespSchema';
-import { deleteWorkSpace } from '../../../controllers/ws/deleteWorkSpace';
 import { getWorkSpaceById } from '../../../controllers/ws/getWorkSpaceById';
 import { getAccessWorkSpaceTokenSetRefresh } from '../../../controllers/ws/getAccessWorkSpaceTokenSetRefresh';
 import { dataFetchHook } from './hooks/dataFetchHook';
-import { clearWorkSpaceData } from '../../../controllers/ws/clearWorkSpaceData';
+import { deleteWorkSpaceProcess } from '../../../controllers/ws/deleteWorkSpaceProcess';
 
 const routes: FastifyPluginAsyncZod = async (fastify) => {
   const f = fastify.withTypeProvider<ZodTypeProvider>();
@@ -28,6 +27,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
   const workSpaceRolePermission = f.repos.workSpaceRolePermissionRepo;
   const workSpaceGoogleCalendarTokenRepo = f.repos.workSpaceGoogleCalendarTokenRepo;
   const workSpaceTodoRepo = f.repos.workSpaceTodoRepo;
+  const userLimitRepo = f.repos.userLimitRepo;
 
   f.addHook('preHandler', roleHook([ERole.USER]));
 
@@ -98,6 +98,7 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
     async (req) => {
       return await createWorkSpaceProcess(
         f.withTransaction,
+        userLimitRepo,
         workSpaceRepo,
         workSpaceUserRepo,
         workSpaceRoleRepo,
@@ -118,7 +119,8 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
       preHandler: [dataFetchHook, permissionsAccessHook(Permissions.deleteWorkSpace), accessToWorkSpaceHook],
     },
     async (req) => {
-      await clearWorkSpaceData(
+      return await deleteWorkSpaceProcess(
+        f.withTransaction,
         workSpaceRepo,
         req.params.id,
         workSpaceGoogleCalendarTokenRepo,
@@ -126,8 +128,9 @@ const routes: FastifyPluginAsyncZod = async (fastify) => {
         f.getOAuth2Client,
         workSpaceTodoRepo,
         f.notification,
+        userLimitRepo,
+        req.userData.id,
       );
-      return await deleteWorkSpace(workSpaceRepo, req.params.id);
     },
   );
 };

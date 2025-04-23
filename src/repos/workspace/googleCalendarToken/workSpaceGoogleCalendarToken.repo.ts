@@ -2,8 +2,9 @@ import { DataSource, EntityManager } from 'typeorm';
 import { WorkSpaceGoogleCalendarTokenEntity } from '../../../services/typeorm/entities/WorkSpace/WorkSpaceGoogleCalendarTokenEntity';
 import { DBError } from '../../../types/errors/DBError';
 import { ApplicationError } from '../../../types/errors/ApplicationError';
+import { IRecreateRepo } from '../../../types/IRecreatebleRepo';
 
-export interface IWorkSpaceGoogleCalendarToken {
+export interface IWorkSpaceGoogleCalendarToken extends IRecreateRepo {
   setToken(token: string, userId: string, workSpaceId: string, calendarId: string): Promise<void>;
   getTokensWithUserCommand(workSpaceId: string, todoId: string): Promise<WorkSpaceGoogleCalendarTokenEntity[]>;
   getUserTokenWithCommand(userId: string): Promise<WorkSpaceGoogleCalendarTokenEntity>;
@@ -62,5 +63,6 @@ export function getWorkSpaceGoogleCalendarTokenRepo(db: DataSource | EntityManag
         throw new DBError('Get googleCalendarTokens with user command error', e);
       }
     },
+    __recreateFunction: getWorkSpaceGoogleCalendarTokenRepo,
   };
 }

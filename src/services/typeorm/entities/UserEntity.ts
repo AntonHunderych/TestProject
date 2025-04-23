@@ -6,6 +6,7 @@ import { TagEntity } from './TagEntity';
 import { CategoryEntity } from './CategoryEntity';
 import { TokenEntity } from './TokenEntity';
 import { UserRoleEntity } from './UserRoleEntity';
+import { UserLimitsEntity } from './UserLimitsEntity';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -44,4 +45,7 @@ export class UserEntity {
 
   @OneToMany(() => WorkSpaceUserEntity, (wsUser) => wsUser.user)
   wsUsers: WorkSpaceUserEntity[];
+
+  @OneToOne(() => UserLimitsEntity, (userLimits) => userLimits.user)
+  limits: UserLimitsEntity;
 }

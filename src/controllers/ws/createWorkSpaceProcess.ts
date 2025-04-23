@@ -10,9 +10,14 @@ import { IWithTransaction } from '../../services/withTransaction/IWithTransactio
 import { IWorkSpaceRolePermissionRepo } from '../../repos/workspace/rolePermission/workSpaceRolePermission.repo';
 import { addRoleToUserByValue } from './roles/AddRoleToUserByValue';
 import { EDefaultRolesInWorkSpace } from '../../types/enum/EDefaultRolesInWorkSpace';
+import { IUserLimits } from '../../repos/limits/userLimits.repo';
+import { checkCreatedWorkSpaceLimit } from '../limits/workSpaceLimits/checkCreatedWorkSpaceLimit';
+import { HttpError } from '../../api/error/HttpError';
+import { increaseCountOfCreatedWorkSpace } from '../limits/workSpaceLimits/increaseCountOfCreatedWorkSpace';
 
 export async function createWorkSpaceProcess(
   withTransaction: IWithTransaction,
+  userLimitRepo: IUserLimits,
   workSpaceRepo: IWorkSpaceRepo,
   workSpaceUserRepo: IWorkSpaceUserRepo,
   workSpaceRoleRepo: IWorkSpaceRoleRepo,
@@ -28,8 +33,12 @@ export async function createWorkSpaceProcess(
       workSpaceRoleRepo,
       workSpaceUserRoleRepo,
       workSpaceRolePermissions,
+      userLimitRepo,
     },
     async (repos) => {
+      if (!(await checkCreatedWorkSpaceLimit(userLimitRepo, userId))) {
+        throw new HttpError(403, 'You have reached the limit of created workspaces');
+      }
       const workSpace = await createWorkSpace(repos.workSpaceRepo, {
         ...workSpaceCreateData,
         creatorId: userId,
@@ -42,6 +51,7 @@ export async function createWorkSpaceProcess(
         workSpaceUser.id,
         EDefaultRolesInWorkSpace.Creator,
       );
+      await increaseCountOfCreatedWorkSpace(userLimitRepo, userId);
       return workSpace;
     },
   );

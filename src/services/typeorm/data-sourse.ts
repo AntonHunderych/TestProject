@@ -28,6 +28,12 @@ import { WorkSpaceInviteLinkEntity } from './entities/WorkSpace/WorkSpaceInviteL
 import { WorkSpaceGoogleCalendarTokenEntity } from './entities/WorkSpace/WorkSpaceGoogleCalendarTokenEntity';
 import { WorkSpaceGoogleCalendarEventEntity } from './entities/WorkSpace/WorkSpaceGoogleCalendarEventEntity';
 import { WorkSpaceFileEntity } from './entities/WorkSpace/WorkSpaceFileEntity';
+import { PaymentHistoryEntity } from './entities/PaymentHistoryEntity';
+import { PaymentErrorEntity } from './entities/PaymentErrorEntity';
+import { PaymentProductsEntity } from './entities/PaymentProducts';
+import { PaymentStripeProductEntity } from './entities/PaymentStripeProduct';
+import { UserLimitsEntity } from './entities/UserLimitsEntity';
+import { LimitsChangeEntity } from './entities/LimitsChangeEntity';
 
 dotenv.config();
 
@@ -69,6 +75,12 @@ export function getDataSource() {
       WorkSpaceGoogleCalendarTokenEntity,
       WorkSpaceGoogleCalendarEventEntity,
       WorkSpaceFileEntity,
+      PaymentHistoryEntity,
+      PaymentErrorEntity,
+      PaymentProductsEntity,
+      PaymentStripeProductEntity,
+      UserLimitsEntity,
+      LimitsChangeEntity,
     ],
     migrations: ['./migrations/*.ts'],
   });

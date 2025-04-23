@@ -35,6 +35,7 @@ import { IFileManager } from '../types/services/fileManager';
 import { getPaymentStripe } from '../services/payment/stripe';
 import { IPayment } from '../types/services/payment';
 import { fastifyMultipart } from '@fastify/multipart';
+import rawBodyPlugin from 'fastify-raw-body';
 
 dotenv.config();
 
@@ -135,6 +136,12 @@ async function run() {
       fileSize: 10 * 1024 * 1024,
     },
   });
+  f.register(rawBodyPlugin, {
+    field: 'rawBody', // req.rawBody буде доступне
+    global: false, // лише на певному маршруті
+    encoding: 'utf8',
+    runFirst: true,
+  });
   f.register(cors);
   f.register(fastifyJwt, {
     secret: 'your-secret-key',
@@ -168,7 +175,7 @@ async function run() {
   f.decorate('calendar', getGoogleCalendar(f));
   f.decorate('addCalendarJob', AddCalendarJob);
   f.decorate('fileManager', getFileManagerS3());
-  f.decorate('payment', getPaymentStripe());
+  f.decorate('payment', getPaymentStripe(f));
 
   f.setValidatorCompiler(validatorCompiler);
   f.setSerializerCompiler(serializerCompiler);
